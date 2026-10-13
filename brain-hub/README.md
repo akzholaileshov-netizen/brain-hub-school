@@ -1,48 +1,29 @@
 # Brain Hub
 
-Next.js (App Router) starter for the **онлайн школ** / Brain Hub project. Stack: TypeScript, Tailwind CSS, ESLint, and the App Router.
+Қазақ тіліндегі лендинг: IELTS 7.5+, грант дайындығы, интерактивті бағыт тесті және бейіндік тректер.
 
-## Requirements
+Стек: Next.js (App Router), TypeScript, Tailwind CSS, shadcn/ui примитивтері.
 
-- Node.js 20+ recommended
-- npm
-
-## Setup
+## Іске қосу
 
 ```bash
 cd brain-hub
 npm install
-```
-
-## Develop
-
-```bash
 npm run dev -- -p 43127 -H 0.0.0.0
 ```
 
-Then open [http://127.0.0.1:43127](http://127.0.0.1:43127).
+Ашыңыз: [http://127.0.0.1:43127](http://127.0.0.1:43127)
 
-Or use the default port:
-
-```bash
-npm run dev
-```
-
-## Build & production
+## Скрипттер
 
 ```bash
 npm run build
 npm start
-```
-
-## Lint
-
-```bash
 npm run lint
 ```
 
-## Project layout
+## Не бар
 
-- `app/` — App Router routes and UI
-- `public/` — static assets
-- `next.config.ts` — Next.js config
+- Толық лендинг (hero, формат, тест, бағыттар, жетістіктер, пікірлер, байланыс)
+- Клиенттік 12 сұрақтық бағыт тесті
+- Кіру / Тіркелу модалы (демо UI)

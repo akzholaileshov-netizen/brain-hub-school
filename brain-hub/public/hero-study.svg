@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" fill="none" role="img" aria-labelledby="heroTitle">
+  <title id="heroTitle">Brain Hub >›C 0B<>AD5@0AK</title>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#D7EFEA"/>
+      <stop offset="45%" stop-color="#F4F7F5"/>
+      <stop offset="100%" stop-color="#E8D9C4"/>
+    </linearGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1A6B63"/>
+      <stop offset="100%" stop-color="#0F4C4A"/>
+    </linearGradient>
+    <linearGradient id="window" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F7FBF9"/>
+      <stop offset="100%" stop-color="#B8D9D2"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="70%" cy="35%" r="45%">
+      <stop offset="0%" stop-color="#F2C14E" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#F2C14E" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <circle cx="1180" cy="220" r="320" fill="url(#glow)"/>
+
+  <!-- distant hills -->
+  <path d="M0 620 C220 540 420 580 640 560 C860 540 1040 480 1280 520 C1420 545 1520 560 1600 540 L1600 1000 L0 1000 Z" fill="#9FC4BC" opacity="0.45"/>
+  <path d="M0 700 C260 640 480 690 760 660 C1040 630 1260 600 1600 640 L1600 1000 L0 1000 Z" fill="#6F9E95" opacity="0.35"/>
+
+  <!-- window frame -->
+  <rect x="820" y="120" width="620" height="420" rx="28" fill="url(#window)" stroke="#0F4C4A" stroke-width="10"/>
+  <line x1="1130" y1="120" x2="1130" y2="540" stroke="#0F4C4A" stroke-width="8" opacity="0.35"/>
+  <line x1="820" y1="330" x2="1440" y2="330" stroke="#0F4C4A" stroke-width="8" opacity="0.35"/>
+
+  <!-- soft sun -->
+  <circle cx="1280" cy="220" r="54" fill="#F2C14E" opacity="0.85"/>
+
+  <!-- desk -->
+  <rect x="120" y="620" width="1040" height="48" rx="12" fill="url(#desk)"/>
+  <rect x="180" y="668" width="36" height="180" rx="8" fill="#0F4C4A"/>
+  <rect x="1040" y="668" width="36" height="180" rx="8" fill="#0F4C4A"/>
+
+  <!-- notebook -->
+  <rect x="280" y="470" width="280" height="180" rx="16" fill="#FBF8F2" stroke="#0F4C4A" stroke-width="6"/>
+  <line x1="320" y1="520" x2="520" y2="520" stroke="#1A8A7D" stroke-width="6" stroke-linecap="round"/>
+  <line x1="320" y1="560" x2="500" y2="560" stroke="#1A8A7D" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  <line x1="320" y1="600" x2="470" y2="600" stroke="#1A8A7D" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+
+  <!-- laptop -->
+  <rect x="620" y="470" width="340" height="200" rx="18" fill="#163A38" stroke="#0F4C4A" stroke-width="6"/>
+  <rect x="642" y="492" width="296" height="150" rx="10" fill="#D7EFEA"/>
+  <rect x="700" y="530" width="180" height="16" rx="8" fill="#1A8A7D" opacity="0.7"/>
+  <rect x="700" y="564" width="120" height="12" rx="6" fill="#0F4C4A" opacity="0.35"/>
+  <rect x="600" y="670" width="380" height="22" rx="8" fill="#0B3A38"/>
+
+  <!-- books stack -->
+  <rect x="1040" y="560" width="160" height="28" rx="6" fill="#E05A3C"/>
+  <rect x="1055" y="532" width="145" height="28" rx="6" fill="#F2C14E"/>
+  <rect x="1068" y="504" width="130" height="28" rx="6" fill="#1A8A7D"/>
+
+  <!-- plant -->
+  <rect x="140" y="540" width="28" height="80" rx="8" fill="#C4A35A"/>
+  <ellipse cx="154" cy="500" rx="34" ry="48" fill="#1A8A7D"/>
+  <ellipse cx="180" cy="520" rx="24" ry="36" fill="#0F4C4A"/>
+
+  <!-- abstract graph lines -->
+  <path d="M670 620 C720 580 760 640 810 590 C860 540 900 610 950 570" stroke="#E05A3C" stroke-width="5" stroke-linecap="round" opacity="0.55"/>
+</svg>
