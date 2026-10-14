@@ -71,6 +71,12 @@ export function mapAuthError(message: string | undefined): string {
   ) {
     return "Почта жіберу шегіне жетті. Authentication → Email → Confirm email өшіріңіз немесе бірнеше минуттан кейін қайталап көріңіз.";
   }
+  if (
+    m.includes("invalid path") ||
+    m.includes("invalid path specified")
+  ) {
+    return "Supabase URL қате. NEXT_PUBLIC_SUPABASE_URL тек https://xxxx.supabase.co болуы керек (/rest/v1 немесе тырнақшасыз).";
+  }
   if (m.includes("email not confirmed") || m.includes("not confirmed")) {
     return "Почтаңызды растаңыз. Inbox-тағы хатты ашып, сілтемені басыңыз.";
   }

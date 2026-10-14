@@ -18,8 +18,15 @@ function loadEnvLocal() {
 
 loadEnvLocal();
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+function normalizeSupabaseUrl(raw) {
+  let u = String(raw || "").trim().replace(/^['"]|['"]$/g, "");
+  u = u.replace(/\/+$/, "");
+  u = u.replace(/\/rest\/v1$/i, "");
+  u = u.replace(/\/auth\/v1$/i, "");
+  return u.replace(/\/+$/, "");
+}
+const url = normalizeSupabaseUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
+const key = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "").trim();
 if (!url || !key) {
   console.error("Missing NEXT_PUBLIC_SUPABASE_URL / ANON_KEY");
   process.exit(1);

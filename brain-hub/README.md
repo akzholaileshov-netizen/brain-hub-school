@@ -25,7 +25,7 @@ Env айнымалылары жоқ болса, қолданба құлап ке
 2. **Схема + seed (ең оңай):** Dashboard → **SQL Editor** → New query → `supabase/setup.sql` файлының **бүкіл** мазмұнын қойып → **Run**  
    (немесе CLI: `npx supabase db push` + seed; anon key DDL істей алмайды)
 3. Project Settings → API / keys:
-   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_URL` — тек `https://xxxx.supabase.co` (/rest/v1, тырнақша, соңғы `/` қоспаңыз)
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (publishable / anon)
    - `SUPABASE_SERVICE_ROLE_KEY` — тек серверге (браузерге ешқашан қоймаңыз; бұл жобада міндетті емес)
 4. Authentication → Providers → Email қосулы
