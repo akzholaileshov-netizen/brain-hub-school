@@ -58,6 +58,19 @@ export function mapAuthError(message: string | undefined): string {
   ) {
     return "Құпия сөз тым әлсіз. Кемінде 8 таңба, әріп пен сан қолданыңыз.";
   }
+  if (
+    m.includes("email address") &&
+    (m.includes("invalid") || m.includes("is invalid"))
+  ) {
+    return "Почта форматы қабылданбады. Басқа почта қолданып көріңіз (мысалы, qa.step6.1@…).";
+  }
+  if (
+    m.includes("rate limit") ||
+    m.includes("over_email_send_rate_limit") ||
+    m.includes("email rate limit")
+  ) {
+    return "Почта жіберу шегіне жетті. Authentication → Email → Confirm email өшіріңіз немесе бірнеше минуттан кейін қайталап көріңіз.";
+  }
   if (m.includes("email not confirmed") || m.includes("not confirmed")) {
     return "Почтаңызды растаңыз. Inbox-тағы хатты ашып, сілтемені басыңыз.";
   }

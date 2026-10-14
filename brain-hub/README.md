@@ -9,8 +9,8 @@
 ```bash
 cd brain-hub
 npm install
-cp .env.example .env
-# .env ішіне Supabase URL + anon key қойыңыз
+cp .env.example .env.local
+# .env.local (gitignore): NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY
 npm run build
 npm run start -- -p 43127 -H 0.0.0.0
 ```
@@ -22,24 +22,19 @@ Env айнымалылары жоқ болса, қолданба құлап ке
 ## Supabase жобасын баптау
 
 1. [supabase.com](https://supabase.com) → New project
-2. SQL Editor немесе CLI арқылы миграцияларды қолданыңыз:
-   ```bash
-   npx supabase login
-   npx supabase link --project-ref YOUR_REF
-   npx supabase db push
-   # немесе SQL Editor-де supabase/migrations/*.sql сосын supabase/seed.sql
-   ```
-3. Project Settings → API:
+2. **Схема + seed (ең оңай):** Dashboard → **SQL Editor** → New query → `supabase/setup.sql` файлының **бүкіл** мазмұнын қойып → **Run**  
+   (немесе CLI: `npx supabase db push` + seed; anon key DDL істей алмайды)
+3. Project Settings → API / keys:
    - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (publishable / anon)
    - `SUPABASE_SERVICE_ROLE_KEY` — тек серверге (браузерге ешқашан қоймаңыз; бұл жобада міндетті емес)
 4. Authentication → Providers → Email қосулы
 5. Authentication → URL configuration:
-   - Site URL = сіздің Vercel/Netlify доменіңіз (немесе `http://127.0.0.1:43127`)
-   - Redirect URLs: сол домен + `/dashboard`, `/`
-6. Email confirmation:
-   - Жергілікті/демо үшін: Authentication → Providers → Email → **Confirm email** өшіруге болады
-   - Қосулы болса, тіркелуден кейін қазақша «почтаны растаңыз» хабарламасы шығады
+   - **Site URL** = `http://127.0.0.1:43127` (жергілікті) немесе Vercel домені
+   - **Redirect URLs**: `http://127.0.0.1:43127/**`, `http://127.0.0.1:43127/dashboard`, production домендері
+6. Email confirmation (QA үшін ұсынылады):
+   - Authentication → Providers → Email → **Confirm email** → **OFF**
+   - Қосулы болса, тіркелуден кейін сессия жоқ → UI қазақша «почтаны растаңыз» көрсетеді; free-tier email rate limit тез толады
 
 ## Не бар
 

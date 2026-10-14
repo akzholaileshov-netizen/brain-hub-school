@@ -34,14 +34,26 @@ BEGIN
   END IF;
 END $$;
 
--- auth.uid() exists on Supabase; stub for local validation
-CREATE OR REPLACE FUNCTION auth.uid()
-RETURNS uuid
-LANGUAGE sql
-STABLE
-AS $$
-  SELECT NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid;
-$$;
+-- auth.uid() already exists on hosted Supabase — never replace it.
+-- Stub only for local Postgres validation.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_proc p
+    JOIN pg_namespace n ON n.oid = p.pronamespace
+    WHERE n.nspname = 'auth' AND p.proname = 'uid' AND p.pronargs = 0
+  ) THEN
+    EXECUTE $fn$
+      CREATE FUNCTION auth.uid()
+      RETURNS uuid
+      LANGUAGE sql
+      STABLE
+      AS $body$
+        SELECT NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid;
+      $body$
+    $fn$;
+  END IF;
+END $$;
 
 -- ---------------------------------------------------------------------------
 -- Profiles (1:1 with auth.users)
@@ -663,6 +675,16 @@ ALTER TABLE public.mentor_bookings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ielts_mock_attempts ENABLE ROW LEVEL SECURITY;
 
 -- Profiles: own row
+DROP POLICY IF EXISTS profiles_select_own ON public.profiles;
+DROP POLICY IF EXISTS profiles_update_own ON public.profiles;
+DROP POLICY IF EXISTS subjects_read ON public.subjects;
+DROP POLICY IF EXISTS videos_read ON public.videos;
+DROP POLICY IF EXISTS assessments_read ON public.assessments;
+DROP POLICY IF EXISTS video_progress_own ON public.video_progress;
+DROP POLICY IF EXISTS assessment_attempts_own ON public.assessment_attempts;
+DROP POLICY IF EXISTS subject_progress_own ON public.subject_progress;
+DROP POLICY IF EXISTS mentor_bookings_own ON public.mentor_bookings;
+DROP POLICY IF EXISTS ielts_mock_attempts_own ON public.ielts_mock_attempts;
 CREATE POLICY profiles_select_own ON public.profiles
   FOR SELECT TO authenticated USING (id = auth.uid());
 CREATE POLICY profiles_update_own ON public.profiles
