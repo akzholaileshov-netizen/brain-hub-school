@@ -1,0 +1,106 @@
+import { NextResponse } from "next/server";
+import {
+  createSessionToken,
+  hashPassword,
+  setSessionCookie,
+  validateEmail,
+  validatePassword,
+} from "@/lib/auth";
+import {
+  generateStudentCode,
+  getDb,
+  getStudentByEmail,
+  isValidTrack,
+  seedStudentProgress,
+} from "@/lib/db";
+
+type Body = {
+  fullName?: string;
+  email?: string;
+  password?: string;
+  track?: string;
+};
+
+export async function POST(request: Request) {
+  let body: Body;
+  try {
+    body = (await request.json()) as Body;
+  } catch {
+    return NextResponse.json(
+      { error: "Сұрау дұрыс емес." },
+      { status: 400 },
+    );
+  }
+
+  const fullName = body.fullName?.trim() ?? "";
+  const email = body.email?.trim().toLowerCase() ?? "";
+  const password = body.password ?? "";
+  const track = body.track ?? "";
+
+  if (fullName.length < 2) {
+    return NextResponse.json(
+      { error: "Аты-жөніңізді енгізіңіз." },
+      { status: 400 },
+    );
+  }
+
+  const emailError = validateEmail(email);
+  if (emailError) {
+    return NextResponse.json({ error: emailError }, { status: 400 });
+  }
+
+  const passwordError = validatePassword(password);
+  if (passwordError) {
+    return NextResponse.json({ error: passwordError }, { status: 400 });
+  }
+
+  if (!isValidTrack(track)) {
+    return NextResponse.json(
+      { error: "Дайындық бағытын таңдаңыз." },
+      { status: 400 },
+    );
+  }
+
+  if (getStudentByEmail(email)) {
+    return NextResponse.json(
+      { error: "Бұл почтамен аккаунт бар. Кіріңіз немесе басқа почта қолданыңыз." },
+      { status: 409 },
+    );
+  }
+
+  const db = getDb();
+  const studentCode = generateStudentCode(db);
+  const passwordHash = await hashPassword(password);
+  const ieltsEnrolled = track === "vip-ielts" ? 1 : 0;
+
+  const insert = db.prepare(
+    `INSERT INTO students
+      (student_id, full_name, email, password_hash, track, gpa, ielts_enrolled)
+     VALUES (?, ?, ?, ?, ?, 0, ?)`,
+  );
+
+  const result = insert.run(
+    studentCode,
+    fullName,
+    email,
+    passwordHash,
+    track,
+    ieltsEnrolled,
+  );
+  const studentPk = Number(result.lastInsertRowid);
+  const gpa = seedStudentProgress(db, studentPk, track);
+  db.prepare("UPDATE students SET gpa = ? WHERE id = ?").run(gpa, studentPk);
+
+  const student = db
+    .prepare("SELECT * FROM students WHERE id = ?")
+    .get(studentPk) as NonNullable<ReturnType<typeof getStudentByEmail>>;
+
+  const token = await createSessionToken(student);
+  await setSessionCookie(token);
+
+  return NextResponse.json({
+    ok: true,
+    redirect: "/dashboard",
+    studentId: student.student_id,
+  });
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { AuthModal } from "@/components/landing/auth-modal";
 import { ContactFooter } from "@/components/landing/contact-footer";
 import { FormatSection } from "@/components/landing/format-section";
@@ -10,12 +10,20 @@ import { QuizSection } from "@/components/landing/quiz-section";
 import { StatsSection } from "@/components/landing/stats-section";
 import { TestimonialsSection } from "@/components/landing/testimonials-section";
 import { TracksSection } from "@/components/landing/tracks-section";
+import type { TrackId } from "@/lib/quiz-data";
 
 type AuthMode = "login" | "register";
 
 export function LandingPage() {
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>("login");
+  const [recommendedTrack, setRecommendedTrack] = useState<TrackId | null>(
+    null,
+  );
+
+  const handleRecommend = useCallback((trackId: TrackId | null) => {
+    setRecommendedTrack(trackId);
+  }, []);
 
   function openAuth(mode: AuthMode) {
     setAuthMode(mode);
@@ -31,7 +39,13 @@ export function LandingPage() {
       <main className="flex-1">
         <Hero onRegister={() => openAuth("register")} />
         <FormatSection />
-        <QuizSection />
+        <QuizSection
+          onRecommend={handleRecommend}
+          onRegisterWithTrack={(trackId) => {
+            setRecommendedTrack(trackId);
+            openAuth("register");
+          }}
+        />
         <TracksSection />
         <StatsSection />
         <TestimonialsSection />
@@ -42,6 +56,7 @@ export function LandingPage() {
         mode={authMode}
         onOpenChange={setAuthOpen}
         onModeChange={setAuthMode}
+        recommendedTrack={recommendedTrack}
       />
     </div>
   );

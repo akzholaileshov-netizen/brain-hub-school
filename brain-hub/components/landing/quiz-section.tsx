@@ -1,16 +1,25 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   QUIZ_QUESTIONS,
   TRACKS,
   type QuizOption,
+  type TrackId,
   recommendTrack,
   scoreQuiz,
 } from "@/lib/quiz-data";
 
-export function QuizSection() {
+type QuizSectionProps = {
+  onRecommend?: (trackId: TrackId | null) => void;
+  onRegisterWithTrack?: (trackId: TrackId) => void;
+};
+
+export function QuizSection({
+  onRecommend,
+  onRegisterWithTrack,
+}: QuizSectionProps) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Array<QuizOption | null>>(
     () => Array(QUIZ_QUESTIONS.length).fill(null),
@@ -24,6 +33,10 @@ export function QuizSection() {
     if (!finished) return null;
     return recommendTrack(scoreQuiz(answers));
   }, [answers, finished]);
+
+  useEffect(() => {
+    onRecommend?.(recommendation?.id ?? null);
+  }, [recommendation, onRecommend]);
 
   function selectOption(option: QuizOption) {
     const next = [...answers];
@@ -41,6 +54,7 @@ export function QuizSection() {
     setStep(0);
     setAnswers(Array(QUIZ_QUESTIONS.length).fill(null));
     setFinished(false);
+    onRecommend?.(null);
   }
 
   return (
@@ -110,10 +124,16 @@ export function QuizSection() {
                 {recommendation.description}
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button asChild variant="accent">
+                <Button
+                  variant="accent"
+                  onClick={() => onRegisterWithTrack?.(recommendation.id)}
+                >
+                  Осы бағытпен тіркелу
+                </Button>
+                <Button asChild variant="outline">
                   <a href="#tracks">Бағыттарды қарау</a>
                 </Button>
-                <Button variant="outline" onClick={reset}>
+                <Button variant="ghost" onClick={reset}>
                   Тестті қайталау
                 </Button>
               </div>
