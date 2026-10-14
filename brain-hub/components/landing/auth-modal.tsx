@@ -43,6 +43,13 @@ export function AuthModal({
     if (recommendedTrack) setTrack(recommendedTrack);
   }, [recommendedTrack, open]);
 
+  useEffect(() => {
+    if (open) {
+      setError(null);
+      setLoading(false);
+    }
+  }, [open, mode]);
+
   function handleOpenChange(next: boolean) {
     if (!next) {
       setError(null);
@@ -85,6 +92,7 @@ export function AuthModal({
         setLoading(false);
         return;
       }
+      setLoading(false);
       onOpenChange(false);
       router.push(data.redirect || "/dashboard");
       router.refresh();
