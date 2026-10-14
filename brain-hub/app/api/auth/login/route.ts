@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
+import { mapAuthError, validateEmail } from "@/lib/auth";
 import {
-  createSessionToken,
-  setSessionCookie,
-  validateEmail,
-  verifyPassword,
-} from "@/lib/auth";
-import { getStudentByEmail } from "@/lib/db";
+  isSupabaseConfigured,
+  SUPABASE_SETUP_MESSAGE,
+} from "@/lib/supabase/env";
+import { createClient } from "@/lib/supabase/server";
 
 type Body = {
   email?: string;
@@ -13,6 +12,10 @@ type Body = {
 };
 
 export async function POST(request: Request) {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ error: SUPABASE_SETUP_MESSAGE }, { status: 503 });
+  }
+
   let body: Body;
   try {
     body = (await request.json()) as Body;
@@ -38,28 +41,31 @@ export async function POST(request: Request) {
     );
   }
 
-  const student = await getStudentByEmail(email);
-  if (!student) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
     return NextResponse.json(
-      { error: "Почта немесе құпия сөз қате." },
+      { error: mapAuthError(error.message) },
       { status: 401 },
     );
   }
 
-  const ok = await verifyPassword(password, student.password_hash);
-  if (!ok) {
+  if (!data.session) {
     return NextResponse.json(
-      { error: "Почта немесе құпия сөз қате." },
+      {
+        error:
+          "Почтаңызды растаңыз. Inbox-тағы хатты ашып, сілтемені басыңыз — содан кейін қайта кіріңіз.",
+      },
       { status: 401 },
     );
   }
-
-  const token = await createSessionToken(student);
-  await setSessionCookie(token);
 
   return NextResponse.json({
     ok: true,
     redirect: "/dashboard",
-    studentId: student.student_id,
   });
 }

@@ -1,34 +1,12 @@
-import bcrypt from "bcryptjs";
-import { SignJWT, jwtVerify } from "jose";
-import { cookies } from "next/headers";
-import { getStudentById, type StudentRow } from "@/lib/db";
+import { TRACKS, type TrackId } from "@/lib/quiz-data";
+import {
+  isSupabaseConfigured,
+  SUPABASE_SETUP_MESSAGE,
+} from "@/lib/supabase/env";
+import { createClient } from "@/lib/supabase/server";
+import type { StudentRow } from "@/lib/db";
 
-export const SESSION_COOKIE = "bh_session";
-const SESSION_DAYS = 7;
-const DEV_FALLBACK_SECRET =
-  "brain-hub-local-dev-secret-change-me-32chars";
-
-function getSecretKey() {
-  const secret = process.env.SESSION_SECRET?.trim();
-  if (secret) return new TextEncoder().encode(secret);
-
-  // Fail loudly on hosted platforms; allow local `next start` without setup.
-  const hosted = Boolean(process.env.VERCEL || process.env.NETLIFY);
-  if (hosted) {
-    throw new Error(
-      "SESSION_SECRET орта айнымалысы production-да міндетті. .env.example қараңыз.",
-    );
-  }
-  return new TextEncoder().encode(DEV_FALLBACK_SECRET);
-}
-
-export async function hashPassword(password: string) {
-  return bcrypt.hash(password, 10);
-}
-
-export async function verifyPassword(password: string, hash: string) {
-  return bcrypt.compare(password, hash);
-}
+export { SUPABASE_SETUP_MESSAGE };
 
 export function validatePassword(password: string): string | null {
   if (password.length < 8) {
@@ -50,51 +28,72 @@ export function validateEmail(email: string): string | null {
   return null;
 }
 
-export async function createSessionToken(student: StudentRow) {
-  return new SignJWT({
-    sub: String(student.id),
-    sid: student.student_id,
-    email: student.email,
-  })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime(`${SESSION_DAYS}d`)
-    .sign(getSecretKey());
+export function isValidTrack(track: string): track is TrackId {
+  return TRACKS.some((t) => t.id === track);
 }
 
-export async function setSessionCookie(token: string) {
-  const jar = await cookies();
-  jar.set(SESSION_COOKIE, token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: SESSION_DAYS * 24 * 60 * 60,
-  });
-}
-
-export async function clearSessionCookie() {
-  const jar = await cookies();
-  jar.set(SESSION_COOKIE, "", {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 0,
-  });
+export function mapAuthError(message: string | undefined): string {
+  const m = (message ?? "").toLowerCase();
+  if (
+    m.includes("already registered") ||
+    m.includes("already been registered") ||
+    m.includes("user already exists") ||
+    m.includes("email address is already")
+  ) {
+    return "Бұл почтамен аккаунт бар. Кіріңіз немесе басқа почта қолданыңыз.";
+  }
+  if (
+    m.includes("invalid login credentials") ||
+    m.includes("invalid credentials") ||
+    m.includes("invalid email or password")
+  ) {
+    return "Почта немесе құпия сөз қате.";
+  }
+  if (
+    m.includes("password") &&
+    (m.includes("weak") ||
+      m.includes("at least") ||
+      m.includes("too short") ||
+      m.includes("least 6"))
+  ) {
+    return "Құпия сөз тым әлсіз. Кемінде 8 таңба, әріп пен сан қолданыңыз.";
+  }
+  if (m.includes("email not confirmed") || m.includes("not confirmed")) {
+    return "Почтаңызды растаңыз. Inbox-тағы хатты ашып, сілтемені басыңыз.";
+  }
+  if (m.includes("signup is disabled")) {
+    return "Тіркелу уақытша өшірілген. Әкімшіге хабарласыңыз.";
+  }
+  return message?.trim() || "Қате пайда болды. Қайта көріңіз.";
 }
 
 export async function readSessionStudent(): Promise<StudentRow | null> {
-  const jar = await cookies();
-  const token = jar.get(SESSION_COOKIE)?.value;
-  if (!token) return null;
+  if (!isSupabaseConfigured()) return null;
 
-  try {
-    const { payload } = await jwtVerify(token, getSecretKey());
-    const id = Number(payload.sub);
-    if (!Number.isFinite(id)) return null;
-    return (await getStudentById(id)) ?? null;
-  } catch {
-    return null;
-  }
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select(
+      "id, student_code, full_name, email, track, gpa, ielts_enrolled, created_at",
+    )
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  return {
+    id: data.id as string,
+    student_id: data.student_code as string,
+    full_name: data.full_name as string,
+    email: data.email as string,
+    track: data.track as TrackId,
+    gpa: Number(data.gpa),
+    ielts_enrolled: Boolean(data.ielts_enrolled),
+    created_at: data.created_at as string,
+  };
 }

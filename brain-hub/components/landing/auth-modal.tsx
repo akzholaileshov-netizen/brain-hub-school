@@ -54,10 +54,11 @@ export function AuthModal({
     onOpenChange(next);
   }
 
-  function switchMode(next: Mode) {
+  function switchMode(next: Mode, preserveMessage?: string | null) {
     resetFormState();
     if (next === "register") setTrackOverride(null);
     onModeChange(next);
+    if (preserveMessage) setError(preserveMessage);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -88,10 +89,24 @@ export function AuthModal({
           body: JSON.stringify(payload),
         },
       );
-      const data = (await res.json()) as { error?: string; redirect?: string };
+      const data = (await res.json()) as {
+        error?: string;
+        redirect?: string;
+        needsEmailConfirmation?: boolean;
+        message?: string;
+      };
       if (!res.ok) {
         setError(data.error || "Қате пайда болды. Қайта көріңіз.");
         setLoading(false);
+        return;
+      }
+      if (data.needsEmailConfirmation) {
+        setLoading(false);
+        switchMode(
+          "login",
+          data.message ||
+            "Тіркелу сәтті. Почтаңызды растап, содан кейін кіріңіз.",
+        );
         return;
       }
       setLoading(false);

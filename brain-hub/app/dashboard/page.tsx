@@ -3,10 +3,13 @@ import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { readSessionStudent } from "@/lib/auth";
 import { getDashboardSubjects, getOverallProgress } from "@/lib/db";
 import { TRACKS } from "@/lib/quiz-data";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 
 export const instant = false;
 
 export default async function DashboardPage() {
+  if (!isSupabaseConfigured()) redirect("/");
+
   const student = await readSessionStudent();
   if (!student) redirect("/");
 

@@ -3,6 +3,7 @@ import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { SubjectLearningPanel } from "@/components/dashboard/subject-learning-panel";
 import { readSessionStudent } from "@/lib/auth";
 import { getSubjectDetail } from "@/lib/db";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 
 export const instant = false;
 
@@ -12,6 +13,8 @@ type PageProps = {
 };
 
 export default async function SubjectPage({ params, searchParams }: PageProps) {
+  if (!isSupabaseConfigured()) redirect("/");
+
   const student = await readSessionStudent();
   if (!student) redirect("/");
 

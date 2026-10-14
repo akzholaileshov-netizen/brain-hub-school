@@ -1,9 +1,21 @@
 import { NextResponse } from "next/server";
 import { readSessionStudent } from "@/lib/auth";
 import { IELTS_MOCK_QUESTIONS } from "@/lib/curriculum";
-import { listIeltsMocks, submitIeltsMock } from "@/lib/db";
+import {
+  getPublicIeltsMockQuestions,
+  listIeltsMocks,
+  submitIeltsMock,
+} from "@/lib/db";
+import {
+  isSupabaseConfigured,
+  SUPABASE_SETUP_MESSAGE,
+} from "@/lib/supabase/env";
 
 export async function GET() {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ error: SUPABASE_SETUP_MESSAGE }, { status: 503 });
+  }
+
   const student = await readSessionStudent();
   if (!student) {
     return NextResponse.json(
@@ -11,17 +23,29 @@ export async function GET() {
       { status: 401 },
     );
   }
+
+  const questions = await getPublicIeltsMockQuestions();
   return NextResponse.json({
-    questions: IELTS_MOCK_QUESTIONS.map((q, index) => ({
-      index,
-      prompt: q.prompt,
-      options: q.options,
-    })),
+    questions: questions.length
+      ? questions.map((q) => ({
+          index: q.index,
+          prompt: q.prompt,
+          options: q.options,
+        }))
+      : IELTS_MOCK_QUESTIONS.map((q, index) => ({
+          index,
+          prompt: q.prompt,
+          options: q.options,
+        })),
     history: await listIeltsMocks(student.id),
   });
 }
 
 export async function POST(request: Request) {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ error: SUPABASE_SETUP_MESSAGE }, { status: 503 });
+  }
+
   const student = await readSessionStudent();
   if (!student) {
     return NextResponse.json(
@@ -49,17 +73,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await submitIeltsMock(
-    student.id,
-    body.answers,
-    IELTS_MOCK_QUESTIONS.map((q, index) => ({
-      index,
-      correctIndex: q.correctIndex,
-    })),
-  );
+  const result = await submitIeltsMock(body.answers);
+  if ("error" in result) {
+    return NextResponse.json({ error: result.error }, { status: 403 });
+  }
 
   return NextResponse.json({
-    ok: true,
     ...result,
     history: await listIeltsMocks(student.id),
   });

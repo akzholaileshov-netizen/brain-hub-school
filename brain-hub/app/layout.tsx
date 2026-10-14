@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SupabaseSetupBanner } from "@/components/supabase-setup-banner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -38,7 +39,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           rel="stylesheet"
         />
       </head>
-      <body className="flex min-h-full flex-col font-sans">{children}</body>
+      <body className="flex min-h-full flex-col font-sans">
+        <SupabaseSetupBanner />
+        {children}
+      </body>
     </html>
   );
 }

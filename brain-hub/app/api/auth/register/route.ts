@@ -1,19 +1,15 @@
 import { NextResponse } from "next/server";
 import {
-  createSessionToken,
-  hashPassword,
-  setSessionCookie,
+  isValidTrack,
+  mapAuthError,
   validateEmail,
   validatePassword,
 } from "@/lib/auth";
 import {
-  createStudent,
-  generateStudentCode,
-  getStudentByEmail,
-  getStudentById,
-  isValidTrack,
-  seedStudentProgress,
-} from "@/lib/db";
+  isSupabaseConfigured,
+  SUPABASE_SETUP_MESSAGE,
+} from "@/lib/supabase/env";
+import { createClient } from "@/lib/supabase/server";
 
 type Body = {
   fullName?: string;
@@ -23,6 +19,10 @@ type Body = {
 };
 
 export async function POST(request: Request) {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ error: SUPABASE_SETUP_MESSAGE }, { status: 503 });
+  }
+
   let body: Body;
   try {
     body = (await request.json()) as Body;
@@ -62,44 +62,38 @@ export async function POST(request: Request) {
     );
   }
 
-  if (await getStudentByEmail(email)) {
-    return NextResponse.json(
-      {
-        error:
-          "Бұл почтамен аккаунт бар. Кіріңіз немесе басқа почта қолданыңыз.",
-      },
-      { status: 409 },
-    );
-  }
-
-  const studentCode = await generateStudentCode();
-  const passwordHash = await hashPassword(password);
-  const ieltsEnrolled = track === "vip-ielts" ? 1 : 0;
-
-  const studentPk = await createStudent({
-    studentId: studentCode,
-    fullName,
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signUp({
     email,
-    passwordHash,
-    track,
-    ieltsEnrolled,
+    password,
+    options: {
+      data: {
+        full_name: fullName,
+        track,
+      },
+    },
   });
-  await seedStudentProgress(studentPk, track);
 
-  const student = await getStudentById(studentPk);
-  if (!student) {
-    return NextResponse.json(
-      { error: "Тіркелу сәтсіз аяқталды." },
-      { status: 500 },
-    );
+  if (error) {
+    const status =
+      error.message.toLowerCase().includes("already") ||
+      error.message.toLowerCase().includes("exists")
+        ? 409
+        : 400;
+    return NextResponse.json({ error: mapAuthError(error.message) }, { status });
   }
 
-  const token = await createSessionToken(student);
-  await setSessionCookie(token);
+  if (data.user && !data.session) {
+    return NextResponse.json({
+      ok: true,
+      needsEmailConfirmation: true,
+      message:
+        "Тіркелу сәтті. Почтаңызға растау хаты жіберілді. Хатты ашып, сілтемені басыңыз — содан кейін кіріңіз.",
+    });
+  }
 
   return NextResponse.json({
     ok: true,
     redirect: "/dashboard",
-    studentId: student.student_id,
   });
 }

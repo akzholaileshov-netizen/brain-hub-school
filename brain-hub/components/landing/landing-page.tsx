@@ -49,7 +49,7 @@ export function LandingPage() {
   }
 
   return (
-    <div className="flex min-h-full flex-col bg-[var(--canvas)] text-[var(--ink)]">
+    <div className="relative flex min-h-full flex-col bg-[var(--canvas)] text-[var(--ink)]">
       <Header
         authenticated={authenticated}
         onLogin={() => openAuth("login")}

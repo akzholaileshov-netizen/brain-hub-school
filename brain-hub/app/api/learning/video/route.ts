@@ -1,8 +1,16 @@
 import { NextResponse } from "next/server";
 import { readSessionStudent } from "@/lib/auth";
 import { markVideoWatched } from "@/lib/db";
+import {
+  isSupabaseConfigured,
+  SUPABASE_SETUP_MESSAGE,
+} from "@/lib/supabase/env";
 
 export async function POST(request: Request) {
+  if (!isSupabaseConfigured()) {
+    return NextResponse.json({ error: SUPABASE_SETUP_MESSAGE }, { status: 503 });
+  }
+
   const student = await readSessionStudent();
   if (!student) {
     return NextResponse.json(
@@ -25,7 +33,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await markVideoWatched(student.id, body.videoId);
+  const result = await markVideoWatched(body.videoId);
   if ("error" in result) {
     return NextResponse.json({ error: result.error }, { status: 404 });
   }
