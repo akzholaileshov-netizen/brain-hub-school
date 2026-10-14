@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = markVideoWatched(student.id, body.videoId);
+  const result = await markVideoWatched(student.id, body.videoId);
   if ("error" in result) {
     return NextResponse.json({ error: result.error }, { status: 404 });
   }

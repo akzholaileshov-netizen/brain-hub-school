@@ -5,12 +5,21 @@ import { getStudentById, type StudentRow } from "@/lib/db";
 
 export const SESSION_COOKIE = "bh_session";
 const SESSION_DAYS = 7;
+const DEV_FALLBACK_SECRET =
+  "brain-hub-local-dev-secret-change-me-32chars";
 
 function getSecretKey() {
-  const secret =
-    process.env.SESSION_SECRET ||
-    "brain-hub-local-dev-secret-change-me-32chars";
-  return new TextEncoder().encode(secret);
+  const secret = process.env.SESSION_SECRET?.trim();
+  if (secret) return new TextEncoder().encode(secret);
+
+  // Fail loudly on hosted platforms; allow local `next start` without setup.
+  const hosted = Boolean(process.env.VERCEL || process.env.NETLIFY);
+  if (hosted) {
+    throw new Error(
+      "SESSION_SECRET орта айнымалысы production-да міндетті. .env.example қараңыз.",
+    );
+  }
+  return new TextEncoder().encode(DEV_FALLBACK_SECRET);
 }
 
 export async function hashPassword(password: string) {
@@ -25,7 +34,10 @@ export function validatePassword(password: string): string | null {
   if (password.length < 8) {
     return "Құпия сөз кемінде 8 таңбадан тұруы керек.";
   }
-  if (!/[A-Za-zА-Яа-яӘәІіҢңҒғҮүҰұҚқӨөҺһ]/.test(password) || !/\d/.test(password)) {
+  if (
+    !/[A-Za-zА-Яа-яӘәІіҢңҒғҮүҰұҚқӨөҺһ]/.test(password) ||
+    !/\d/.test(password)
+  ) {
     return "Құпия сөзде әріп пен сан болуы керек.";
   }
   return null;
@@ -81,7 +93,7 @@ export async function readSessionStudent(): Promise<StudentRow | null> {
     const { payload } = await jwtVerify(token, getSecretKey());
     const id = Number(payload.sub);
     if (!Number.isFinite(id)) return null;
-    return getStudentById(id) ?? null;
+    return (await getStudentById(id)) ?? null;
   } catch {
     return null;
   }

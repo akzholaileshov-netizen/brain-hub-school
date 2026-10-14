@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AuthModal } from "@/components/landing/auth-modal";
 import { ContactFooter } from "@/components/landing/contact-footer";
 import { FormatSection } from "@/components/landing/format-section";
@@ -15,11 +16,28 @@ import type { TrackId } from "@/lib/quiz-data";
 type AuthMode = "login" | "register";
 
 export function LandingPage() {
+  const router = useRouter();
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>("login");
   const [recommendedTrack, setRecommendedTrack] = useState<TrackId | null>(
     null,
   );
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data: { authenticated?: boolean }) => {
+        if (active) setAuthenticated(Boolean(data.authenticated));
+      })
+      .catch(() => {
+        if (active) setAuthenticated(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleRecommend = useCallback((trackId: TrackId | null) => {
     setRecommendedTrack(trackId);
@@ -33,16 +51,25 @@ export function LandingPage() {
   return (
     <div className="flex min-h-full flex-col bg-[var(--canvas)] text-[var(--ink)]">
       <Header
+        authenticated={authenticated}
         onLogin={() => openAuth("login")}
         onRegister={() => openAuth("register")}
       />
       <main className="flex-1">
-        <Hero onRegister={() => openAuth("register")} />
+        <Hero
+          onRegister={() =>
+            authenticated ? router.push("/dashboard") : openAuth("register")
+          }
+        />
         <FormatSection />
         <QuizSection
           onRecommend={handleRecommend}
           onRegisterWithTrack={(trackId) => {
             setRecommendedTrack(trackId);
+            if (authenticated) {
+              router.push("/dashboard");
+              return;
+            }
             openAuth("register");
           }}
         />

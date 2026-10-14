@@ -17,7 +17,7 @@ export async function GET() {
       prompt: q.prompt,
       options: q.options,
     })),
-    history: listIeltsMocks(student.id),
+    history: await listIeltsMocks(student.id),
   });
 }
 
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = submitIeltsMock(
+  const result = await submitIeltsMock(
     student.id,
     body.answers,
     IELTS_MOCK_QUESTIONS.map((q, index) => ({
@@ -61,6 +61,6 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ok: true,
     ...result,
-    history: listIeltsMocks(student.id),
+    history: await listIeltsMocks(student.id),
   });
 }

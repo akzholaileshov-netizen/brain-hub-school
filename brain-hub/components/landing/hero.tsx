@@ -12,6 +12,7 @@ export function Hero({ onRegister }: HeroProps) {
     >
       <div className="absolute inset-0 -z-10">
         {/* Decorative full-bleed scene; brand text lives in the content column */}
+        {/* eslint-disable-next-line @next/next/no-img-element -- local SVG full-bleed background */}
         <img
           src="/hero-study.svg"
           alt=""

@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   }
 
   const enrolled = Boolean(body.enrolled);
-  setIeltsEnrollment(student.id, enrolled);
+  await setIeltsEnrollment(student.id, enrolled);
 
   return NextResponse.json({ ok: true, enrolled });
 }

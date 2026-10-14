@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const student = getStudentByEmail(email);
+  const student = await getStudentByEmail(email);
   if (!student) {
     return NextResponse.json(
       { error: "Почта немесе құпия сөз қате." },

@@ -16,9 +16,14 @@ const NAV = [
 type HeaderProps = {
   onLogin: () => void;
   onRegister: () => void;
+  authenticated?: boolean;
 };
 
-export function Header({ onLogin, onRegister }: HeaderProps) {
+export function Header({
+  onLogin,
+  onRegister,
+  authenticated = false,
+}: HeaderProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -43,13 +48,26 @@ export function Header({ onLogin, onRegister }: HeaderProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 sm:flex">
-          <Button type="button" variant="ghost" size="sm" onClick={onLogin}>
-            Кіру
-          </Button>
-          <Button type="button" variant="accent" size="sm" onClick={onRegister}>
-            Тіркелу
-          </Button>
+        <div className="hidden items-center gap-2 lg:flex">
+          {authenticated ? (
+            <Button asChild variant="accent" size="sm">
+              <a href="/dashboard">Кабинет</a>
+            </Button>
+          ) : (
+            <>
+              <Button type="button" variant="ghost" size="sm" onClick={onLogin}>
+                Кіру
+              </Button>
+              <Button
+                type="button"
+                variant="accent"
+                size="sm"
+                onClick={onRegister}
+              >
+                Тіркелу
+              </Button>
+            </>
+          )}
         </div>
 
         <button
@@ -77,26 +95,38 @@ export function Header({ onLogin, onRegister }: HeaderProps) {
             ))}
           </nav>
           <div className="mt-4 flex gap-2">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={() => {
-                setOpen(false);
-                onLogin();
-              }}
-            >
-              Кіру
-            </Button>
-            <Button
-              variant="accent"
-              className="flex-1"
-              onClick={() => {
-                setOpen(false);
-                onRegister();
-              }}
-            >
-              Тіркелу
-            </Button>
+            {authenticated ? (
+              <Button asChild variant="accent" className="flex-1">
+                <a href="/dashboard" onClick={() => setOpen(false)}>
+                  Кабинет
+                </a>
+              </Button>
+            ) : (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => {
+                    setOpen(false);
+                    onLogin();
+                  }}
+                >
+                  Кіру
+                </Button>
+                <Button
+                  type="button"
+                  variant="accent"
+                  className="flex-1"
+                  onClick={() => {
+                    setOpen(false);
+                    onRegister();
+                  }}
+                >
+                  Тіркелу
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}

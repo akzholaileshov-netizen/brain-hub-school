@@ -17,7 +17,7 @@ export default async function IeltsPage() {
 
   const prominent = student.track === "vip-ielts";
   const enrolled = prominent || Boolean(student.ielts_enrolled);
-  const modules = enrolled ? getIeltsModuleCards(student) : [];
+  const modules = enrolled ? await getIeltsModuleCards(student) : [];
 
   return (
     <DashboardShell title="VIP IELTS">
@@ -25,8 +25,8 @@ export default async function IeltsPage() {
         enrolled={enrolled}
         prominent={prominent}
         modules={modules}
-        bookings={listMentorBookings(student.id)}
-        mockHistory={listIeltsMocks(student.id)}
+        bookings={await listMentorBookings(student.id)}
+        mockHistory={await listIeltsMocks(student.id)}
         mockQuestions={IELTS_MOCK_QUESTIONS.map((q, index) => ({
           index,
           prompt: q.prompt,

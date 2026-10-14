@@ -1,10 +1,7 @@
 import { redirect } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { readSessionStudent } from "@/lib/auth";
-import {
-  getDashboardSubjects,
-  getOverallProgress,
-} from "@/lib/db";
+import { getDashboardSubjects, getOverallProgress } from "@/lib/db";
 import { TRACKS } from "@/lib/quiz-data";
 
 export const instant = false;
@@ -14,8 +11,8 @@ export default async function DashboardPage() {
   if (!student) redirect("/");
 
   const track = TRACKS.find((t) => t.id === student.track);
-  const subjects = getDashboardSubjects(student);
-  const progressPct = getOverallProgress(student);
+  const subjects = await getDashboardSubjects(student);
+  const progressPct = await getOverallProgress(student);
   const isVip = student.track === "vip-ielts";
 
   return (
@@ -66,7 +63,7 @@ export default async function DashboardPage() {
         <div className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-6">
           <p className="text-sm text-[var(--ink-muted)]">GPA</p>
           <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--teal-deep)]">
-            {student.gpa.toFixed(2)}{" "}
+            {Number(student.gpa).toFixed(2)}{" "}
             <span className="text-lg text-[var(--ink-muted)]">/ 4.0</span>
           </p>
           <p className="mt-3 text-sm text-[var(--ink-soft)]">

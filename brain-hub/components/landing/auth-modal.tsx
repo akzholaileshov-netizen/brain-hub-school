@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,27 +35,29 @@ export function AuthModal({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [track, setTrack] = useState<TrackId>(
-    recommendedTrack ?? "info-mat",
-  );
+  const [trackOverride, setTrackOverride] = useState<TrackId | null>(null);
+  const track = trackOverride ?? recommendedTrack ?? "info-mat";
 
-  useEffect(() => {
-    if (recommendedTrack) setTrack(recommendedTrack);
-  }, [recommendedTrack, open]);
-
-  useEffect(() => {
-    if (open) {
-      setError(null);
-      setLoading(false);
-    }
-  }, [open, mode]);
+  function resetFormState() {
+    setError(null);
+    setLoading(false);
+  }
 
   function handleOpenChange(next: boolean) {
-    if (!next) {
-      setError(null);
-      setLoading(false);
+    if (next) {
+      resetFormState();
+      setTrackOverride(null);
+    } else {
+      resetFormState();
+      setTrackOverride(null);
     }
     onOpenChange(next);
+  }
+
+  function switchMode(next: Mode) {
+    resetFormState();
+    if (next === "register") setTrackOverride(null);
+    onModeChange(next);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -124,10 +126,7 @@ export function AuthModal({
                 ? "bg-white text-[var(--teal-deep)] shadow-sm"
                 : "text-[var(--ink-muted)]"
             }`}
-            onClick={() => {
-              setError(null);
-              onModeChange("login");
-            }}
+            onClick={() => switchMode("login")}
           >
             Кіру
           </button>
@@ -138,10 +137,7 @@ export function AuthModal({
                 ? "bg-white text-[var(--teal-deep)] shadow-sm"
                 : "text-[var(--ink-muted)]"
             }`}
-            onClick={() => {
-              setError(null);
-              onModeChange("register");
-            }}
+            onClick={() => switchMode("register")}
           >
             Тіркелу
           </button>
@@ -165,7 +161,7 @@ export function AuthModal({
                   id="track"
                   name="track"
                   value={track}
-                  onChange={(e) => setTrack(e.target.value as TrackId)}
+                  onChange={(e) => setTrackOverride(e.target.value as TrackId)}
                   required
                 >
                   {TRACKS.map((item) => (

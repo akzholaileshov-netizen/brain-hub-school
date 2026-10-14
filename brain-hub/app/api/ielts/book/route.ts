@@ -10,7 +10,9 @@ export async function GET() {
       { status: 401 },
     );
   }
-  return NextResponse.json({ bookings: listMentorBookings(student.id) });
+  return NextResponse.json({
+    bookings: await listMentorBookings(student.id),
+  });
 }
 
 export async function POST(request: Request) {
@@ -52,7 +54,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const id = createMentorBooking(
+  const id = await createMentorBooking(
     student.id,
     body.slotAt,
     body.platform,
@@ -61,6 +63,6 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ok: true,
     id,
-    bookings: listMentorBookings(student.id),
+    bookings: await listMentorBookings(student.id),
   });
 }

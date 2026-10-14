@@ -28,7 +28,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = submitAssessment(student.id, body.assessmentId, body.answers);
+  const result = await submitAssessment(
+    student.id,
+    body.assessmentId,
+    body.answers,
+  );
   if ("error" in result) {
     return NextResponse.json({ error: result.error }, { status: 404 });
   }

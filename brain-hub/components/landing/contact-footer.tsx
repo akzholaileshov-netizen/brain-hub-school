@@ -1,8 +1,11 @@
-import { MessageCircle, Play, Send } from "lucide-react";
+import { MessageCircle, Music2, Send } from "lucide-react";
 
 export function ContactFooter() {
   return (
-    <footer id="contact" className="relative scroll-mt-24 border-t border-[var(--teal-deep)]/10 bg-[var(--mist)]">
+    <footer
+      id="contact"
+      className="relative scroll-mt-24 border-t border-[var(--teal-deep)]/10 bg-[var(--mist)]"
+    >
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
           <div>
@@ -15,7 +18,7 @@ export function ContactFooter() {
             </p>
             <div className="mt-5 flex gap-3">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/brainhub.kz/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -24,7 +27,7 @@ export function ContactFooter() {
                 <MessageCircle className="h-4 w-4" />
               </a>
               <a
-                href="https://t.me"
+                href="https://t.me/brainhub_kz"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Telegram"
@@ -33,13 +36,13 @@ export function ContactFooter() {
                 <Send className="h-4 w-4" />
               </a>
               <a
-                href="https://youtube.com"
+                href="https://www.tiktok.com/@brainhub.kz"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="YouTube"
+                aria-label="TikTok"
                 className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-[var(--teal-deep)] transition-colors hover:text-[var(--coral)]"
               >
-                <Play className="h-4 w-4" />
+                <Music2 className="h-4 w-4" />
               </a>
             </div>
           </div>
@@ -58,12 +61,18 @@ export function ContactFooter() {
                 </a>
               </li>
               <li>
-                <a href="tel:+77001234567" className="hover:text-[var(--teal-deep)]">
+                <a
+                  href="tel:+77001234567"
+                  className="hover:text-[var(--teal-deep)]"
+                >
                   +7 (700) 123-45-67
                 </a>
               </li>
               <li>
-                <a href="tel:+77271234567" className="hover:text-[var(--teal-deep)]">
+                <a
+                  href="tel:+77271234567"
+                  className="hover:text-[var(--teal-deep)]"
+                >
                   +7 (727) 123-45-67
                 </a>
               </li>
@@ -91,8 +100,18 @@ export function ContactFooter() {
                 </a>
               </li>
               <li>
+                <a href="#results" className="hover:text-[var(--teal-deep)]">
+                  Жетістіктер
+                </a>
+              </li>
+              <li>
                 <a href="#reviews" className="hover:text-[var(--teal-deep)]">
                   Түлектер пікірі
+                </a>
+              </li>
+              <li>
+                <a href="#contact" className="hover:text-[var(--teal-deep)]">
+                  Байланыс
                 </a>
               </li>
             </ul>

@@ -7,9 +7,10 @@ import {
   validatePassword,
 } from "@/lib/auth";
 import {
+  createStudent,
   generateStudentCode,
-  getDb,
   getStudentByEmail,
+  getStudentById,
   isValidTrack,
   seedStudentProgress,
 } from "@/lib/db";
@@ -61,39 +62,37 @@ export async function POST(request: Request) {
     );
   }
 
-  if (getStudentByEmail(email)) {
+  if (await getStudentByEmail(email)) {
     return NextResponse.json(
-      { error: "Бұл почтамен аккаунт бар. Кіріңіз немесе басқа почта қолданыңыз." },
+      {
+        error:
+          "Бұл почтамен аккаунт бар. Кіріңіз немесе басқа почта қолданыңыз.",
+      },
       { status: 409 },
     );
   }
 
-  const db = getDb();
-  const studentCode = generateStudentCode(db);
+  const studentCode = await generateStudentCode();
   const passwordHash = await hashPassword(password);
   const ieltsEnrolled = track === "vip-ielts" ? 1 : 0;
 
-  const insert = db.prepare(
-    `INSERT INTO students
-      (student_id, full_name, email, password_hash, track, gpa, ielts_enrolled)
-     VALUES (?, ?, ?, ?, ?, 0, ?)`,
-  );
-
-  const result = insert.run(
-    studentCode,
+  const studentPk = await createStudent({
+    studentId: studentCode,
     fullName,
     email,
     passwordHash,
     track,
     ieltsEnrolled,
-  );
-  const studentPk = Number(result.lastInsertRowid);
-  const gpa = seedStudentProgress(db, studentPk, track);
-  db.prepare("UPDATE students SET gpa = ? WHERE id = ?").run(gpa, studentPk);
+  });
+  await seedStudentProgress(studentPk, track);
 
-  const student = db
-    .prepare("SELECT * FROM students WHERE id = ?")
-    .get(studentPk) as NonNullable<ReturnType<typeof getStudentByEmail>>;
+  const student = await getStudentById(studentPk);
+  if (!student) {
+    return NextResponse.json(
+      { error: "Тіркелу сәтсіз аяқталды." },
+      { status: 500 },
+    );
+  }
 
   const token = await createSessionToken(student);
   await setSessionCookie(token);

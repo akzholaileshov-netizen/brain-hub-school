@@ -17,14 +17,13 @@ export default async function SubjectPage({ params, searchParams }: PageProps) {
 
   const { slug } = await params;
   const { scope } = await searchParams;
-  const detail = getSubjectDetail(
+  const detail = await getSubjectDetail(
     student,
     slug,
     scope === "ielts" ? "ielts-service" : "track",
   );
   if (!detail) notFound();
 
-  // Non-VIP students need enrollment for ielts-service subjects
   if (
     scope === "ielts" &&
     student.track !== "vip-ielts" &&
