@@ -40,18 +40,17 @@ function client() {
 
 async function ensureUser(acc) {
   const sb = client();
-  let { data, error } = await sb.auth.signUp({
+  // Prefer login — signup is blocked when Confirm email is ON / rate-limited.
+  let { data, error } = await sb.auth.signInWithPassword({
     email: acc.email,
     password: PASS,
-    options: { data: { full_name: acc.full_name, track: acc.track } },
   });
   if (error) {
-    if (/already|registered|exists/i.test(error.message)) {
-      ({ data, error } = await sb.auth.signInWithPassword({
-        email: acc.email,
-        password: PASS,
-      }));
-    }
+    ({ data, error } = await sb.auth.signUp({
+      email: acc.email,
+      password: PASS,
+      options: { data: { full_name: acc.full_name, track: acc.track } },
+    }));
   }
   if (error) throw new Error(`${acc.email}: ${error.message}`);
   if (!data.session) {
