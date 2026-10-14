@@ -26,7 +26,9 @@ npm run dev -- -p 43127 -H 0.0.0.0
 
 - Лендинг (hero, формат, 12 сұрақтық тест, бағыттар, жетістіктер, пікірлер)
 - Тіркелу / кіру API + httpOnly cookie сессия
-- `/dashboard` — студент ID, GPA, пән/сабақ прогресі, VIP IELTS сервисі
+- `/dashboard` — бағыт бойынша пән карталары, GPA/прогресс
+- `/dashboard/subjects/[slug]` — бейне сабақтар, үй жұмысы, тесттер
+- `/dashboard/ielts` — VIP IELTS модульдері, ментор брондау, mock-тест
 - SQLite дерекқор: `data/brain-hub.db` (gitignore)
 
 ## Auth ескертпелері
