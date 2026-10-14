@@ -44,10 +44,10 @@ export function Header({ onLogin, onRegister }: HeaderProps) {
         </nav>
 
         <div className="hidden items-center gap-2 sm:flex">
-          <Button variant="ghost" size="sm" onClick={onLogin}>
+          <Button type="button" variant="ghost" size="sm" onClick={onLogin}>
             Кіру
           </Button>
-          <Button variant="accent" size="sm" onClick={onRegister}>
+          <Button type="button" variant="accent" size="sm" onClick={onRegister}>
             Тіркелу
           </Button>
         </div>
