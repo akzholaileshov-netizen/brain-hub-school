@@ -1,4 +1,5 @@
 import { LogoutButton } from "@/components/dashboard/logout-button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 type Props = {
   children: React.ReactNode;
@@ -7,32 +8,33 @@ type Props = {
 
 export function DashboardShell({ children, title = "Жеке кабинет" }: Props) {
   return (
-    <div className="min-h-full bg-[var(--canvas)] text-[var(--ink)]">
-      <header className="border-b border-[var(--teal-deep)]/10 bg-[var(--surface)]/90 backdrop-blur">
+    <div className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
+      <header className="border-b border-[var(--border)] bg-[var(--card)]/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
             <a
               href="/dashboard"
-              className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-[var(--teal-deep)] sm:text-xl"
+              className="font-display text-lg font-bold tracking-tight text-[var(--foreground)] sm:text-xl"
             >
               Brain Hub
             </a>
-            <nav className="hidden items-center gap-3 text-sm font-medium text-[var(--ink-soft)] sm:flex">
-              <a href="/dashboard" className="hover:text-[var(--teal-deep)]">
+            <nav className="hidden items-center gap-3 text-sm font-medium text-[var(--foreground-soft)] sm:flex">
+              <a href="/dashboard" className="hover:text-[var(--primary)]">
                 Басты бет
               </a>
               <a
                 href="/dashboard/ielts"
-                className="hover:text-[var(--teal-deep)]"
+                className="hover:text-[var(--primary)]"
               >
                 VIP IELTS
               </a>
             </nav>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-[var(--ink-muted)] md:inline">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="hidden text-sm text-[var(--muted-foreground)] md:inline">
               {title}
             </span>
+            <ThemeToggle />
             <LogoutButton />
           </div>
         </div>

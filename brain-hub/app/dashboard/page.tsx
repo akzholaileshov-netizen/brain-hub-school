@@ -20,56 +20,56 @@ export default async function DashboardPage() {
 
   return (
     <DashboardShell>
-      <section className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-6 sm:p-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--coral)]">
+      <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 sm:p-8">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
           Студент профилі
         </p>
-        <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--teal-deep)] sm:text-3xl">
+        <h1 className="mt-2 font-display text-2xl font-semibold text-[var(--foreground)] sm:text-3xl">
           {student.full_name}
         </h1>
-        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--ink-soft)]">
+        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[var(--foreground-soft)]">
           <p>
-            <span className="text-[var(--ink-muted)]">ID:</span>{" "}
-            <span className="font-semibold text-[var(--ink)]">
+            <span className="text-[var(--muted-foreground)]">ID:</span>{" "}
+            <span className="font-semibold text-[var(--foreground)]">
               {student.student_id}
             </span>
           </p>
           <p>
-            <span className="text-[var(--ink-muted)]">Бағыт:</span>{" "}
-            <span className="font-semibold text-[var(--ink)]">
+            <span className="text-[var(--muted-foreground)]">Бағыт:</span>{" "}
+            <span className="font-semibold text-[var(--foreground)]">
               {track?.name ?? student.track}
             </span>
           </p>
           <p>
-            <span className="text-[var(--ink-muted)]">Почта:</span>{" "}
+            <span className="text-[var(--muted-foreground)]">Почта:</span>{" "}
             {student.email}
           </p>
         </div>
       </section>
 
       <section className="mt-6 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-6">
-          <p className="text-sm text-[var(--ink-muted)]">Жалпы прогресс</p>
-          <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--teal-deep)]">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <p className="text-sm text-[var(--muted-foreground)]">Жалпы прогресс</p>
+          <p className="mt-2 font-display text-3xl font-semibold text-[var(--foreground)]">
             {progressPct}%
           </p>
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-[var(--mist)]">
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-[var(--muted)]">
             <div
-              className="h-full rounded-full bg-[var(--coral)]"
+              className="h-full rounded-full bg-[var(--primary)]"
               style={{ width: `${progressPct}%` }}
             />
           </div>
-          <p className="mt-3 text-sm text-[var(--ink-soft)]">
+          <p className="mt-3 text-sm text-[var(--foreground-soft)]">
             Бейне + үй жұмысы + тест нәтижелерінен есептеледі.
           </p>
         </div>
-        <div className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-6">
-          <p className="text-sm text-[var(--ink-muted)]">GPA</p>
-          <p className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold text-[var(--teal-deep)]">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+          <p className="text-sm text-[var(--muted-foreground)]">GPA</p>
+          <p className="mt-2 font-display text-3xl font-semibold text-[var(--foreground)]">
             {Number(student.gpa).toFixed(2)}{" "}
-            <span className="text-lg text-[var(--ink-muted)]">/ 4.0</span>
+            <span className="text-lg text-[var(--muted-foreground)]">/ 4.0</span>
           </p>
-          <p className="mt-3 text-sm text-[var(--ink-soft)]">
+          <p className="mt-3 text-sm text-[var(--foreground-soft)]">
             Прогресс өзгерген сайын GPA жаңарады.
           </p>
         </div>
@@ -78,10 +78,10 @@ export default async function DashboardPage() {
       <section className="mt-8">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--teal-deep)]">
+            <h2 className="font-display text-2xl font-semibold text-[var(--foreground)]">
               {isVip ? "IELTS модульдері" : "Пәндер"}
             </h2>
-            <p className="mt-2 text-sm text-[var(--ink-soft)]">
+            <p className="mt-2 text-sm text-[var(--foreground-soft)]">
               {isVip
                 ? "VIP IELTS бағытының негізгі мазмұны."
                 : `${track?.name} бағыты бойынша пәндер.`}
@@ -89,14 +89,14 @@ export default async function DashboardPage() {
           </div>
           <a
             href="/dashboard/ielts"
-            className="text-sm font-semibold text-[var(--coral)] hover:underline"
+            className="text-sm font-semibold text-[var(--primary)] hover:underline"
           >
             VIP IELTS сервисі →
           </a>
         </div>
 
         {subjects.length === 0 ? (
-          <div className="mt-6 rounded-2xl border border-dashed border-[var(--teal-deep)]/20 bg-[var(--surface)] p-8 text-sm text-[var(--ink-muted)]">
+          <div className="mt-6 rounded-2xl border border-dashed border-[var(--border)] bg-[var(--card)] p-8 text-sm text-[var(--muted-foreground)]">
             Пәндер жүктелуде немесе әзірге жоқ.
           </div>
         ) : (
@@ -105,21 +105,21 @@ export default async function DashboardPage() {
               <a
                 key={subject.id}
                 href={`/dashboard/subjects/${subject.slug}`}
-                className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-5 transition-transform hover:-translate-y-0.5"
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 transition-transform hover:-translate-y-0.5"
               >
-                <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--ink)]">
+                <h3 className="font-display text-lg font-semibold text-[var(--foreground)]">
                   {subject.name}
                 </h3>
-                <p className="mt-2 text-sm text-[var(--ink-soft)]">
+                <p className="mt-2 text-sm text-[var(--foreground-soft)]">
                   {subject.watchedCount}/{subject.videoCount} бейне қаралды
                 </p>
-                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[var(--mist)]">
+                <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-[var(--muted)]">
                   <div
-                    className="h-full rounded-full bg-[var(--coral)]"
+                    className="h-full rounded-full bg-[var(--primary)]"
                     style={{ width: `${subject.percent}%` }}
                   />
                 </div>
-                <p className="mt-2 text-xs font-semibold text-[var(--teal-mid)]">
+                <p className="mt-2 text-xs font-semibold text-[var(--primary)]">
                   Прогресс: {Math.round(subject.percent)}%
                 </p>
               </a>

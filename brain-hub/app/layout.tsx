@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SupabaseSetupBanner } from "@/components/supabase-setup-banner";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,26 +23,36 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="kk" className="h-full antialiased">
+    <html lang="kk" className="h-full antialiased" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('bh-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}var r=document.documentElement;r.classList.toggle('dark',t==='dark');r.style.colorScheme=t}catch(e){}})();`,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        {/* Cyrillic-capable display/body fonts (Turbopack next/font issue avoided) */}
+        {/* Plus Jakarta Sans + Outfit (Latin). Noto Sans: full Kazakh Cyrillic glyph fallback
+            (ә ғ қ ң ө ұ ү һ і). next/font skipped — prior Turbopack instability. */}
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
       <body className="flex min-h-full flex-col font-sans">
-        <SupabaseSetupBanner />
-        {children}
+        <ThemeProvider>
+          <SupabaseSetupBanner />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

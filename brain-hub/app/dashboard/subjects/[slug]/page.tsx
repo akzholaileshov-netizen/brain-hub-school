@@ -40,7 +40,7 @@ export default async function SubjectPage({ params, searchParams }: PageProps) {
       <div className="mb-4">
         <a
           href={scope === "ielts" ? "/dashboard/ielts" : "/dashboard"}
-          className="text-sm font-medium text-[var(--teal-mid)] hover:underline"
+          className="text-sm font-medium text-[var(--primary)] hover:underline"
         >
           ← Артқа
         </a>

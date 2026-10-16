@@ -23,10 +23,10 @@ export function FormatSection() {
     <section id="format" className="relative scroll-mt-24 py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--teal-deep)] sm:text-4xl">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
             Оқыту форматы
           </h2>
-          <p className="mt-3 text-base text-[var(--ink-soft)] sm:text-lg">
+          <p className="mt-3 text-base text-[var(--foreground-soft)] sm:text-lg">
             Нәтижеге бағытталған үш тірек — сабақ, менторлық және өлшенетін
             прогресс.
           </p>
@@ -39,13 +39,13 @@ export function FormatSection() {
               className="motion-safe:animate-rise"
               style={{ animationDelay: `${index * 90}ms` }}
             >
-              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[var(--mist)] text-[var(--teal-mid)]">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[var(--muted)] text-[var(--primary)]">
                 <item.icon className="h-5 w-5" aria-hidden />
               </div>
-              <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--ink)]">
+              <h3 className="font-display text-xl font-semibold text-[var(--foreground)]">
                 {item.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--ink-soft)] sm:text-base">
+              <p className="mt-2 text-sm leading-relaxed text-[var(--foreground-soft)] sm:text-base">
                 {item.text}
               </p>
             </div>

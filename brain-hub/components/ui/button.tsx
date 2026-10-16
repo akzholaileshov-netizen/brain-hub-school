@@ -4,19 +4,22 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-[var(--teal-deep)] text-white shadow-sm hover:bg-[var(--teal-mid)] active:translate-y-px",
+          "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm hover:bg-[var(--primary-hover)] active:translate-y-px",
         secondary:
-          "bg-white/90 text-[var(--teal-deep)] border border-[var(--teal-deep)]/15 hover:bg-white hover:border-[var(--teal-deep)]/30",
+          "bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:bg-[var(--muted)]",
         outline:
-          "border border-[var(--teal-deep)]/20 bg-transparent text-[var(--teal-deep)] hover:bg-[var(--teal-deep)]/5",
-        ghost: "text-[var(--teal-deep)] hover:bg-[var(--teal-deep)]/8",
+          "border border-[var(--border)] bg-transparent text-[var(--foreground)] hover:bg-[var(--muted)]",
+        ghost:
+          "text-[var(--foreground-soft)] hover:bg-[var(--muted)] hover:text-[var(--foreground)]",
         accent:
-          "bg-[var(--coral)] text-white shadow-sm hover:bg-[var(--coral-deep)] active:translate-y-px",
+          "bg-[var(--accent)] text-[var(--accent-foreground)] shadow-sm hover:bg-[var(--accent-hover)] active:translate-y-px",
+        destructive:
+          "bg-[var(--destructive)] text-[var(--destructive-foreground)] shadow-sm hover:opacity-90 active:translate-y-px",
       },
       size: {
         default: "h-11 px-5 py-2",

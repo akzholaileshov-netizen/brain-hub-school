@@ -24,25 +24,25 @@ export function TestimonialsSection() {
     <section id="reviews" className="relative scroll-mt-24 py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <h2 className="font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-[var(--teal-deep)] sm:text-4xl">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
             Түлектер пікірі
           </h2>
-          <p className="mt-3 text-base text-[var(--ink-soft)] sm:text-lg">
+          <p className="mt-3 text-base text-[var(--foreground-soft)] sm:text-lg">
             Нақты баллдар, гранттар және оқушылардың өз сөздері.
           </p>
         </div>
 
         <div className="mt-12 grid gap-8 md:grid-cols-3">
           {REVIEWS.map((review) => (
-            <blockquote key={review.name} className="border-t-2 border-[var(--coral)] pt-5">
-              <p className="text-sm leading-relaxed text-[var(--ink-soft)] sm:text-base">
+            <blockquote key={review.name} className="border-t-2 border-[var(--accent)] pt-5">
+              <p className="text-sm leading-relaxed text-[var(--foreground-soft)] sm:text-base">
                 “{review.quote}”
               </p>
               <footer className="mt-5">
-                <p className="font-[family-name:var(--font-display)] text-base font-semibold text-[var(--ink)]">
+                <p className="font-display text-base font-semibold text-[var(--foreground)]">
                   {review.name}
                 </p>
-                <p className="mt-1 text-sm text-[var(--teal-mid)]">
+                <p className="mt-1 text-sm text-[var(--primary)]">
                   {review.result}
                 </p>
               </footer>

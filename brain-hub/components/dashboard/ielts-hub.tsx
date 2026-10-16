@@ -171,17 +171,17 @@ export function IeltsHub({
       <section
         className={`rounded-2xl border p-6 sm:p-8 ${
           prominent
-            ? "border-[var(--coral)]/35 bg-[linear-gradient(135deg,#fff7f4,#ffffff_55%)]"
-            : "border-[var(--teal-deep)]/10 bg-[var(--surface)]"
+            ? "border-[var(--accent)]/40 bg-[linear-gradient(135deg,color-mix(in_oklab,var(--primary)_12%,var(--card)),var(--card)_55%)]"
+            : "border-[var(--border)] bg-[var(--card)]"
         }`}
       >
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--coral)]">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
           {prominent ? "Негізгі бағыт" : "Қосымша сервис"}
         </p>
-        <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--teal-deep)] sm:text-3xl">
+        <h1 className="mt-2 font-display text-2xl font-semibold text-[var(--foreground)] sm:text-3xl">
           VIP IELTS / Ағылшын тілі
         </h1>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--ink-soft)]">
+        <p className="mt-2 max-w-2xl text-sm text-[var(--foreground-soft)]">
           Speaking, Listening, Reading, Writing модульдері, ментор сессиясы және
           mock-тест — бір жерде.
         </p>
@@ -189,7 +189,7 @@ export function IeltsHub({
           <div className="mt-5">
             <Button
               type="button"
-              variant={currentEnrolled ? "secondary" : "accent"}
+              variant={currentEnrolled ? "secondary" : "default"}
               disabled={loading}
               onClick={toggleEnroll}
             >
@@ -200,24 +200,24 @@ export function IeltsHub({
       </section>
 
       {error && (
-        <div className="rounded-lg border border-[var(--coral)]/30 bg-[var(--coral)]/8 px-3 py-2 text-sm text-[var(--coral-deep)]">
+        <div className="rounded-lg border border-[var(--destructive)]/30 bg-[var(--destructive)]/10 px-3 py-2 text-sm text-[var(--destructive)]">
           {error}
         </div>
       )}
       {message && (
-        <div className="rounded-lg border border-[var(--teal-mid)]/25 bg-[var(--mist)] px-3 py-2 text-sm text-[var(--teal-deep)]">
+        <div className="rounded-lg border border-[var(--primary)]/25 bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)]">
           {message}
         </div>
       )}
 
       {!currentEnrolled && !prominent ? (
-        <div className="rounded-2xl border border-dashed border-[var(--teal-deep)]/20 bg-[var(--surface)] p-8 text-sm text-[var(--ink-soft)]">
+        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--card)] p-8 text-sm text-[var(--foreground-soft)]">
           Модульдер, брондау және mock-тест үшін сервиске жазылыңыз.
         </div>
       ) : (
         <>
           <section>
-            <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--teal-deep)]">
+            <h2 className="font-display text-xl font-semibold text-[var(--foreground)]">
               IELTS модульдері
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -225,18 +225,18 @@ export function IeltsHub({
                 <a
                   key={mod.id}
                   href={`/dashboard/subjects/${mod.slug}?scope=${prominent ? "track" : "ielts"}`}
-                  className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-5 transition-transform hover:-translate-y-0.5"
+                  className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 transition-transform hover:-translate-y-0.5"
                 >
-                  <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--ink)]">
+                  <h3 className="font-display text-lg font-semibold text-[var(--foreground)]">
                     {mod.name}
                   </h3>
-                  <p className="mt-2 text-sm text-[var(--ink-soft)]">
+                  <p className="mt-2 text-sm text-[var(--foreground-soft)]">
                     {mod.watchedCount}/{mod.videoCount} бейне · прогресс{" "}
                     {Math.round(mod.percent)}%
                   </p>
-                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[var(--mist)]">
+                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[var(--muted)]">
                     <div
-                      className="h-full rounded-full bg-[var(--coral)]"
+                      className="h-full rounded-full bg-[var(--primary)]"
                       style={{ width: `${mod.percent}%` }}
                     />
                   </div>
@@ -248,9 +248,9 @@ export function IeltsHub({
           <section className="grid gap-5 lg:grid-cols-2">
             <form
               onSubmit={bookSession}
-              className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-5 space-y-4"
+              className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 space-y-4"
             >
-              <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--teal-deep)]">
+              <h2 className="font-display text-lg font-semibold text-[var(--foreground)]">
                 Ментормен сессия брондау
               </h2>
               <div className="space-y-2">
@@ -290,12 +290,12 @@ export function IeltsHub({
               </Button>
             </form>
 
-            <div className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-5">
-              <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--teal-deep)]">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
+              <h2 className="font-display text-lg font-semibold text-[var(--foreground)]">
                 Алдағы брондаулар
               </h2>
               {bookings.length === 0 ? (
-                <p className="mt-3 text-sm text-[var(--ink-muted)]">
+                <p className="mt-3 text-sm text-[var(--muted-foreground)]">
                   Әзірге брондау жоқ.
                 </p>
               ) : (
@@ -303,13 +303,13 @@ export function IeltsHub({
                   {bookings.map((b) => (
                     <li
                       key={b.id}
-                      className="rounded-lg bg-[var(--mist)]/70 px-3 py-2 text-sm"
+                      className="rounded-lg bg-[var(--muted)]/70 px-3 py-2 text-sm"
                     >
-                      <p className="font-medium text-[var(--ink)]">
+                      <p className="font-medium text-[var(--foreground)]">
                         {new Date(b.slotAt).toLocaleString("kk-KZ")} ·{" "}
                         {b.platform === "zoom" ? "Zoom" : "Meet"}
                       </p>
-                      <p className="text-xs text-[var(--ink-muted)]">
+                      <p className="text-xs text-[var(--muted-foreground)]">
                         {b.status === "upcoming" ? "Күтілуде" : b.status}
                         {b.note ? ` · ${b.note}` : ""}
                       </p>
@@ -320,20 +320,19 @@ export function IeltsHub({
             </div>
           </section>
 
-          <section className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-5 sm:p-6">
+          <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--teal-deep)]">
+                <h2 className="font-display text-lg font-semibold text-[var(--foreground)]">
                   IELTS mock-тест
                 </h2>
-                <p className="mt-1 text-sm text-[var(--ink-soft)]">
+                <p className="mt-1 text-sm text-[var(--foreground-soft)]">
                   6 сұрақ · таймер 10 минут · band нәтижесі сақталады
                 </p>
               </div>
               {!mockStarted ? (
                 <Button
                   type="button"
-                  variant="accent"
                   onClick={() => {
                     setMockStarted(true);
                     setSecondsLeft(10 * 60);
@@ -344,14 +343,14 @@ export function IeltsHub({
                   Mock-тесті бастау
                 </Button>
               ) : (
-                <p className="rounded-full bg-[var(--mist)] px-3 py-1 text-sm font-semibold text-[var(--teal-deep)]">
+                <p className="rounded-full bg-[var(--muted)] px-3 py-1 text-sm font-semibold text-[var(--foreground)]">
                   Қалған уақыт: {timerLabel}
                 </p>
               )}
             </div>
 
             {lastResult && (
-              <p className="mt-4 text-sm font-medium text-[var(--teal-mid)]">
+              <p className="mt-4 text-sm font-medium text-[var(--primary)]">
                 Соңғы нәтиже: {lastResult.percent}% · Band {lastResult.band.toFixed(1)}
               </p>
             )}
@@ -367,7 +366,7 @@ export function IeltsHub({
                       {question.options.map((option, optionIndex) => (
                         <label
                           key={option}
-                          className="flex gap-2 rounded-lg border border-[var(--teal-deep)]/10 px-3 py-2 text-sm"
+                          className="flex gap-2 rounded-lg border border-[var(--border)] px-3 py-2 text-sm"
                         >
                           <input
                             type="radio"
@@ -395,11 +394,11 @@ export function IeltsHub({
             )}
 
             <div className="mt-6">
-              <h3 className="text-sm font-semibold text-[var(--ink)]">
+              <h3 className="text-sm font-semibold text-[var(--foreground)]">
                 Нәтижелер тарихы
               </h3>
               {history.length === 0 ? (
-                <p className="mt-2 text-sm text-[var(--ink-muted)]">
+                <p className="mt-2 text-sm text-[var(--muted-foreground)]">
                   Тарих бос.
                 </p>
               ) : (
@@ -407,7 +406,7 @@ export function IeltsHub({
                   {history.map((item) => (
                     <li
                       key={item.id}
-                      className="rounded-lg bg-[var(--mist)]/70 px-3 py-2 text-sm"
+                      className="rounded-lg bg-[var(--muted)]/70 px-3 py-2 text-sm"
                     >
                       Band {item.band.toFixed(1)} · {item.percent}% ·{" "}
                       {new Date(item.createdAt).toLocaleString("kk-KZ")}

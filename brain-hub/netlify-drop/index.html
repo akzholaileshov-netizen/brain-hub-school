@@ -7,30 +7,29 @@
   <meta name="description" content="Brain Hub: интерактивті сабақтар, жеке ментор және бейіндік бағыттар арқылы IELTS пен грантқа дайындық." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --canvas: #f4f8f6;
-      --surface: #ffffff;
-      --mist: #e7f2ef;
-      --ink: #1b2a28;
-      --ink-soft: #3d524e;
-      --ink-muted: #6b7f7a;
-      --teal-deep: #0f4c4a;
-      --teal-mid: #1a8a7d;
-      --coral: #e05a3c;
-      --coral-deep: #c4472d;
-      --amber: #f2c14e;
-      --font-body: "Manrope", "Segoe UI", sans-serif;
-      --font-display: "Unbounded", "Manrope", sans-serif;
+      --background: #f8fafc;
+      --card: #ffffff;
+      --muted: #f1f5f9;
+      --foreground: #0f172a;
+      --foreground-soft: #334155;
+      --muted-foreground: #64748b;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #6366f1;
+      --font-body: "Plus Jakarta Sans", "Noto Sans", "Segoe UI", sans-serif;
+      --font-display: "Outfit", "Noto Sans", "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: var(--font-body);
-      background: var(--canvas);
-      color: var(--ink);
+      background: var(--background);
+      color: var(--foreground);
     }
     a { color: inherit; text-decoration: none; }
     .wrap { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem; }
@@ -43,13 +42,13 @@
     }
     .brand {
       font-family: var(--font-display);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 1.15rem;
-      color: var(--teal-deep);
+      color: var(--foreground);
     }
     .nav-links { display: none; gap: 1.25rem; }
-    .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-soft); }
-    .nav-links a:hover { color: var(--teal-deep); }
+    .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--foreground-soft); }
+    .nav-links a:hover { color: var(--primary); }
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       border: 0; border-radius: 0.5rem; font-weight: 600; cursor: pointer;
@@ -57,11 +56,11 @@
       transition: transform .15s ease, background .15s ease;
     }
     .btn:active { transform: translateY(1px); }
-    .btn-coral { background: var(--coral); color: #fff; }
-    .btn-coral:hover { background: var(--coral-deep); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
     .btn-ghost {
-      background: rgba(255,255,255,.9); color: var(--teal-deep);
-      border: 1px solid rgba(15,76,74,.15);
+      background: rgba(255,255,255,.9); color: var(--foreground);
+      border: 1px solid var(--border);
     }
     .btn-sm { padding: 0.45rem 0.85rem; font-size: 0.8rem; }
     .hero {
@@ -71,34 +70,34 @@
     .hero-bg {
       position: absolute; inset: 0; z-index: -1;
       background:
-        radial-gradient(ellipse at 70% 40%, rgba(242,193,78,.18), transparent 55%),
-        linear-gradient(105deg, rgba(244,248,246,.96) 0%, rgba(244,248,246,.82) 36%, rgba(232,244,240,.35) 62%, rgba(26,138,125,.12) 100%),
-        radial-gradient(#0f4c4a 0.7px, transparent 0.7px);
+        radial-gradient(ellipse at 70% 40%, rgba(99,102,241,.2), transparent 55%),
+        linear-gradient(105deg, rgba(248,250,252,.96) 0%, rgba(248,250,252,.82) 36%, rgba(219,234,254,.35) 62%, rgba(37,99,235,.12) 100%),
+        radial-gradient(#2563eb 0.7px, transparent 0.7px);
       background-size: auto, auto, 18px 18px;
-      background-color: #d9ebe6;
+      background-color: #dbeafe;
     }
     .hero-inner { padding: 7rem 0 4rem; max-width: 34rem; animation: rise .7s both; }
     .hero-brand {
-      font-family: var(--font-display); font-weight: 600;
-      font-size: clamp(2.4rem, 6vw, 3.6rem); color: var(--teal-deep); margin: 0;
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(2.4rem, 6vw, 3.6rem); color: var(--foreground); margin: 0;
       letter-spacing: -0.02em;
     }
     .hero h1 {
-      font-family: var(--font-display); font-weight: 600;
+      font-family: var(--font-display); font-weight: 700;
       font-size: clamp(1.7rem, 4vw, 2.6rem); line-height: 1.15;
       margin: 1.1rem 0 0; letter-spacing: -0.02em;
     }
     .hero p.lead {
-      margin: 1rem 0 0; color: var(--ink-soft); font-size: 1.05rem; line-height: 1.6;
+      margin: 1rem 0 0; color: var(--foreground-soft); font-size: 1.05rem; line-height: 1.6;
       max-width: 28rem;
     }
     .cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
     section.block { padding: 4.5rem 0; }
     h2 {
-      font-family: var(--font-display); font-weight: 600;
-      font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--teal-deep); margin: 0;
+      font-family: var(--font-display); font-weight: 700;
+      font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--foreground); margin: 0;
     }
-    .sub { margin: 0.75rem 0 0; color: var(--ink-soft); max-width: 36rem; }
+    .sub { margin: 0.75rem 0 0; color: var(--foreground-soft); max-width: 36rem; }
     .grid3 {
       display: grid; gap: 2rem; margin-top: 2.5rem;
     }
@@ -108,45 +107,47 @@
       .nav-actions { display: flex; gap: 0.5rem; align-items: center; }
     }
     .card-soft h3 {
-      font-family: var(--font-display); font-size: 1.15rem; margin: 0.75rem 0 0;
+      font-family: var(--font-display); font-size: 1.15rem; margin: 0.75rem 0 0; font-weight: 700;
     }
-    .card-soft p { margin: 0.5rem 0 0; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.55; }
+    .card-soft p { margin: 0.5rem 0 0; color: var(--foreground-soft); font-size: 0.95rem; line-height: 1.55; }
     .icon {
       width: 2.75rem; height: 2.75rem; border-radius: 999px;
-      background: var(--mist); color: var(--teal-mid);
+      background: var(--muted); color: var(--primary);
       display: grid; place-items: center; font-weight: 700;
     }
     .tracks { display: grid; gap: 1rem; margin-top: 2rem; }
     @media (min-width: 640px) { .tracks { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1024px) { .tracks { grid-template-columns: repeat(3, 1fr); } }
     .track {
-      background: var(--surface); border: 1px solid rgba(15,76,74,.1);
+      background: var(--card); border: 1px solid var(--border);
       border-radius: 1rem; padding: 1.25rem 1.35rem;
     }
-    .track h3 { margin: 0; font-family: var(--font-display); font-size: 1.1rem; }
-    .track .short { margin: 0.35rem 0 0; color: var(--coral); font-size: 0.85rem; font-weight: 600; }
-    .track p { margin: 0.55rem 0 0; color: var(--ink-soft); font-size: 0.9rem; line-height: 1.5; }
+    .track h3 { margin: 0; font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; }
+    .track .short { margin: 0.35rem 0 0; color: var(--accent); font-size: 0.85rem; font-weight: 600; }
+    .track p { margin: 0.55rem 0 0; color: var(--foreground-soft); font-size: 0.9rem; line-height: 1.5; }
     .notice {
       margin: 2rem 0 0; padding: 1rem 1.15rem; border-radius: 0.75rem;
-      background: #fff8e8; border: 1px solid rgba(242,193,78,.55);
-      color: #5c4a12; font-size: 0.92rem; line-height: 1.5;
+      background: color-mix(in oklab, var(--primary) 8%, white);
+      border: 1px solid color-mix(in oklab, var(--primary) 25%, var(--border));
+      color: var(--foreground-soft); font-size: 0.92rem; line-height: 1.5;
     }
     footer {
-      border-top: 1px solid rgba(15,76,74,.1);
+      border-top: 1px solid var(--border);
       padding: 2.5rem 0 2rem; margin-top: 1rem;
-      color: var(--ink-muted); font-size: 0.8rem;
+      color: var(--muted-foreground); font-size: 0.8rem;
     }
     .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(15,30,28,.45);
+      position: fixed; inset: 0; background: rgba(15,23,42,.45);
       display: none; align-items: center; justify-content: center; z-index: 50; padding: 1rem;
     }
     .modal-backdrop.open { display: flex; }
     .modal {
-      width: min(100%, 26rem); background: #fff; border-radius: 1rem;
+      width: min(100%, 26rem); background: var(--card); border-radius: 1rem;
       padding: 1.5rem; box-shadow: 0 20px 50px rgba(0,0,0,.18);
+      border: 1px solid var(--border);
     }
-    .modal h3 { font-family: var(--font-display); margin: 0 0 0.5rem; color: var(--teal-deep); }
-    .modal p { margin: 0; color: var(--ink-soft); font-size: 0.95rem; line-height: 1.5; }
+    .modal h3 { font-family: var(--font-display); margin: 0 0 0.5rem; color: var(--foreground); font-weight: 700; }
+    .modal p { margin: 0; color: var(--foreground-soft); font-size: 0.95rem; line-height: 1.5; }
     .modal .actions { margin-top: 1.25rem; display: flex; gap: 0.5rem; justify-content: flex-end; }
     @keyframes rise {
       from { opacity: 0; transform: translateY(18px); }
@@ -154,7 +155,7 @@
     }
     .nav-actions { display: none; }
     .menu-btn {
-      display: inline-flex; background: transparent; border: 0; color: var(--teal-deep);
+      display: inline-flex; background: transparent; border: 0; color: var(--foreground);
       font-size: 1.4rem; cursor: pointer;
     }
     @media (min-width: 768px) { .menu-btn { display: none; } }
@@ -171,7 +172,7 @@
       </nav>
       <div class="nav-actions">
         <button class="btn btn-ghost btn-sm" type="button" data-open-modal>Кіру</button>
-        <button class="btn btn-coral btn-sm" type="button" data-open-modal>Тіркелу</button>
+        <button class="btn btn-primary btn-sm" type="button" data-open-modal>Тіркелу</button>
       </div>
       <button class="menu-btn" type="button" data-open-modal aria-label="Мәзір">☰</button>
     </div>
@@ -185,7 +186,7 @@
         <h1>IELTS 7.5+ және грантқа нақты жол</h1>
         <p class="lead">Жеке ментор, интерактивті сабақтар және өлшенетін прогресс — бір платформада.</p>
         <div class="cta">
-          <a class="btn btn-coral" href="#tracks">Бағытты анықтау</a>
+          <a class="btn btn-primary" href="#tracks">Бағытты анықтау</a>
           <button class="btn btn-ghost" type="button" data-open-modal>Тегін консультация</button>
         </div>
       </div>

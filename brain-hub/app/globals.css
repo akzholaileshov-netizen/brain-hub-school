@@ -1,32 +1,87 @@
 @import "tailwindcss";
 
 :root {
-  --canvas: #f4f8f6;
-  --surface: #ffffff;
-  --mist: #e7f2ef;
-  --ink: #1b2a28;
-  --ink-soft: #3d524e;
-  --ink-muted: #6b7f7a;
-  --teal-deep: #0f4c4a;
-  --teal-mid: #1a8a7d;
-  --coral: #e05a3c;
-  --coral-deep: #c4472d;
-  --amber: #f2c14e;
-  --ring: #1a8a7d;
-  --background: var(--canvas);
-  --foreground: var(--ink);
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --foreground-soft: #334155;
+  --border: #e2e8f0;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-foreground: #ffffff;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --ring: #2563eb;
+  --success: #059669;
+  --warning: #d97706;
+
+  /* shadcn-aligned aliases */
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --secondary: var(--muted);
+  --secondary-foreground: var(--foreground);
+  --input: var(--border);
+
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --card: #1e293b;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --foreground-soft: #cbd5e1;
+  --border: #334155;
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --primary-foreground: #0f172a;
+  --accent: #818cf8;
+  --accent-hover: #a5b4fc;
+  --accent-foreground: #0f172a;
+  --destructive: #f87171;
+  --destructive-foreground: #0f172a;
+  --ring: #60a5fa;
+  --success: #34d399;
+  --warning: #fbbf24;
+
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --secondary: #334155;
+  --secondary-foreground: var(--foreground);
+  --input: var(--border);
+
+  color-scheme: dark;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Manrope", "Segoe UI", sans-serif;
-  --font-display: "Unbounded", "Manrope", sans-serif;
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
 }
 
 :root {
-  --font-body: "Manrope", "Segoe UI", sans-serif;
-  --font-display: "Unbounded", "Manrope", sans-serif;
+  /* Plus Jakarta / Outfit for Latin; Noto Sans covers Kazakh Cyrillic glyphs */
+  --font-body: var(--font-body-loaded, "Plus Jakarta Sans"), "Noto Sans",
+    "Segoe UI", sans-serif;
+  --font-display: var(--font-display-loaded, "Outfit"), "Noto Sans", "Segoe UI",
+    sans-serif;
 }
 
 html {
@@ -34,9 +89,29 @@ html {
 }
 
 body {
-  background: var(--canvas);
-  color: var(--ink);
+  background: var(--background);
+  color: var(--foreground);
   font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-weight: 800;
+}
+
+h2 {
+  font-weight: 700;
 }
 
 @keyframes rise {

@@ -63,31 +63,31 @@ export function SubjectLearningPanel({ subject }: Props) {
     <div className="space-y-8">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--coral)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
             Пән модулі
           </p>
-          <h1 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--teal-deep)] sm:text-3xl">
+          <h1 className="mt-2 font-display text-2xl font-semibold text-[var(--foreground)] sm:text-3xl">
             {subject.name}
           </h1>
         </div>
-        <div className="rounded-xl bg-[var(--mist)] px-4 py-2 text-sm font-semibold text-[var(--teal-deep)]">
+        <div className="rounded-xl bg-[var(--muted)] px-4 py-2 text-sm font-semibold text-[var(--foreground)]">
           Прогресс: {Math.round(percent)}%
         </div>
       </div>
 
       {error && (
-        <div className="rounded-lg border border-[var(--coral)]/30 bg-[var(--coral)]/8 px-3 py-2 text-sm text-[var(--coral-deep)]">
+        <div className="rounded-lg border border-[var(--destructive)]/30 bg-[var(--destructive)]/10 px-3 py-2 text-sm text-[var(--destructive)]">
           {error}
         </div>
       )}
       {message && (
-        <div className="rounded-lg border border-[var(--teal-mid)]/25 bg-[var(--mist)] px-3 py-2 text-sm text-[var(--teal-deep)]">
+        <div className="rounded-lg border border-[var(--primary)]/25 bg-[var(--muted)] px-3 py-2 text-sm text-[var(--foreground)]">
           {message}
         </div>
       )}
 
       <section className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
-        <div className="overflow-hidden rounded-2xl border border-[var(--teal-deep)]/10 bg-black">
+        <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-black">
           {activeVideo ? (
             <video
               key={activeVideo.id}
@@ -105,12 +105,12 @@ export function SubjectLearningPanel({ subject }: Props) {
             </div>
           )}
           {activeVideo && (
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-[var(--surface)] px-4 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-[var(--card)] px-4 py-3">
               <div>
-                <p className="font-semibold text-[var(--ink)]">
+                <p className="font-semibold text-[var(--foreground)]">
                   {activeVideo.title}
                 </p>
-                <p className="text-xs text-[var(--ink-muted)]">
+                <p className="text-xs text-[var(--muted-foreground)]">
                   Ұзақтығы: {formatDuration(activeVideo.durationSec)} ·{" "}
                   {activeVideo.watched ? "Қаралған" : "Қаралмаған"}
                 </p>
@@ -127,8 +127,8 @@ export function SubjectLearningPanel({ subject }: Props) {
           )}
         </div>
 
-        <div className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-4">
-          <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--teal-deep)]">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4">
+          <h2 className="font-display text-lg font-semibold text-[var(--foreground)]">
             Бейне сабақтар
           </h2>
           <ul className="mt-3 space-y-2">
@@ -139,12 +139,12 @@ export function SubjectLearningPanel({ subject }: Props) {
                   onClick={() => setActiveVideoId(video.id)}
                   className={`w-full rounded-xl px-3 py-2.5 text-left text-sm transition-colors ${
                     video.id === activeVideo?.id
-                      ? "bg-[var(--mist)] text-[var(--teal-deep)]"
-                      : "hover:bg-[var(--mist)]/70"
+                      ? "bg-[var(--muted)] text-[var(--foreground)]"
+                      : "hover:bg-[var(--muted)]/70"
                   }`}
                 >
                   <span className="font-medium">{video.title}</span>
-                  <span className="mt-1 block text-xs text-[var(--ink-muted)]">
+                  <span className="mt-1 block text-xs text-[var(--muted-foreground)]">
                     {formatDuration(video.durationSec)} ·{" "}
                     {video.watched ? "Қаралған" : "Жаңа"}
                   </span>
@@ -156,7 +156,7 @@ export function SubjectLearningPanel({ subject }: Props) {
       </section>
 
       <section className="space-y-5">
-        <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--teal-deep)]">
+        <h2 className="font-display text-xl font-semibold text-[var(--foreground)]">
           Үй жұмысы және тесттер
         </h2>
         {subject.assessments.map((assessment) => (
@@ -240,18 +240,18 @@ function AssessmentCard({
   }
 
   return (
-    <article className="rounded-2xl border border-[var(--teal-deep)]/10 bg-[var(--surface)] p-5">
+    <article className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--coral)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">
             {assessment.type === "homework" ? "Үй жұмысы" : "Тест"}
           </p>
-          <h3 className="mt-1 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--ink)]">
+          <h3 className="mt-1 font-display text-lg font-semibold text-[var(--foreground)]">
             {assessment.title}
           </h3>
         </div>
         {assessment.bestPercent != null && (
-          <span className="rounded-full bg-[var(--mist)] px-3 py-1 text-xs font-semibold text-[var(--teal-deep)]">
+          <span className="rounded-full bg-[var(--muted)] px-3 py-1 text-xs font-semibold text-[var(--foreground)]">
             Үздік нәтиже: {Math.round(assessment.bestPercent)}%
           </span>
         )}
@@ -260,14 +260,14 @@ function AssessmentCard({
       <div className="mt-4 space-y-4">
         {assessment.questions.map((question, index) => (
           <fieldset key={question.id} className="space-y-2">
-            <legend className="text-sm font-medium text-[var(--ink)]">
+            <legend className="text-sm font-medium text-[var(--foreground)]">
               {index + 1}. {question.prompt}
             </legend>
             <div className="grid gap-2">
               {question.options.map((option, optionIndex) => (
                 <label
                   key={option}
-                  className="flex cursor-pointer items-start gap-2 rounded-lg border border-[var(--teal-deep)]/10 px-3 py-2 text-sm hover:bg-[var(--mist)]/60"
+                  className="flex cursor-pointer items-start gap-2 rounded-lg border border-[var(--border)] px-3 py-2 text-sm hover:bg-[var(--muted)]/60"
                 >
                   <input
                     type="radio"
@@ -294,7 +294,7 @@ function AssessmentCard({
           {loading ? "Жіберілуде…" : "Жауаптарды жіберу"}
         </Button>
         {result && (
-          <p className="text-sm font-medium text-[var(--teal-mid)]">
+          <p className="text-sm font-medium text-[var(--primary)]">
             Нәтиже: {result.percent}%
             {result.score
               ? ` (${result.score}/${result.total})`

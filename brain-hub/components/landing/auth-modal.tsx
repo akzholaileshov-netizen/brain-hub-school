@@ -133,13 +133,13 @@ export function AuthModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex gap-2 rounded-lg bg-[var(--mist)] p-1">
+        <div className="flex gap-2 rounded-lg bg-[var(--muted)] p-1">
           <button
             type="button"
             className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
               mode === "login"
-                ? "bg-white text-[var(--teal-deep)] shadow-sm"
-                : "text-[var(--ink-muted)]"
+                ? "bg-[var(--card)] text-[var(--foreground)] shadow-sm"
+                : "text-[var(--muted-foreground)]"
             }`}
             onClick={() => switchMode("login")}
           >
@@ -149,8 +149,8 @@ export function AuthModal({
             type="button"
             className={`flex-1 rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
               mode === "register"
-                ? "bg-white text-[var(--teal-deep)] shadow-sm"
-                : "text-[var(--ink-muted)]"
+                ? "bg-[var(--card)] text-[var(--foreground)] shadow-sm"
+                : "text-[var(--muted-foreground)]"
             }`}
             onClick={() => switchMode("register")}
           >
@@ -212,7 +212,7 @@ export function AuthModal({
           </div>
 
           {error && (
-            <div className="rounded-lg border border-[var(--coral)]/30 bg-[var(--coral)]/8 px-3 py-2 text-sm text-[var(--coral-deep)]">
+            <div className="rounded-lg border border-[var(--destructive)]/30 bg-[var(--destructive)]/10 px-3 py-2 text-sm text-[var(--destructive)]">
               {error}
             </div>
           )}
