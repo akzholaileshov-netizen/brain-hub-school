@@ -61,6 +61,15 @@ RLS: студент тек өз жолдарын оқиды/жазады; кат
 
 Қолданба DB-де әлі `/videos/sample.mp4` тұрса да құламайды — `lib/lesson-videos.ts` fallback қолданылады.
 
+## IELTS mock-тест (сұрақтарды өзгерту)
+
+1. Дерек көзі: `lib/ielts-mock-data.ts` (сұрақтар ағылшынша, түсіндірмелер қазақша)
+2. Тексеру: `npx tsx scripts/validate-ielts-mock.ts`
+3. Seed: `npx tsx scripts/generate-seed.ts`
+4. Supabase: SQL Editor-де `supabase/migrations/20261017010000_ielts_mock_v2.sql` (немесе ready-to-paste `docs` файлы) орындаңыз
+5. Бағалау серверде (`scoreIeltsMock`) — `correctAnswer` клиентке тек submit-тен кейін review ретінде келеді
+6. Миграциясыз да тест жұмыс істейді; тарихтың толық өрістері үшін SQL қажет
+
 ## Vercel deploy
 
 1. Репоны импорттаңыз (Root Directory: `brain-hub` егер monorepo болса)

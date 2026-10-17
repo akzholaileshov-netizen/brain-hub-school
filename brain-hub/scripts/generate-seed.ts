@@ -1,10 +1,13 @@
 import { writeFileSync } from "fs";
 import {
   IELTS_MODULES,
-  IELTS_MOCK_QUESTIONS,
   subjectsForTrack,
   type SubjectSeed,
 } from "../lib/curriculum";
+import {
+  IELTS_MOCK_PASSAGES,
+  IELTS_MOCK_QUESTIONS,
+} from "../lib/ielts-mock-data";
 import { lookupLessonVideo } from "../lib/lesson-videos";
 import { TRACKS } from "../lib/quiz-data";
 
@@ -61,15 +64,36 @@ IELTS_MODULES.forEach((subject, sIndex) =>
   emitSubject("ielts-service", subject, sIndex),
 );
 
+const passageById = new Map(IELTS_MOCK_PASSAGES.map((p) => [p.id, p]));
+
 for (let i = 0; i < IELTS_MOCK_QUESTIONS.length; i++) {
   const q = IELTS_MOCK_QUESTIONS[i];
-  const opts = JSON.stringify(q.options).replace(/'/g, "''");
-  blocks.push(`INSERT INTO public.ielts_mock_questions (prompt, options_json, correct_index, sort_order)
-VALUES ('${esc(q.prompt)}', '${opts}'::jsonb, ${q.correctIndex}, ${i});`);
+  const opts =
+    q.options != null
+      ? `'${JSON.stringify(q.options).replace(/'/g, "''")}'::jsonb`
+      : "NULL";
+  const correct =
+    q.correctIndex == null ? "NULL" : String(q.correctIndex);
+  const accepted =
+    q.acceptedAnswers != null
+      ? `'${JSON.stringify(q.acceptedAnswers).replace(/'/g, "''")}'::jsonb`
+      : "NULL";
+  const passage = q.passageId ? passageById.get(q.passageId) : null;
+  blocks.push(`INSERT INTO public.ielts_mock_questions (
+  qkey, section, qtype, prompt, options_json, correct_index,
+  accepted_answers, explanation_kk, passage_id, passage_title, passage_text, sort_order
+) VALUES (
+  '${esc(q.id)}', '${esc(q.section)}', '${esc(q.type)}', '${esc(q.text)}',
+  ${opts}, ${correct}, ${accepted}, '${esc(q.explanationKk)}',
+  ${q.passageId ? `'${esc(q.passageId)}'` : "NULL"},
+  ${passage ? `'${esc(passage.title)}'` : "NULL"},
+  ${passage ? `'${esc(passage.text)}'` : "NULL"},
+  ${i}
+);`);
 }
 
 const out = [
-  "-- Brain Hub curriculum seed (generated from lib/curriculum.ts + lib/lesson-videos.ts)",
+  "-- Brain Hub curriculum seed (generated from lib/curriculum.ts + lib/lesson-videos.ts + lib/ielts-mock-data.ts)",
   "-- Safe to re-run: truncates catalog tables first.",
   "TRUNCATE public.ielts_mock_questions, public.assessment_questions, public.assessments, public.videos, public.subjects RESTART IDENTITY CASCADE;",
   "",

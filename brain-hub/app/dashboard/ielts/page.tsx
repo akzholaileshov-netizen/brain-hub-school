@@ -2,10 +2,12 @@ import { redirect } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { IeltsHub } from "@/components/dashboard/ielts-hub";
 import { readSessionStudent } from "@/lib/auth";
-import { IELTS_MOCK_QUESTIONS } from "@/lib/curriculum";
+import {
+  getPublicMockQuestions,
+  getPublicPassages,
+} from "@/lib/ielts-mock-data";
 import {
   getIeltsModuleCards,
-  getPublicIeltsMockQuestions,
   listIeltsMocks,
   listMentorBookings,
 } from "@/lib/db";
@@ -22,18 +24,10 @@ export default async function IeltsPage() {
   const prominent = student.track === "vip-ielts";
   const enrolled = prominent || Boolean(student.ielts_enrolled);
   const modules = enrolled ? await getIeltsModuleCards(student) : [];
-  const dbQuestions = await getPublicIeltsMockQuestions();
-  const mockQuestions = dbQuestions.length
-    ? dbQuestions.map((q) => ({
-        index: q.index,
-        prompt: q.prompt,
-        options: q.options,
-      }))
-    : IELTS_MOCK_QUESTIONS.map((q, index) => ({
-        index,
-        prompt: q.prompt,
-        options: q.options,
-      }));
+
+  // Always serve from typed data file (no correct answers in payload).
+  const mockQuestions = getPublicMockQuestions();
+  const mockPassages = getPublicPassages();
 
   return (
     <DashboardShell title="VIP IELTS">
@@ -44,6 +38,7 @@ export default async function IeltsPage() {
         bookings={await listMentorBookings(student.id)}
         mockHistory={await listIeltsMocks(student.id)}
         mockQuestions={mockQuestions}
+        mockPassages={mockPassages}
       />
     </DashboardShell>
   );

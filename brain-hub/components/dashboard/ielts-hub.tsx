@@ -1,12 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { IeltsMockTest } from "@/components/dashboard/ielts-mock-test";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import type { SubjectCard } from "@/lib/db";
+import type {
+  PublicMockQuestion,
+  SectionScore,
+} from "@/lib/ielts-mock-data";
 
 type Booking = {
   id: number;
@@ -23,13 +28,11 @@ type MockHistory = {
   percent: number;
   band: number;
   createdAt: string;
+  sectionScores?: SectionScore[] | null;
+  durationSec?: number | null;
 };
 
-type MockQuestion = {
-  index: number;
-  prompt: string;
-  options: string[];
-};
+type Passage = { id: string; title: string; text: string };
 
 type Props = {
   enrolled: boolean;
@@ -37,7 +40,8 @@ type Props = {
   modules: SubjectCard[];
   bookings: Booking[];
   mockHistory: MockHistory[];
-  mockQuestions: MockQuestion[];
+  mockQuestions: PublicMockQuestion[];
+  mockPassages: Passage[];
 };
 
 export function IeltsHub({
@@ -47,11 +51,11 @@ export function IeltsHub({
   bookings: initialBookings,
   mockHistory: initialHistory,
   mockQuestions,
+  mockPassages,
 }: Props) {
   const router = useRouter();
   const [currentEnrolled, setCurrentEnrolled] = useState(enrolled);
   const [bookings, setBookings] = useState(initialBookings);
-  const [history, setHistory] = useState(initialHistory);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -59,26 +63,6 @@ export function IeltsHub({
   const [slotAt, setSlotAt] = useState("");
   const [platform, setPlatform] = useState<"zoom" | "meet">("zoom");
   const [note, setNote] = useState("");
-
-  const [mockStarted, setMockStarted] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(10 * 60);
-  const [answers, setAnswers] = useState<Record<string, number>>({});
-  const [lastResult, setLastResult] = useState<{
-    percent: number;
-    band: number;
-  } | null>(null);
-
-  useEffect(() => {
-    if (!mockStarted || secondsLeft <= 0) return;
-    const t = setInterval(() => setSecondsLeft((s) => s - 1), 1000);
-    return () => clearInterval(t);
-  }, [mockStarted, secondsLeft]);
-
-  const timerLabel = useMemo(() => {
-    const m = Math.floor(Math.max(0, secondsLeft) / 60);
-    const s = Math.max(0, secondsLeft) % 60;
-    return `${m}:${String(s).padStart(2, "0")}`;
-  }, [secondsLeft]);
 
   async function toggleEnroll() {
     setLoading(true);
@@ -124,42 +108,6 @@ export function IeltsHub({
       setBookings(data.bookings ?? []);
       setMessage("Ментор сессиясы брондалды.");
       setNote("");
-      router.refresh();
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function submitMock() {
-    if (Object.keys(answers).length < mockQuestions.length) {
-      setError("Mock-тестің барлық сұрағына жауап беріңіз.");
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/ielts/mock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers }),
-      });
-      const data = (await res.json()) as {
-        error?: string;
-        percent?: number;
-        band?: number;
-        history?: MockHistory[];
-      };
-      if (!res.ok) {
-        setError(data.error || "Mock-тестті жіберу мүмкін болмады.");
-        return;
-      }
-      setLastResult({
-        percent: data.percent ?? 0,
-        band: data.band ?? 0,
-      });
-      setHistory(data.history ?? []);
-      setMockStarted(false);
-      setMessage("Mock-тест нәтижесі сақталды.");
       router.refresh();
     } finally {
       setLoading(false);
@@ -320,102 +268,11 @@ export function IeltsHub({
             </div>
           </section>
 
-          <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 className="font-display text-lg font-semibold text-[var(--foreground)]">
-                  IELTS mock-тест
-                </h2>
-                <p className="mt-1 text-sm text-[var(--foreground-soft)]">
-                  6 сұрақ · таймер 10 минут · band нәтижесі сақталады
-                </p>
-              </div>
-              {!mockStarted ? (
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setMockStarted(true);
-                    setSecondsLeft(10 * 60);
-                    setAnswers({});
-                    setLastResult(null);
-                  }}
-                >
-                  Mock-тесті бастау
-                </Button>
-              ) : (
-                <p className="rounded-full bg-[var(--muted)] px-3 py-1 text-sm font-semibold text-[var(--foreground)]">
-                  Қалған уақыт: {timerLabel}
-                </p>
-              )}
-            </div>
-
-            {lastResult && (
-              <p className="mt-4 text-sm font-medium text-[var(--primary)]">
-                Соңғы нәтиже: {lastResult.percent}% · Band {lastResult.band.toFixed(1)}
-              </p>
-            )}
-
-            {mockStarted && (
-              <div className="mt-5 space-y-4">
-                {mockQuestions.map((question) => (
-                  <fieldset key={question.index} className="space-y-2">
-                    <legend className="text-sm font-medium">
-                      {question.index + 1}. {question.prompt}
-                    </legend>
-                    <div className="grid gap-2">
-                      {question.options.map((option, optionIndex) => (
-                        <label
-                          key={option}
-                          className="flex gap-2 rounded-lg border border-[var(--border)] px-3 py-2 text-sm"
-                        >
-                          <input
-                            type="radio"
-                            name={`mock-${question.index}`}
-                            checked={
-                              answers[String(question.index)] === optionIndex
-                            }
-                            onChange={() =>
-                              setAnswers((prev) => ({
-                                ...prev,
-                                [String(question.index)]: optionIndex,
-                              }))
-                            }
-                          />
-                          {option}
-                        </label>
-                      ))}
-                    </div>
-                  </fieldset>
-                ))}
-                <Button type="button" disabled={loading} onClick={submitMock}>
-                  Mock-тесті жіберу
-                </Button>
-              </div>
-            )}
-
-            <div className="mt-6">
-              <h3 className="text-sm font-semibold text-[var(--foreground)]">
-                Нәтижелер тарихы
-              </h3>
-              {history.length === 0 ? (
-                <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-                  Тарих бос.
-                </p>
-              ) : (
-                <ul className="mt-2 space-y-2">
-                  {history.map((item) => (
-                    <li
-                      key={item.id}
-                      className="rounded-lg bg-[var(--muted)]/70 px-3 py-2 text-sm"
-                    >
-                      Band {item.band.toFixed(1)} · {item.percent}% ·{" "}
-                      {new Date(item.createdAt).toLocaleString("kk-KZ")}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </section>
+          <IeltsMockTest
+            questions={mockQuestions}
+            passages={mockPassages}
+            history={initialHistory}
+          />
         </>
       )}
     </div>

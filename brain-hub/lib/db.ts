@@ -410,24 +410,106 @@ export async function submitIeltsMock(answers: Record<string, number>) {
   };
 }
 
+export async function saveIeltsMockAttempt(input: {
+  studentId: string;
+  score: number;
+  total: number;
+  percent: number;
+  band: number;
+  answers: Record<string, string | number | null>;
+  sectionScores: unknown;
+  durationSec: number | null;
+  review: unknown;
+}): Promise<{ ok: true; id: number } | { ok: false; warning: string }> {
+  const supabase = await requireSupabase();
+
+  // Prefer extended RPC (migration). Falls back to legacy columns / RPC.
+  const extended = await supabase.rpc("save_ielts_mock_attempt", {
+    p_score: input.score,
+    p_total: input.total,
+    p_percent: input.percent,
+    p_band: input.band,
+    p_answers: input.answers,
+    p_section_scores: input.sectionScores,
+    p_duration_sec: input.durationSec,
+    p_review: input.review,
+  });
+
+  if (!extended.error && extended.data) {
+    const result = extended.data as Record<string, unknown>;
+    return { ok: true, id: Number(result.id) };
+  }
+
+  // Direct insert may work if RLS allows; otherwise user must run migration RPC.
+  const legacyInsert = await supabase
+    .from("ielts_mock_attempts")
+    .insert({
+      student_id: input.studentId,
+      score: input.score,
+      total: input.total,
+      percent: input.percent,
+      band: input.band,
+      answers_json: input.answers,
+    })
+    .select("id")
+    .maybeSingle();
+
+  if (!legacyInsert.error && legacyInsert.data) {
+    return { ok: true, id: Number(legacyInsert.data.id) };
+  }
+
+  // Do NOT fall back to legacy submit_ielts_mock — it scores against old meta
+  // questions and would write incorrect history rows.
+  return {
+    ok: false,
+    warning:
+      "Нәтиже есептелді, бірақ тарихқа сақтау үшін Supabase SQL Editor-де brain-hub-ielts-migration.sql файлын орындаңыз.",
+  };
+}
+
 export async function listIeltsMocks(studentId: string) {
   const supabase = await requireSupabase();
-  const { data, error } = await supabase
+  const full = await supabase
     .from("ielts_mock_attempts")
-    .select("id, score, total, percent, band, created_at")
+    .select(
+      "id, score, total, percent, band, created_at, section_scores, duration_sec",
+    )
     .eq("student_id", studentId)
     .order("created_at", { ascending: false });
 
+  const { data, error } =
+    full.error && /section_scores|duration_sec/i.test(full.error.message)
+      ? await supabase
+          .from("ielts_mock_attempts")
+          .select("id, score, total, percent, band, created_at")
+          .eq("student_id", studentId)
+          .order("created_at", { ascending: false })
+      : full;
+
   if (error || !data) return [];
 
-  return data.map((row) => ({
-    id: Number(row.id),
-    score: Number(row.score),
-    total: Number(row.total),
-    percent: Number(row.percent),
-    band: Number(row.band),
-    createdAt: row.created_at as string,
-  }));
+  return data.map((row) => {
+    const r = row as Record<string, unknown>;
+    const sectionScores = Array.isArray(r.section_scores)
+      ? (r.section_scores as Array<{
+          section: "grammar" | "vocabulary" | "reading" | "writing";
+          correct: number;
+          total: number;
+          percent: number;
+        }>)
+      : null;
+    return {
+      id: Number(r.id),
+      score: Number(r.score),
+      total: Number(r.total),
+      percent: Number(r.percent),
+      band: Number(r.band),
+      createdAt: r.created_at as string,
+      sectionScores,
+      durationSec:
+        r.duration_sec == null ? null : Number(r.duration_sec as number),
+    };
+  });
 }
 
 export async function getIeltsModuleCards(

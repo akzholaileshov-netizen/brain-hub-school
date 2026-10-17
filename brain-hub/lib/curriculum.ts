@@ -229,56 +229,12 @@ export const IELTS_MODULES: SubjectSeed[] = [
   ], "жазу"),
 ];
 
-export const IELTS_MOCK_QUESTIONS: QuestionSeed[] = [
-  q("IELTS Listening бөлімінде неше section бар?", [
-    "4",
-    "2",
-    "6",
-    "3",
-  ], 0),
-  q("Writing Task 2 үшін ұсынылатын сөз саны шамамен қанша?", [
-    "250+",
-    "100",
-    "50",
-    "400 міндетті",
-  ], 0),
-  q("Speaking Part 2-де дайындыққа қанша уақыт беріледі?", [
-    "1 минут",
-    "5 минут",
-    "10 секунд",
-    "3 минут",
-  ], 0),
-  q("Reading сұрақтарында True/False/Not Given нені білдіреді?", [
-    "Мәтіндегі ақпаратқа сәйкестік деңгейі",
-    "Грамматика қателері",
-    "Сөйлеу жылдамдығы",
-    "Эссе құрылымы",
-  ], 0),
-  q("Band 7.0 деңгейіне жету үшін не маңызды?", [
-    "Тұрақты практика және қателерді түзету",
-    "Тек сөздік жаттау",
-    "Тестті бір рет тапсыру",
-    "Тек фильм көру",
-  ], 0),
-  q("Mock-тесттің мақсаты қандай?", [
-    "Нақты емтихан жағдайын жаттықтыру",
-    "Ойын ойнау",
-    "Почтаны тексеру",
-    "GPA-ны қолмен өзгерту",
-  ], 0),
-];
+/** @deprecated Use lib/ielts-mock-data.ts — proficiency mock bank. */
+export const IELTS_MOCK_QUESTIONS: QuestionSeed[] = [];
 
 export function subjectsForTrack(track: TrackId): SubjectSeed[] {
   if (track === "vip-ielts") return IELTS_MODULES;
   return TRACK_SUBJECTS[track];
 }
 
-export function scoreToBand(percent: number): number {
-  if (percent >= 90) return 8.0;
-  if (percent >= 80) return 7.5;
-  if (percent >= 70) return 7.0;
-  if (percent >= 60) return 6.5;
-  if (percent >= 50) return 6.0;
-  if (percent >= 40) return 5.5;
-  return 5.0;
-}
+export { percentToIeltsBand as scoreToBand } from "@/lib/ielts-mock-data";
