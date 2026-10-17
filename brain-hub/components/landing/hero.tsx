@@ -19,9 +19,9 @@ export function Hero({ onRegister }: HeroProps) {
           aria-hidden
           className="absolute inset-0 h-full w-full object-cover object-[70%_40%] motion-safe:animate-hero-drift"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(248,250,252,0.94)_0%,rgba(248,250,252,0.78)_34%,rgba(248,250,252,0.22)_58%,rgba(248,250,252,0.05)_100%)] dark:bg-[linear-gradient(105deg,rgba(15,23,42,0.92)_0%,rgba(15,23,42,0.78)_34%,rgba(15,23,42,0.35)_58%,rgba(15,23,42,0.12)_100%)]" />
+        <div className="hero-scrim absolute inset-0" />
         <div className="absolute inset-0 opacity-[0.05] [background-image:radial-gradient(#2563eb_0.8px,transparent_0.8px)] [background-size:18px_18px]" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[55%] bg-[radial-gradient(ellipse_at_70%_40%,rgba(99,102,241,0.2),transparent_55%)] sm:block" />
+        <div className="hero-glow pointer-events-none absolute inset-y-0 right-0 hidden w-[55%] sm:block" />
       </div>
 
       <div className="mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-center px-4 pb-16 pt-28 sm:px-6 lg:px-8">

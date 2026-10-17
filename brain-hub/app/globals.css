@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Class-based dark mode (matches ThemeProvider + localStorage `bh-theme`) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
@@ -112,6 +115,42 @@ h1 {
 
 h2 {
   font-weight: 700;
+}
+
+.hero-scrim {
+  background: linear-gradient(
+    105deg,
+    rgba(248, 250, 252, 0.94) 0%,
+    rgba(248, 250, 252, 0.78) 34%,
+    rgba(248, 250, 252, 0.22) 58%,
+    rgba(248, 250, 252, 0.05) 100%
+  );
+}
+
+.dark .hero-scrim {
+  background: linear-gradient(
+    105deg,
+    rgba(15, 23, 42, 0.94) 0%,
+    rgba(15, 23, 42, 0.84) 34%,
+    rgba(15, 23, 42, 0.5) 58%,
+    rgba(15, 23, 42, 0.22) 100%
+  );
+}
+
+.hero-glow {
+  background: radial-gradient(
+    ellipse at 70% 40%,
+    rgba(99, 102, 241, 0.2),
+    transparent 55%
+  );
+}
+
+.dark .hero-glow {
+  background: radial-gradient(
+    ellipse at 70% 40%,
+    rgba(99, 102, 241, 0.3),
+    transparent 55%
+  );
 }
 
 @keyframes rise {
