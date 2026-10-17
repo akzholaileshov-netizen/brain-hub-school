@@ -1,5 +1,6 @@
 import type { TrackId } from "@/lib/quiz-data";
 import { TRACKS } from "@/lib/quiz-data";
+import { resolveLessonVideoUrl } from "@/lib/lesson-videos";
 import {
   isSupabaseConfigured,
   SUPABASE_SETUP_MESSAGE,
@@ -36,7 +37,8 @@ export type SubjectDetail = {
     id: number;
     title: string;
     durationSec: number;
-    videoUrl: string;
+    /** Playable URL, or null when no verified video is available yet */
+    videoUrl: string | null;
     watched: boolean;
   }>;
   assessments: Array<{
@@ -160,9 +162,24 @@ export async function getSubjectDetail(
 
   const subjectId = subject.id as number;
 
+  const videosWithUrl = await supabase
+    .from("videos")
+    .select("id, title, duration_sec, video_url, sort_order")
+    .eq("subject_id", subjectId)
+    .order("sort_order");
+
+  // If video_url column is not migrated yet, retry without it and use lesson-videos.ts.
+  const videosQuery =
+    videosWithUrl.error && /video_url/i.test(videosWithUrl.error.message)
+      ? await supabase
+          .from("videos")
+          .select("id, title, duration_sec, sort_order")
+          .eq("subject_id", subjectId)
+          .order("sort_order")
+      : videosWithUrl;
+
   const [
     { data: percentRow },
-    { data: videos },
     { data: assessments },
     { data: videoProgress },
     { data: attempts },
@@ -173,11 +190,6 @@ export async function getSubjectDetail(
       .eq("student_id", student.id)
       .eq("subject_id", subjectId)
       .maybeSingle(),
-    supabase
-      .from("videos")
-      .select("id, title, duration_sec, video_url, sort_order")
-      .eq("subject_id", subjectId)
-      .order("sort_order"),
     supabase
       .from("assessments")
       .select("id, type, title, sort_order")
@@ -192,6 +204,8 @@ export async function getSubjectDetail(
       .select("assessment_id, percent")
       .eq("student_id", student.id),
   ]);
+
+  const videos = videosQuery.data;
 
   const watchedMap = new Map(
     (videoProgress ?? []).map((vp) => [
@@ -241,13 +255,23 @@ export async function getSubjectDetail(
     slug: subject.slug as string,
     trackId: subject.track_id as SubjectDetail["trackId"],
     percent: Number(percentRow?.percent ?? 0),
-    videos: (videos ?? []).map((v) => ({
-      id: v.id as number,
-      title: v.title as string,
-      durationSec: Number(v.duration_sec),
-      videoUrl: v.video_url as string,
-      watched: Boolean(watchedMap.get(v.id as number)),
-    })),
+    videos: (videos ?? []).map((row) => {
+      const v = row as {
+        id: number;
+        title: string;
+        duration_sec: number;
+        video_url?: string | null;
+      };
+      const title = v.title;
+      const raw = v.video_url ?? null;
+      return {
+        id: Number(v.id),
+        title,
+        durationSec: Number(v.duration_sec),
+        videoUrl: resolveLessonVideoUrl(subject.slug as string, title, raw),
+        watched: Boolean(watchedMap.get(Number(v.id))),
+      };
+    }),
     assessments: (assessments ?? []).map((a) => {
       const id = a.id as number;
       const questions = questionsByAssessment.get(id) ?? [];

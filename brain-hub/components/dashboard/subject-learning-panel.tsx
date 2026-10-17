@@ -2,8 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { LessonVideoPlayer } from "@/components/dashboard/lesson-video-player";
 import { Button } from "@/components/ui/button";
 import type { SubjectDetail } from "@/lib/db";
+import { isYouTubeUrl } from "@/lib/lesson-videos";
 
 function formatDuration(sec: number) {
   const m = Math.floor(sec / 60);
@@ -89,16 +91,12 @@ export function SubjectLearningPanel({ subject }: Props) {
       <section className="grid gap-5 lg:grid-cols-[1.4fr_1fr]">
         <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-black">
           {activeVideo ? (
-            <video
+            <LessonVideoPlayer
               key={activeVideo.id}
-              className="aspect-video w-full"
-              controls
-              preload="metadata"
-              src={activeVideo.videoUrl}
+              videoUrl={activeVideo.videoUrl}
+              title={activeVideo.title}
               onEnded={() => markWatched(activeVideo.id)}
-            >
-              Сіздің браузеріңіз бейнені қолдамайды.
-            </video>
+            />
           ) : (
             <div className="flex aspect-video items-center justify-center text-sm text-white/80">
               Бейне сабақтар әзірге жоқ.
@@ -113,15 +111,21 @@ export function SubjectLearningPanel({ subject }: Props) {
                 <p className="text-xs text-[var(--muted-foreground)]">
                   Ұзақтығы: {formatDuration(activeVideo.durationSec)} ·{" "}
                   {activeVideo.watched ? "Қаралған" : "Қаралмаған"}
+                  {activeVideo.videoUrl &&
+                  isYouTubeUrl(activeVideo.videoUrl)
+                    ? " · YouTube"
+                    : ""}
                 </p>
               </div>
               <Button
                 type="button"
                 size="sm"
-                disabled={busy || activeVideo.watched}
+                disabled={busy || activeVideo.watched || !activeVideo.videoUrl}
                 onClick={() => markWatched(activeVideo.id)}
               >
-                {activeVideo.watched ? "Қаралды" : "Қаралды деп белгілеу"}
+                {activeVideo.watched
+                  ? "Қаралды"
+                  : "Көрілді деп белгілеу"}
               </Button>
             </div>
           )}

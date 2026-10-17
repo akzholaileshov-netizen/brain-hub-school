@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS public.videos (
   subject_id bigint NOT NULL REFERENCES public.subjects (id) ON DELETE CASCADE,
   title text NOT NULL,
   duration_sec int NOT NULL,
-  video_url text NOT NULL,
+  video_url text,
   sort_order int NOT NULL DEFAULT 0
 );
 

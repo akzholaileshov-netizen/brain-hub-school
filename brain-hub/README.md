@@ -50,6 +50,17 @@ Seed (пәндер/сұрақтар): `supabase/seed.sql` (қайта генер
 
 RLS: студент тек өз жолдарын оқиды/жазады; каталог кестелері authenticated оқуға ашық; дұрыс жауаптар RPC арқылы ғана.
 
+## Сабаққа бейне қосу
+
+1. `lib/lesson-videos.ts` ішінде кілт: `` `${subjectSlug}::${videoTitle}` ``
+2. YouTube үшін `https://www.youtube-nocookie.com/embed/<ID>` (алдымен oEmbed арқылы ID-ны тексеріңіз)
+3. Немесе тікелей `.mp4` URL
+4. Расталмаған тақырыпта `videoUrl: null` қалдырыңыз — UI: «Бұл сабақтың видеосы жақын арада қосылады»
+5. Seed жаңарту: `npx tsx scripts/generate-seed.ts`
+6. SQL миграция жаңарту: `npx tsx scripts/generate-video-migration.ts` → Supabase SQL Editor-де `supabase/migrations/20261017000000_lesson_videos.sql` (немесе `docs` папкасындағы ready-to-paste файл) орындаңыз
+
+Қолданба DB-де әлі `/videos/sample.mp4` тұрса да құламайды — `lib/lesson-videos.ts` fallback қолданылады.
+
 ## Vercel deploy
 
 1. Репоны импорттаңыз (Root Directory: `brain-hub` егер monorepo болса)

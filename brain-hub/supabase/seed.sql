@@ -1,4 +1,4 @@
--- Brain Hub curriculum seed (generated from lib/curriculum.ts)
+-- Brain Hub curriculum seed (generated from lib/curriculum.ts + lib/lesson-videos.ts)
 -- Safe to re-run: truncates catalog tables first.
 TRUNCATE public.ielts_mock_questions, public.assessment_questions, public.assessments, public.videos, public.subjects RESTART IDENTITY CASCADE;
 
@@ -11,11 +11,11 @@ BEGIN
     VALUES ('info-mat', 'Информатика', 'informatika', 0)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Алгоритм және блок-схема', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Алгоритм және блок-схема', 420, 'https://www.youtube-nocookie.com/embed/soOdsFeOQr4', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Python: айнымалылар мен типтер', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Python: айнымалылар мен типтер', 510, 'https://www.youtube-nocookie.com/embed/kqtD5dpn9C8', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Циклдер мен шарттар', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Циклдер мен шарттар', 600, 'https://www.youtube-nocookie.com/embed/94UHCEmprCY', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Информатика: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -50,11 +50,11 @@ BEGIN
     VALUES ('info-mat', 'Математикалық сауаттылық', 'mat-sauattylyq', 1)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Пайыз және пропорция', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Пайыз және пропорция', 420, 'https://www.youtube-nocookie.com/embed/IATRm-lbBG8', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Кесте мен диаграмманы оқу', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Кесте мен диаграмманы оқу', 510, 'https://www.youtube-nocookie.com/embed/Qu1jbxHEPX0', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Күнделікті есептер', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Күнделікті есептер', 600, 'https://www.youtube-nocookie.com/embed/Y2rKcR8NKDE', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Математикалық сауаттылық: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -89,11 +89,11 @@ BEGIN
     VALUES ('info-mat', 'Математика', 'matematika', 2)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Теңдеулер жүйесі', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Теңдеулер жүйесі', 420, 'https://www.youtube-nocookie.com/embed/ywHYli3y3QQ', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Функция және график', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Функция және график', 510, 'https://www.youtube-nocookie.com/embed/Gdq0T4YbJPk', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Ықтималдық негіздері', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Ықтималдық негіздері', 600, 'https://www.youtube-nocookie.com/embed/uzkc-qNVoOk', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Математика: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -128,11 +128,11 @@ BEGIN
     VALUES ('bio-him', 'Биология', 'biologiya', 0)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Жасуша құрылымы', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Жасуша құрылымы', 420, 'https://www.youtube-nocookie.com/embed/K38dtYulv2I', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Генетикаға кіріспе', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Генетикаға кіріспе', 510, 'https://www.youtube-nocookie.com/embed/WK9w5Y1P_IM', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Адам ағзасы', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Адам ағзасы', 600, 'https://www.youtube-nocookie.com/embed/uBGl2BujkPQ', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Биология: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -167,11 +167,11 @@ BEGIN
     VALUES ('bio-him', 'Химия', 'himiya', 1)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Атом және периодтық жүйе', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Атом және периодтық жүйе', 420, 'https://www.youtube-nocookie.com/embed/aPTgXKxTug4', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Химиялық реакция түрлері', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Химиялық реакция түрлері', 510, 'https://www.youtube-nocookie.com/embed/4Gyx2AFmQvQ', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Есептер практикумы', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Есептер практикумы', 600, 'https://www.youtube-nocookie.com/embed/l7NOQ1DH0BI', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Химия: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -206,11 +206,11 @@ BEGIN
     VALUES ('bio-him', 'Математикалық сауаттылық', 'mat-sauattylyq', 2)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Графиктерді талдау', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Графиктерді талдау', 420, 'https://www.youtube-nocookie.com/embed/6cdwhXy1a7Y', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Өлшем бірліктері', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Өлшем бірліктері', 510, NULL, 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Пайыздық есептер', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Пайыздық есептер', 600, 'https://www.youtube-nocookie.com/embed/qJMrghdG27Y', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Математикалық сауаттылық: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -245,11 +245,11 @@ BEGIN
     VALUES ('fiz-mat', 'Физика', 'fizika', 0)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Кинематика негіздері', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Кинематика негіздері', 420, 'https://www.youtube-nocookie.com/embed/4n8YoK-XL_Y', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Ньютон заңдары', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Ньютон заңдары', 510, 'https://www.youtube-nocookie.com/embed/1jSAgHFawxM', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Электр тогы', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Электр тогы', 600, 'https://www.youtube-nocookie.com/embed/uHTY1ZPj4WM', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Физика: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -284,11 +284,11 @@ BEGIN
     VALUES ('fiz-mat', 'Математика', 'matematika', 1)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Векторлар', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Векторлар', 420, 'https://www.youtube-nocookie.com/embed/fNk_zzaMoSs', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Туындыға кіріспе', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Туындыға кіріспе', 510, 'https://www.youtube-nocookie.com/embed/6cdwhXy1a7Y', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Тригонометрия', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Тригонометрия', 600, 'https://www.youtube-nocookie.com/embed/jXv5QOz3eoY', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Математика: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -323,11 +323,11 @@ BEGIN
     VALUES ('fiz-mat', 'Математикалық сауаттылық', 'mat-sauattylyq', 2)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Формулаларды қолдану', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Формулаларды қолдану', 420, NULL, 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Графиктік есептер', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Графиктік есептер', 510, 'https://www.youtube-nocookie.com/embed/NavEQL1rB7k', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Бірліктерді түрлендіру', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Бірліктерді түрлендіру', 600, NULL, 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Математикалық сауаттылық: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -362,11 +362,11 @@ BEGIN
     VALUES ('geo-mat', 'География', 'geografiya', 0)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Физикалық география', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Физикалық география', 420, 'https://www.youtube-nocookie.com/embed/pYmC72lCpQg', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Экономикалық география', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Экономикалық география', 510, NULL, 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Қазақстан географиясы', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Қазақстан географиясы', 600, 'https://www.youtube-nocookie.com/embed/vRIK-ikdt7c', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'География: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -401,11 +401,11 @@ BEGIN
     VALUES ('geo-mat', 'Математика', 'matematika', 1)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Статистика негіздері', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Статистика негіздері', 420, 'https://www.youtube-nocookie.com/embed/uzkc-qNVoOk', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Координаталық жазықтық', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Координаталық жазықтық', 510, 'https://www.youtube-nocookie.com/embed/chxBlWp5Sb4', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Пайыз және өсу', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Пайыз және өсу', 600, 'https://www.youtube-nocookie.com/embed/IATRm-lbBG8', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Математика: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -440,11 +440,11 @@ BEGIN
     VALUES ('geo-mat', 'Математикалық сауаттылық', 'mat-sauattylyq', 2)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Карта мен масштаб', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Карта мен масштаб', 420, 'https://www.youtube-nocookie.com/embed/CzoY5kxdOk0', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Кестелік деректер', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Кестелік деректер', 510, 'https://www.youtube-nocookie.com/embed/69eho-sFkZ8', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Аналитикалық есептер', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Аналитикалық есептер', 600, NULL, 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Математикалық сауаттылық: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -479,11 +479,11 @@ BEGIN
     VALUES ('law', 'Адам. Қоғам. Құқық', 'adam-qogam-quqyq', 0)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Құқық ұғымы және жүйесі', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Құқық ұғымы және жүйесі', 420, NULL, 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Адам құқықтары', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Адам құқықтары', 510, 'https://www.youtube-nocookie.com/embed/eN5U04VvrTY', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Азаматтық жауапкершілік', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Азаматтық жауапкершілік', 600, NULL, 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Адам. Қоғам. Құқық: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -518,11 +518,11 @@ BEGIN
     VALUES ('law', 'Дүниежүзі тарихы', 'duniezhuzi-tarihy', 1)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Ежелгі өркениеттер', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Ежелгі өркениеттер', 420, 'https://www.youtube-nocookie.com/embed/LETvyK8rKso', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Жаңа заман төңкерістері', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Жаңа заман төңкерістері', 510, 'https://www.youtube-nocookie.com/embed/vtyFYCohbbc', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'XX ғасыр оқиғалары', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'XX ғасыр оқиғалары', 600, NULL, 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Дүниежүзі тарихы: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -557,11 +557,11 @@ BEGIN
     VALUES ('law', 'Қазақстан тарихы', 'qazaqstan-tarihy', 2)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Қазақ хандығы', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Қазақ хандығы', 420, 'https://www.youtube-nocookie.com/embed/XG2dFzMRiBY', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'ХХ ғасырдағы Қазақстан', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'ХХ ғасырдағы Қазақстан', 510, 'https://www.youtube-nocookie.com/embed/VLe_36tDWUM', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Тәуелсіздік жылдары', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Тәуелсіздік жылдары', 600, 'https://www.youtube-nocookie.com/embed/ZKlEX3o3cfA', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Қазақстан тарихы: үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -596,11 +596,11 @@ BEGIN
     VALUES ('vip-ielts', 'Сөйлеу (Speaking)', 'speaking', 0)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Part 1: таныстыру сұрақтары', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Part 1: таныстыру сұрақтары', 420, 'https://www.youtube-nocookie.com/embed/sRFEKvsw-vs', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Part 2: cue card стратегиясы', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Part 2: cue card стратегиясы', 510, 'https://www.youtube-nocookie.com/embed/4eJqU7U1R5w', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Part 3: пікір білдіру', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Part 3: пікір білдіру', 600, 'https://www.youtube-nocookie.com/embed/HtR63JFVE5Y', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Сөйлеу (Speaking): үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -635,11 +635,11 @@ BEGIN
     VALUES ('vip-ielts', 'Тыңдау (Listening)', 'listening', 1)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Section 1–2 стратегиясы', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Section 1–2 стратегиясы', 420, 'https://www.youtube-nocookie.com/embed/q8qmJeBxk4Q', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Note completion жаттығуы', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Note completion жаттығуы', 510, 'https://www.youtube-nocookie.com/embed/_6jgygopp40', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Map labelling тәжірибесі', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Map labelling тәжірибесі', 600, 'https://www.youtube-nocookie.com/embed/AkW0IeF46cA', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Тыңдау (Listening): үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -674,11 +674,11 @@ BEGIN
     VALUES ('vip-ielts', 'Оқу (Reading)', 'reading', 2)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Skimming және scanning', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Skimming және scanning', 420, 'https://www.youtube-nocookie.com/embed/RtcXr0_201A', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'True / False / Not Given', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'True / False / Not Given', 510, 'https://www.youtube-nocookie.com/embed/PM3nWVXgsHo', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Matching headings', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Matching headings', 600, 'https://www.youtube-nocookie.com/embed/SXdMpskBDmA', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Оқу (Reading): үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -713,11 +713,11 @@ BEGIN
     VALUES ('vip-ielts', 'Жазу (Writing)', 'writing', 3)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Task 1: графикті сипаттау', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Task 1: графикті сипаттау', 420, 'https://www.youtube-nocookie.com/embed/E3U1Y1jgGls', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Task 2: эссе құрылымы', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Task 2: эссе құрылымы', 510, 'https://www.youtube-nocookie.com/embed/YngqHl_BLOU', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Лексика мен байланыстырғыштар', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Лексика мен байланыстырғыштар', 600, 'https://www.youtube-nocookie.com/embed/OUlh3UidArM', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Жазу (Writing): үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -752,11 +752,11 @@ BEGIN
     VALUES ('ielts-service', 'Сөйлеу (Speaking)', 'speaking', 0)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Part 1: таныстыру сұрақтары', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Part 1: таныстыру сұрақтары', 420, 'https://www.youtube-nocookie.com/embed/sRFEKvsw-vs', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Part 2: cue card стратегиясы', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Part 2: cue card стратегиясы', 510, 'https://www.youtube-nocookie.com/embed/4eJqU7U1R5w', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Part 3: пікір білдіру', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Part 3: пікір білдіру', 600, 'https://www.youtube-nocookie.com/embed/HtR63JFVE5Y', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Сөйлеу (Speaking): үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -791,11 +791,11 @@ BEGIN
     VALUES ('ielts-service', 'Тыңдау (Listening)', 'listening', 1)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Section 1–2 стратегиясы', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Section 1–2 стратегиясы', 420, 'https://www.youtube-nocookie.com/embed/q8qmJeBxk4Q', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Note completion жаттығуы', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Note completion жаттығуы', 510, 'https://www.youtube-nocookie.com/embed/_6jgygopp40', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Map labelling тәжірибесі', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Map labelling тәжірибесі', 600, 'https://www.youtube-nocookie.com/embed/AkW0IeF46cA', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Тыңдау (Listening): үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -830,11 +830,11 @@ BEGIN
     VALUES ('ielts-service', 'Оқу (Reading)', 'reading', 2)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Skimming және scanning', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Skimming және scanning', 420, 'https://www.youtube-nocookie.com/embed/RtcXr0_201A', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'True / False / Not Given', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'True / False / Not Given', 510, 'https://www.youtube-nocookie.com/embed/PM3nWVXgsHo', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Matching headings', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Matching headings', 600, 'https://www.youtube-nocookie.com/embed/SXdMpskBDmA', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Оқу (Reading): үй жұмысы', 0)
       RETURNING id INTO v_assessment;
@@ -869,11 +869,11 @@ BEGIN
     VALUES ('ielts-service', 'Жазу (Writing)', 'writing', 3)
     RETURNING id INTO v_subject;
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Task 1: графикті сипаттау', 420, '/videos/sample.mp4', 0);
+      VALUES (v_subject, 'Task 1: графикті сипаттау', 420, 'https://www.youtube-nocookie.com/embed/E3U1Y1jgGls', 0);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Task 2: эссе құрылымы', 510, '/videos/sample.mp4', 1);
+      VALUES (v_subject, 'Task 2: эссе құрылымы', 510, 'https://www.youtube-nocookie.com/embed/YngqHl_BLOU', 1);
   INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, 'Лексика мен байланыстырғыштар', 600, '/videos/sample.mp4', 2);
+      VALUES (v_subject, 'Лексика мен байланыстырғыштар', 600, 'https://www.youtube-nocookie.com/embed/OUlh3UidArM', 2);
   INSERT INTO public.assessments (subject_id, type, title, sort_order)
       VALUES (v_subject, 'homework', 'Жазу (Writing): үй жұмысы', 0)
       RETURNING id INTO v_assessment;

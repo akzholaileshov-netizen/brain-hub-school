@@ -2,14 +2,20 @@ import { writeFileSync } from "fs";
 import {
   IELTS_MODULES,
   IELTS_MOCK_QUESTIONS,
-  SAMPLE_VIDEO_SRC,
   subjectsForTrack,
   type SubjectSeed,
 } from "../lib/curriculum";
+import { lookupLessonVideo } from "../lib/lesson-videos";
 import { TRACKS } from "../lib/quiz-data";
 
 function esc(s: string) {
   return String(s).replace(/'/g, "''");
+}
+
+function sqlVideoUrl(subjectSlug: string, title: string): string {
+  const url = lookupLessonVideo(subjectSlug, title).videoUrl;
+  if (!url) return "NULL";
+  return `'${esc(url)}'`;
 }
 
 const blocks: string[] = [];
@@ -21,8 +27,9 @@ function emitSubject(trackId: string, subject: SubjectSeed, sIndex: number) {
     RETURNING id INTO v_subject;`);
   for (let vIndex = 0; vIndex < subject.videos.length; vIndex++) {
     const v = subject.videos[vIndex];
+    const urlSql = sqlVideoUrl(subject.slug, v.title);
     stmts.push(`INSERT INTO public.videos (subject_id, title, duration_sec, video_url, sort_order)
-      VALUES (v_subject, '${esc(v.title)}', ${v.durationSec}, '${esc(SAMPLE_VIDEO_SRC)}', ${vIndex});`);
+      VALUES (v_subject, '${esc(v.title)}', ${v.durationSec}, ${urlSql}, ${vIndex});`);
   }
   for (let aIndex = 0; aIndex < subject.assessments.length; aIndex++) {
     const a = subject.assessments[aIndex];
@@ -62,7 +69,7 @@ VALUES ('${esc(q.prompt)}', '${opts}'::jsonb, ${q.correctIndex}, ${i});`);
 }
 
 const out = [
-  "-- Brain Hub curriculum seed (generated from lib/curriculum.ts)",
+  "-- Brain Hub curriculum seed (generated from lib/curriculum.ts + lib/lesson-videos.ts)",
   "-- Safe to re-run: truncates catalog tables first.",
   "TRUNCATE public.ielts_mock_questions, public.assessment_questions, public.assessments, public.videos, public.subjects RESTART IDENTITY CASCADE;",
   "",

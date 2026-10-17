@@ -15,6 +15,8 @@ export type AssessmentSeed = {
 export type VideoSeed = {
   title: string;
   durationSec: number;
+  /** Optional; prefer lib/lesson-videos.ts as the editable source */
+  videoUrl?: string | null;
 };
 
 export type SubjectSeed = {
@@ -23,8 +25,6 @@ export type SubjectSeed = {
   videos: VideoSeed[];
   assessments: AssessmentSeed[];
 };
-
-const SAMPLE_VIDEO = "/videos/sample.mp4";
 
 function q(
   prompt: string,
@@ -228,8 +228,6 @@ export const IELTS_MODULES: SubjectSeed[] = [
     "Лексика мен байланыстырғыштар",
   ], "жазу"),
 ];
-
-export const SAMPLE_VIDEO_SRC = SAMPLE_VIDEO;
 
 export const IELTS_MOCK_QUESTIONS: QuestionSeed[] = [
   q("IELTS Listening бөлімінде неше section бар?", [
