@@ -65,17 +65,20 @@ export const TRACKS: Track[] = [
   },
 ];
 
+/** @deprecated Landing quiz lives in `lib/career-quiz.ts`. */
 export type QuizOption = {
   label: string;
   scores: Partial<Record<TrackId, number>>;
 };
 
+/** @deprecated Use CAREER_QUESTIONS from `lib/career-quiz.ts`. */
 export type QuizQuestion = {
   id: string;
   question: string;
   options: QuizOption[];
 };
 
+/** @deprecated Use CAREER_QUESTIONS from `lib/career-quiz.ts`. */
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: "q1",
