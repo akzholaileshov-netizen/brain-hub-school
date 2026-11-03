@@ -64,9 +64,11 @@ RLS: студент тек өз жолдарын оқиды/жазады; кат
 ## Қабілет тесті (лендинг)
 
 1. Дерек көзі: `lib/career-quiz.ts` — 30 сұрақ, мамандық каталогы, салмақтар
-2. Тексеру: `npx tsx scripts/validate-career-quiz.ts`
-3. UI: `components/landing/quiz-section.tsx` (бастау экраны → 30 сұрақ → топ-5 мамандық + бағыт)
-4. Тіркелу CTA ұсынылған бағытты auth modal-да алдын ала таңдайды
+2. Университеттер: `lib/universities.ts` — әлемдік (~30) және Қазақстан (~14) каталогы, GPA/IELTS скоринг
+3. Тексеру: `npx tsx scripts/validate-career-quiz.ts` және `npx tsx scripts/validate-universities.ts`
+4. UI: `components/landing/quiz-section.tsx` (бастау → 30 сұрақ → топ-5 мамандық + бағыт → GPA/IELTS форма → топ-10 әлем + топ-5 ҚР)
+5. «Өткізіп жіберу» әдепкі: GPA 3.50, IELTS жоқ
+6. Тіркелу CTA ұсынылған бағытты auth modal-да алдын ала таңдайды
 
 ## IELTS mock-тест (сұрақтарды өзгерту)
 
