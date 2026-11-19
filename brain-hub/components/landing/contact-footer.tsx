@@ -146,6 +146,17 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
                 <button
                   type="button"
                   className="hover:text-[var(--foreground)]"
+                  onClick={() =>
+                    onNavigate?.({ kind: "panel", id: "pricing" })
+                  }
+                >
+                  Бағалар
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  className="hover:text-[var(--foreground)]"
                   onClick={() => onNavigate?.({ kind: "contact" })}
                 >
                   Байланыс

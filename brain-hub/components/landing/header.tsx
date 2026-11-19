@@ -24,6 +24,11 @@ const NAV: Array<{ id: string; label: string; target: NavTarget }> = [
     label: "Пікірлер",
     target: { kind: "panel", id: "reviews" },
   },
+  {
+    id: "pricing",
+    label: "Бағалар",
+    target: { kind: "panel", id: "pricing" },
+  },
   { id: "contact", label: "Байланыс", target: { kind: "contact" } },
 ];
 

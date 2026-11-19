@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { FormatSection } from "@/components/landing/format-section";
+import { PricingSection } from "@/components/landing/pricing-section";
 import { QuizSection } from "@/components/landing/quiz-section";
 import { StatsSection } from "@/components/landing/stats-section";
 import { TestimonialsSection } from "@/components/landing/testimonials-section";
@@ -13,7 +14,8 @@ export type ContentPanelId =
   | "quiz"
   | "tracks"
   | "results"
-  | "reviews";
+  | "reviews"
+  | "pricing";
 
 const TITLES: Record<ContentPanelId, string> = {
   format: "Оқыту форматы",
@@ -21,6 +23,7 @@ const TITLES: Record<ContentPanelId, string> = {
   tracks: "Дайындық бағыттары",
   results: "Жетістіктер",
   reviews: "Түлектер пікірі",
+  pricing: "Бағалар",
 };
 
 type ContentPanelProps = {
@@ -28,6 +31,7 @@ type ContentPanelProps = {
   onClose: () => void;
   onRecommend?: (trackId: TrackId | null) => void;
   onRegisterWithTrack?: (trackId: TrackId) => void;
+  onRegister?: () => void;
 };
 
 export function ContentPanel({
@@ -35,6 +39,7 @@ export function ContentPanel({
   onClose,
   onRecommend,
   onRegisterWithTrack,
+  onRegister,
 }: ContentPanelProps) {
   if (!panel) return null;
 
@@ -71,6 +76,9 @@ export function ContentPanel({
           {panel === "tracks" && <TracksSection />}
           {panel === "results" && <StatsSection />}
           {panel === "reviews" && <TestimonialsSection />}
+          {panel === "pricing" && (
+            <PricingSection onRegister={onRegister} />
+          )}
         </div>
       </div>
     </div>

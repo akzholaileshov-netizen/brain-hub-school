@@ -95,6 +95,9 @@ export function LandingPage() {
         panel={panel}
         onClose={() => setPanel(null)}
         onRecommend={handleRecommend}
+        onRegister={() =>
+          authenticated ? router.push("/dashboard") : openAuth("register")
+        }
         onRegisterWithTrack={(trackId) => {
           setRecommendedTrack(trackId);
           if (authenticated) {
