@@ -3,14 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AuthModal } from "@/components/landing/auth-modal";
+import {
+  ContentPanel,
+  type ContentPanelId,
+} from "@/components/landing/content-panel";
 import { ContactFooter } from "@/components/landing/contact-footer";
-import { FormatSection } from "@/components/landing/format-section";
-import { Header } from "@/components/landing/header";
+import { Header, type NavTarget } from "@/components/landing/header";
 import { Hero } from "@/components/landing/hero";
-import { QuizSection } from "@/components/landing/quiz-section";
-import { StatsSection } from "@/components/landing/stats-section";
-import { TestimonialsSection } from "@/components/landing/testimonials-section";
-import { TracksSection } from "@/components/landing/tracks-section";
 import type { TrackId } from "@/lib/quiz-data";
 
 type AuthMode = "login" | "register";
@@ -23,6 +22,8 @@ export function LandingPage() {
     null,
   );
   const [authenticated, setAuthenticated] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [panel, setPanel] = useState<ContentPanelId | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -39,6 +40,15 @@ export function LandingPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!panel) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [panel]);
+
   const handleRecommend = useCallback((trackId: TrackId | null) => {
     setRecommendedTrack(trackId);
   }, []);
@@ -48,36 +58,52 @@ export function LandingPage() {
     setAuthOpen(true);
   }
 
+  function handleNavigate(target: NavTarget) {
+    if (target.kind === "contact") {
+      setPanel(null);
+      requestAnimationFrame(() => {
+        document.getElementById("contact")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+      return;
+    }
+    setPanel(target.id);
+  }
+
   return (
     <div className="relative flex min-h-full flex-col bg-[var(--background)] text-[var(--foreground)]">
       <Header
         authenticated={authenticated}
         onLogin={() => openAuth("login")}
         onRegister={() => openAuth("register")}
+        onNavigate={handleNavigate}
+        menuOpen={menuOpen}
+        onMenuOpenChange={setMenuOpen}
       />
       <main className="flex-1">
         <Hero
+          onOpenQuiz={() => setPanel("quiz")}
           onRegister={() =>
             authenticated ? router.push("/dashboard") : openAuth("register")
           }
         />
-        <FormatSection />
-        <QuizSection
-          onRecommend={handleRecommend}
-          onRegisterWithTrack={(trackId) => {
-            setRecommendedTrack(trackId);
-            if (authenticated) {
-              router.push("/dashboard");
-              return;
-            }
-            openAuth("register");
-          }}
-        />
-        <TracksSection />
-        <StatsSection />
-        <TestimonialsSection />
       </main>
-      <ContactFooter />
+      <ContactFooter onNavigate={handleNavigate} />
+      <ContentPanel
+        panel={panel}
+        onClose={() => setPanel(null)}
+        onRecommend={handleRecommend}
+        onRegisterWithTrack={(trackId) => {
+          setRecommendedTrack(trackId);
+          if (authenticated) {
+            router.push("/dashboard");
+            return;
+          }
+          openAuth("register");
+        }}
+      />
       <AuthModal
         open={authOpen}
         mode={authMode}

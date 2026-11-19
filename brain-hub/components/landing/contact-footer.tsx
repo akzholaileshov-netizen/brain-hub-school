@@ -1,6 +1,11 @@
 import { MessageCircle, Music2, Send } from "lucide-react";
+import type { NavTarget } from "@/components/landing/header";
 
-export function ContactFooter() {
+type ContactFooterProps = {
+  onNavigate?: (target: NavTarget) => void;
+};
+
+export function ContactFooter({ onNavigate }: ContactFooterProps) {
   return (
     <footer
       id="contact"
@@ -85,34 +90,66 @@ export function ContactFooter() {
             </h3>
             <ul className="mt-4 space-y-2 text-sm text-[var(--foreground-soft)]">
               <li>
-                <a href="#format" className="hover:text-[var(--foreground)]">
+                <button
+                  type="button"
+                  className="hover:text-[var(--foreground)]"
+                  onClick={() =>
+                    onNavigate?.({ kind: "panel", id: "format" })
+                  }
+                >
                   Оқыту форматы
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#quiz" className="hover:text-[var(--foreground)]">
+                <button
+                  type="button"
+                  className="hover:text-[var(--foreground)]"
+                  onClick={() => onNavigate?.({ kind: "panel", id: "quiz" })}
+                >
                   Бағыт тесті
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#tracks" className="hover:text-[var(--foreground)]">
+                <button
+                  type="button"
+                  className="hover:text-[var(--foreground)]"
+                  onClick={() =>
+                    onNavigate?.({ kind: "panel", id: "tracks" })
+                  }
+                >
                   Дайындық бағыттары
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#results" className="hover:text-[var(--foreground)]">
+                <button
+                  type="button"
+                  className="hover:text-[var(--foreground)]"
+                  onClick={() =>
+                    onNavigate?.({ kind: "panel", id: "results" })
+                  }
+                >
                   Жетістіктер
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#reviews" className="hover:text-[var(--foreground)]">
+                <button
+                  type="button"
+                  className="hover:text-[var(--foreground)]"
+                  onClick={() =>
+                    onNavigate?.({ kind: "panel", id: "reviews" })
+                  }
+                >
                   Түлектер пікірі
-                </a>
+                </button>
               </li>
               <li>
-                <a href="#contact" className="hover:text-[var(--foreground)]">
+                <button
+                  type="button"
+                  className="hover:text-[var(--foreground)]"
+                  onClick={() => onNavigate?.({ kind: "contact" })}
+                >
                   Байланыс
-                </a>
+                </button>
               </li>
             </ul>
           </div>
