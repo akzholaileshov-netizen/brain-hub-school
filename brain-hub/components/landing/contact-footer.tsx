@@ -4,10 +4,10 @@ export function ContactFooter() {
   return (
     <footer
       id="contact"
-      className="relative scroll-mt-24 border-t border-[var(--border)] bg-[var(--muted)]"
+      className="scroll-mt-24 border-t border-[var(--border)] bg-[var(--background)]"
     >
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-[1.2fr_1fr_1fr]">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <div className="grid gap-12 md:grid-cols-[1.2fr_1fr_1fr]">
           <div>
             <p className="font-display text-2xl font-semibold text-[var(--foreground)]">
               Brain Hub
@@ -16,13 +16,13 @@ export function ContactFooter() {
               Қазақстандық оқушыларға IELTS, грант және бейіндік пәндер бойынша
               нәтижелі дайындық.
             </p>
-            <div className="mt-5 flex gap-3">
+            <div className="mt-5 flex gap-2">
               <a
                 href="https://www.instagram.com/brainhub.kz/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[var(--card)] text-[var(--foreground)] transition-colors hover:text-[var(--primary)]"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--foreground-soft)] transition-colors hover:border-[var(--primary)]/40 hover:text-[var(--primary)]"
               >
                 <MessageCircle className="h-4 w-4" />
               </a>
@@ -31,7 +31,7 @@ export function ContactFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Telegram"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[var(--card)] text-[var(--foreground)] transition-colors hover:text-[var(--primary)]"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--foreground-soft)] transition-colors hover:border-[var(--primary)]/40 hover:text-[var(--primary)]"
               >
                 <Send className="h-4 w-4" />
               </a>
@@ -40,7 +40,7 @@ export function ContactFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[var(--card)] text-[var(--foreground)] transition-colors hover:text-[var(--primary)]"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--foreground-soft)] transition-colors hover:border-[var(--primary)]/40 hover:text-[var(--primary)]"
               >
                 <Music2 className="h-4 w-4" />
               </a>
@@ -48,7 +48,7 @@ export function ContactFooter() {
           </div>
 
           <div>
-            <h3 className="font-display text-sm font-semibold uppercase tracking-[0.12em] text-[var(--foreground)]">
+            <h3 className="text-sm font-semibold text-[var(--foreground)]">
               Байланыс
             </h3>
             <ul className="mt-4 space-y-2 text-sm text-[var(--foreground-soft)]">
@@ -80,7 +80,7 @@ export function ContactFooter() {
           </div>
 
           <div>
-            <h3 className="font-display text-sm font-semibold uppercase tracking-[0.12em] text-[var(--foreground)]">
+            <h3 className="text-sm font-semibold text-[var(--foreground)]">
               Навигация
             </h3>
             <ul className="mt-4 space-y-2 text-sm text-[var(--foreground-soft)]">

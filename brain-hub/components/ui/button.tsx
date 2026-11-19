@@ -9,17 +9,17 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm hover:bg-[var(--primary-hover)] active:translate-y-px",
+          "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-soft hover:bg-[var(--primary-hover)] active:translate-y-px",
         secondary:
-          "bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] hover:bg-[var(--muted)]",
+          "bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] shadow-soft hover:bg-[var(--muted)]",
         outline:
-          "border border-[var(--border)] bg-transparent text-[var(--foreground)] hover:bg-[var(--muted)]",
+          "border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--muted)]",
         ghost:
           "text-[var(--foreground-soft)] hover:bg-[var(--muted)] hover:text-[var(--foreground)]",
         accent:
-          "bg-[var(--accent)] text-[var(--accent-foreground)] shadow-sm hover:bg-[var(--accent-hover)] active:translate-y-px",
+          "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-soft hover:bg-[var(--primary-hover)] active:translate-y-px",
         destructive:
-          "bg-[var(--destructive)] text-[var(--destructive-foreground)] shadow-sm hover:opacity-90 active:translate-y-px",
+          "bg-[var(--destructive)] text-[var(--destructive-foreground)] shadow-soft hover:opacity-90 active:translate-y-px",
       },
       size: {
         default: "h-11 px-5 py-2",

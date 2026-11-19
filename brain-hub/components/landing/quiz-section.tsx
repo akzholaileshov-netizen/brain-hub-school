@@ -154,8 +154,10 @@ export function QuizSection({
   }
 
   return (
-    <section id="quiz" className="relative scroll-mt-24 py-20 sm:py-28">
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,transparent_0%,var(--muted)_35%,transparent_100%)]" />
+    <section
+      id="quiz"
+      className="scroll-mt-24 border-y border-[var(--border)] bg-[var(--muted)] py-20 sm:py-28"
+    >
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
           <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
@@ -178,7 +180,7 @@ export function QuizSection({
           </div>
         )}
 
-        <div className="mt-8 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-sm sm:p-8">
+        <div className="mt-8 rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-soft sm:p-8">
           {phase === "start" && (
             <div className="motion-safe:animate-rise space-y-5">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--primary)]">

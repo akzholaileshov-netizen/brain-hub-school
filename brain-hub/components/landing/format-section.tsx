@@ -20,7 +20,7 @@ const ITEMS = [
 
 export function FormatSection() {
   return (
-    <section id="format" className="relative scroll-mt-24 py-20 sm:py-28">
+    <section id="format" className="scroll-mt-24 py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
           <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
@@ -32,14 +32,14 @@ export function FormatSection() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-10 md:grid-cols-3">
+        <div className="mt-14 grid gap-8 border-t border-[var(--border)] pt-14 md:grid-cols-3 md:gap-10">
           {ITEMS.map((item, index) => (
             <div
               key={item.title}
               className="motion-safe:animate-rise"
-              style={{ animationDelay: `${index * 90}ms` }}
+              style={{ animationDelay: `${index * 80}ms` }}
             >
-              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[var(--muted)] text-[var(--primary)]">
+              <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--muted)] text-[var(--primary)]">
                 <item.icon className="h-5 w-5" aria-hidden />
               </div>
               <h3 className="font-display text-xl font-semibold text-[var(--foreground)]">

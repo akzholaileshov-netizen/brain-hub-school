@@ -21,7 +21,7 @@ const REVIEWS = [
 
 export function TestimonialsSection() {
   return (
-    <section id="reviews" className="relative scroll-mt-24 py-20 sm:py-28">
+    <section id="reviews" className="scroll-mt-24 py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
           <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
@@ -32,13 +32,16 @@ export function TestimonialsSection() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-8 md:grid-cols-3">
+        <div className="mt-14 grid gap-4 md:grid-cols-3">
           {REVIEWS.map((review) => (
-            <blockquote key={review.name} className="border-t-2 border-[var(--accent)] pt-5">
+            <blockquote
+              key={review.name}
+              className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-soft"
+            >
               <p className="text-sm leading-relaxed text-[var(--foreground-soft)] sm:text-base">
                 “{review.quote}”
               </p>
-              <footer className="mt-5">
+              <footer className="mt-6 border-t border-[var(--border)] pt-4">
                 <p className="font-display text-base font-semibold text-[var(--foreground)]">
                   {review.name}
                 </p>
