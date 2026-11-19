@@ -1,39 +1,26 @@
-const REVIEWS = [
-  {
-    name: "Аружан Қ.",
-    result: "IELTS 7.5 · Nazarbayev University гранты",
-    quote:
-      "Жеке ментор апта сайын жазу бөлімін тексерді. Екі айда Writing 5.5-тен 7.0-ге көтерілді.",
-  },
-  {
-    name: "Дастан М.",
-    result: "Инфо-Мат · ҰБТ 135 балл",
-    quote:
-      "Интерактивті сабақтар мен прогресс картасы әлсіз тақырыптарымды анық көрсетті. Грантқа түстім.",
-  },
-  {
-    name: "Мәдина С.",
-    result: "Био-Хим · Медицина гранты",
-    quote:
-      "Химия мен биологияны бір жүйеде өткенің пайдасы зор болды. Түсініксіз жерлерді дереу пысықтадық.",
-  },
-];
+"use client";
+
+import { useI18n } from "@/components/i18n-provider";
+import { REVIEWS_I18N } from "@/lib/i18n/messages";
 
 export function TestimonialsSection() {
+  const { locale, t } = useI18n();
+  const reviews = REVIEWS_I18N[locale];
+
   return (
     <section id="reviews" className="scroll-mt-24 py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
           <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
-            Түлектер пікірі
+            {t("reviews.title")}
           </h2>
           <p className="mt-3 text-base text-[var(--foreground-soft)] sm:text-lg">
-            Нақты баллдар, гранттар және оқушылардың өз сөздері.
+            {t("reviews.subtitle")}
           </p>
         </div>
 
         <div className="mt-14 grid gap-4 md:grid-cols-3">
-          {REVIEWS.map((review) => (
+          {reviews.map((review) => (
             <blockquote
               key={review.name}
               className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-6 shadow-soft"

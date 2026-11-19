@@ -4,14 +4,21 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useI18n } from "@/components/i18n-provider";
 import {
   CAREER_QUESTIONS,
-  CAREER_QUIZ_META,
   scoreCareerQuiz,
   type CareerQuizOption,
   type CareerQuizResult,
 } from "@/lib/career-quiz";
-import { TRACKS, type TrackId } from "@/lib/quiz-data";
+import {
+  getQuestions,
+  getQuizMeta,
+  getTrack,
+  localizeQuizResult,
+  localizeUniversityMatch,
+} from "@/lib/i18n/localize";
+import type { TrackId } from "@/lib/quiz-data";
 import {
   DEFAULT_ACADEMIC_PROFILE,
   parseGpaInput,
@@ -34,6 +41,9 @@ export function QuizSection({
   onRecommend,
   onRegisterWithTrack,
 }: QuizSectionProps) {
+  const { locale, t } = useI18n();
+  const questions = useMemo(() => getQuestions(locale), [locale]);
+  const meta = useMemo(() => getQuizMeta(locale), [locale]);
   const [phase, setPhase] = useState<Phase>("start");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Array<CareerQuizOption | null>>(
@@ -47,12 +57,12 @@ export function QuizSection({
     null,
   );
 
-  const current = CAREER_QUESTIONS[step];
+  const current = questions[step];
   const selectedIndex = useMemo(() => {
     if (phase !== "quiz" || !current) return null;
     const existing = answers[step];
     if (!existing) return null;
-    const idx = current.options.findIndex((o) => o.label === existing.label);
+    const idx = CAREER_QUESTIONS[step].options.findIndex((o) => o === existing);
     return idx >= 0 ? idx : null;
   }, [phase, current, answers, step]);
 
@@ -74,13 +84,23 @@ export function QuizSection({
       return null;
     }
     if (answers.some((a) => a == null)) return null;
-    return scoreCareerQuiz(answers);
-  }, [answers, phase]);
+    return localizeQuizResult(locale, scoreCareerQuiz(answers));
+  }, [answers, phase, locale]);
 
   const uniRec: UniversityRecommendation | null = useMemo(() => {
     if (phase !== "uni-results" || !result || !academic) return null;
-    return recommendUniversities(result, academic);
-  }, [phase, result, academic]);
+    const raw = recommendUniversities(result, academic);
+    const mapList = (items: UniversityMatch[]) =>
+      items.map((item) =>
+        localizeUniversityMatch(
+          locale,
+          item,
+          getTrack(locale, item.university.tracks[0] ?? result.track.id).name,
+          item.relatedProfessionKk,
+        ),
+      );
+    return { world: mapList(raw.world), kz: mapList(raw.kz) };
+  }, [phase, result, academic, locale]);
 
   useEffect(() => {
     onRecommend?.(result?.track.id ?? null);
@@ -97,7 +117,7 @@ export function QuizSection({
 
   function selectOption(index: number) {
     const nextAnswers = [...answers];
-    nextAnswers[step] = current.options[index];
+    nextAnswers[step] = CAREER_QUESTIONS[step].options[index];
     setAnswers(nextAnswers);
   }
 
@@ -137,7 +157,7 @@ export function QuizSection({
     e.preventDefault();
     const gpa = parseGpaInput(gpaRaw);
     if (gpa == null) {
-      setGpaError("GPA 0.00–4.00 аралығында болуы керек");
+      setGpaError(t("quiz.gpaError"));
       return;
     }
     submitAcademic({
@@ -161,10 +181,10 @@ export function QuizSection({
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
           <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
-            {CAREER_QUIZ_META.title}
+            {meta.title}
           </h2>
           <p className="mt-3 text-base text-[var(--foreground-soft)] sm:text-lg">
-            {CAREER_QUIZ_META.subtitle}
+            {meta.subtitle}
           </p>
         </div>
 
@@ -184,23 +204,19 @@ export function QuizSection({
           {phase === "start" && (
             <div className="motion-safe:animate-rise space-y-5">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--primary)]">
-                30 сұрақ · {CAREER_QUIZ_META.estimatedMinutes}
+                30 · {meta.estimatedMinutes}
               </p>
               <h3 className="font-display text-xl font-semibold text-[var(--foreground)] sm:text-2xl">
-                Дайындық бағытын және мамандықты бірге анықтаймыз
+                {t("quiz.startTitle")}
               </h3>
               <ul className="space-y-2 text-sm text-[var(--foreground-soft)]">
-                <li>
-                  • Қабілет, қызығушылық және жұмыс стилі туралы нақты сұрақтар
-                </li>
-                <li>• Нәтижеде — топ-5 сай мамандық және ұсынылған бағыт</li>
-                <li>
-                  • GPA мен IELTS бойынша әлемдік және Қазақстан университеттері
-                </li>
-                <li>• Тіркелу кезінде ұсынылған бағыт алдын ала таңдалады</li>
+                <li>• {t("quiz.bullet1")}</li>
+                <li>• {t("quiz.bullet2")}</li>
+                <li>• {t("quiz.bullet3")}</li>
+                <li>• {t("quiz.bullet4")}</li>
               </ul>
               <Button type="button" size="lg" onClick={startQuiz}>
-                Тестті бастау
+                {t("quiz.start")}
               </Button>
             </div>
           )}
@@ -208,7 +224,7 @@ export function QuizSection({
           {phase === "quiz" && current && (
             <div key={current.id} className="motion-safe:animate-fade-swap">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--primary)]">
-                Сұрақ {step + 1} / {CAREER_QUESTIONS.length}
+                {t("quiz.questionOf", { n: step + 1, total: CAREER_QUESTIONS.length })}
               </p>
               <h3 className="mt-3 font-display text-xl font-semibold text-[var(--foreground)] sm:text-2xl">
                 {current.question}
@@ -218,7 +234,7 @@ export function QuizSection({
                   const active = selectedIndex === index;
                   return (
                     <button
-                      key={option.label}
+                      key={`${current.id}-${index}`}
                       type="button"
                       onClick={() => selectOption(index)}
                       className={`rounded-xl border px-4 py-3.5 text-left text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] sm:text-base ${
@@ -239,12 +255,12 @@ export function QuizSection({
                   disabled={selectedIndex == null}
                 >
                   {step === CAREER_QUESTIONS.length - 1
-                    ? "Нәтижені көру"
-                    : "Келесі"}
+                    ? t("quiz.seeResults")
+                    : t("quiz.next")}
                 </Button>
                 {step > 0 && (
                   <Button type="button" variant="ghost" onClick={goBack}>
-                    Алдыңғы сұрақ
+                    {t("quiz.back")}
                   </Button>
                 )}
               </div>
@@ -258,10 +274,10 @@ export function QuizSection({
               <div className="motion-safe:animate-rise space-y-6">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
-                    Нәтиже
+                    {t("quiz.result")}
                   </p>
                   <h3 className="mt-3 font-display text-2xl font-semibold text-[var(--foreground)] sm:text-3xl">
-                    Ұсынылған бағыт: {result.track.name}
+                    {t("quiz.recommendedTrack", { name: result.track.name })}
                   </h3>
                   <p className="mt-2 text-sm text-[var(--muted-foreground)]">
                     {result.track.short} · {result.track.focus}
@@ -273,13 +289,11 @@ export function QuizSection({
 
                 <div>
                   <h4 className="font-display text-lg font-semibold text-[var(--foreground)]">
-                    Топ-5 мамандық
+                    {t("quiz.top5")}
                   </h4>
                   <ol className="mt-4 space-y-3">
                     {result.topProfessions.map((item, index) => {
-                      const trackName =
-                        TRACKS.find((t) => t.id === item.profession.trackId)
-                          ?.name ?? item.profession.trackId;
+                      const trackName = getTrack(locale, item.profession.trackId).name;
                       return (
                         <li
                           key={item.profession.id}
@@ -294,7 +308,7 @@ export function QuizSection({
                                 {item.profession.nameKk}
                               </p>
                               <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                                Бағыт: {trackName}
+                                {t("quiz.trackLabel", { name: trackName })}
                               </p>
                             </div>
                             <p className="text-sm font-semibold text-[var(--foreground)]">
@@ -322,16 +336,16 @@ export function QuizSection({
                       type="button"
                       onClick={() => setPhase("uni-form")}
                     >
-                      Университет ұсынысын алу
+                      {t("quiz.getUnis")}
                     </Button>
                     <Button
                       type="button"
                       onClick={() => onRegisterWithTrack?.(result.track.id)}
                     >
-                      Осы бағытпен тіркелу
+                      {t("quiz.registerTrack")}
                     </Button>
                     <Button type="button" variant="ghost" onClick={reset}>
-                      Тестті қайталау
+                      {t("quiz.restart")}
                     </Button>
                   </div>
                 )}
@@ -343,16 +357,15 @@ export function QuizSection({
                   >
                     <div>
                       <h4 className="font-display text-lg font-semibold text-[var(--foreground)]">
-                        Академиялық профиль
+                        {t("quiz.academicTitle")}
                       </h4>
                       <p className="mt-1 text-sm text-[var(--foreground-soft)]">
-                        GPA және IELTS бойынша сізге сай университеттерді
-                        сұрыптаймыз.
+                        {t("quiz.academicHint")}
                       </p>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="quiz-gpa">GPA (0.00–4.00)</Label>
+                      <Label htmlFor="quiz-gpa">{t("quiz.gpa")}</Label>
                       <Input
                         id="quiz-gpa"
                         name="gpa"
@@ -377,28 +390,28 @@ export function QuizSection({
                     </div>
 
                     <div className="space-y-2">
-                      <Label>IELTS сертификаты</Label>
+                      <Label>{t("quiz.ieltsCert")}</Label>
                       <div className="flex flex-wrap gap-2">
                         <Button
                           type="button"
                           variant={hasIelts === "yes" ? "default" : "outline"}
                           onClick={() => setHasIelts("yes")}
                         >
-                          Бар
+                          {t("quiz.ieltsYes")}
                         </Button>
                         <Button
                           type="button"
                           variant={hasIelts === "no" ? "default" : "outline"}
                           onClick={() => setHasIelts("no")}
                         >
-                          Жоқ
+                          {t("quiz.ieltsNo")}
                         </Button>
                       </div>
                     </div>
 
                     {hasIelts === "yes" && (
                       <div className="space-y-2">
-                        <Label htmlFor="quiz-ielts">IELTS балл (0–9)</Label>
+                        <Label htmlFor="quiz-ielts">{t("quiz.ieltsBand")}</Label>
                         <select
                           id="quiz-ielts"
                           className="flex h-11 w-full rounded-md border border-[var(--border)] bg-[var(--card)] px-3 text-sm text-[var(--foreground)] shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
@@ -417,24 +430,24 @@ export function QuizSection({
                     )}
 
                     <div className="flex flex-wrap gap-3">
-                      <Button type="submit">Университеттерді көрсету</Button>
+                      <Button type="submit">{t("quiz.showUnis")}</Button>
                       <Button
                         type="button"
                         variant="outline"
                         onClick={skipForm}
                       >
-                        Өткізіп жіберу
+                        {t("quiz.skip")}
                       </Button>
                       <Button
                         type="button"
                         variant="ghost"
                         onClick={() => setPhase("results")}
                       >
-                        Артқа
+                        {t("quiz.backShort")}
                       </Button>
                     </div>
                     <p className="text-xs text-[var(--muted-foreground)]">
-                      «Өткізіп жіберу» — GPA 3.50 және IELTS жоқ деп есептейді.
+                      {t("quiz.skipHint")}
                     </p>
                   </form>
                 )}
@@ -442,19 +455,27 @@ export function QuizSection({
                 {phase === "uni-results" && uniRec && academic && (
                   <div className="space-y-8">
                     <p className="text-sm text-[var(--foreground-soft)]">
-                      Профиль: GPA {academic.gpa.toFixed(2)}
+                      {t("quiz.profile", { gpa: academic.gpa.toFixed(2) })}
                       {academic.hasIelts && academic.ieltsBand != null
-                        ? ` · IELTS ${academic.ieltsBand.toFixed(1)}`
-                        : " · IELTS жоқ"}
+                        ? t("quiz.profileIelts", {
+                            band: academic.ieltsBand.toFixed(1),
+                          })
+                        : t("quiz.profileNoIelts")}
                     </p>
 
                     <UniversityList
-                      title="Әлемдік топ-10 университет"
+                      title={t("quiz.worldUnis")}
                       items={uniRec.world}
+                      relatedLabel={(profession, track) =>
+                        t("quiz.related", { profession, track })
+                      }
                     />
                     <UniversityList
-                      title="Қазақстандық топ-5 университет"
+                      title={t("quiz.kzUnis")}
                       items={uniRec.kz}
+                      relatedLabel={(profession, track) =>
+                        t("quiz.related", { profession, track })
+                      }
                     />
 
                     <div className="flex flex-wrap gap-3">
@@ -462,10 +483,10 @@ export function QuizSection({
                         type="button"
                         onClick={() => onRegisterWithTrack?.(result.track.id)}
                       >
-                        Осы бағытпен тіркелу
+                        {t("quiz.registerTrack")}
                       </Button>
                       <Button asChild variant="outline">
-                        <a href="#tracks">Бағыттарды қарау</a>
+                        <a href="#top">{t("quiz.viewTracks")}</a>
                       </Button>
                       <Button
                         type="button"
@@ -475,10 +496,10 @@ export function QuizSection({
                           setPhase("uni-form");
                         }}
                       >
-                        GPA / IELTS өзгерту
+                        {t("quiz.editAcademic")}
                       </Button>
                       <Button type="button" variant="ghost" onClick={reset}>
-                        Тестті қайталау
+                        {t("quiz.restart")}
                       </Button>
                     </div>
                   </div>
@@ -494,9 +515,11 @@ export function QuizSection({
 function UniversityList({
   title,
   items,
+  relatedLabel,
 }: {
   title: string;
   items: UniversityMatch[];
+  relatedLabel: (profession: string, track: string) => string;
 }) {
   return (
     <div>
@@ -540,7 +563,7 @@ function UniversityList({
                 {item.gpaHintKk} · {item.ieltsHintKk}
               </p>
               <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                Байланысты: {item.relatedProfessionKk} · {item.relatedTrackKk}
+                {relatedLabel(item.relatedProfessionKk, item.relatedTrackKk)}
               </p>
             </li>
           );

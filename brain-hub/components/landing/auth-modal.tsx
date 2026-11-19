@@ -13,7 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { TRACKS, type TrackId } from "@/lib/quiz-data";
+import { useI18n } from "@/components/i18n-provider";
+import { getTracks } from "@/lib/i18n/localize";
+import { type TrackId } from "@/lib/quiz-data";
 
 type Mode = "login" | "register";
 
@@ -33,6 +35,8 @@ export function AuthModal({
   recommendedTrack = null,
 }: AuthModalProps) {
   const router = useRouter();
+  const { locale, t } = useI18n();
+  const tracks = getTracks(locale);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [trackOverride, setTrackOverride] = useState<TrackId | null>(null);
@@ -96,7 +100,12 @@ export function AuthModal({
         message?: string;
       };
       if (!res.ok) {
-        setError(data.error || "Қате пайда болды. Қайта көріңіз.");
+        setError(
+          data.error ||
+            (locale === "ru"
+              ? "Произошла ошибка. Попробуйте снова."
+              : "Қате пайда болды. Қайта көріңіз."),
+        );
         setLoading(false);
         return;
       }
@@ -105,7 +114,9 @@ export function AuthModal({
         switchMode(
           "login",
           data.message ||
-            "Тіркелу сәтті. Почтаңызды растап, содан кейін кіріңіз.",
+            (locale === "ru"
+              ? "Регистрация успешна. Подтвердите почту, затем войдите."
+              : "Тіркелу сәтті. Почтаңызды растап, содан кейін кіріңіз."),
         );
         return;
       }
@@ -114,7 +125,11 @@ export function AuthModal({
       router.push(data.redirect || "/dashboard");
       router.refresh();
     } catch {
-      setError("Желі қатесі. Қайта көріңіз.");
+      setError(
+        locale === "ru"
+          ? "Ошибка сети. Попробуйте снова."
+          : "Желі қатесі. Қайта көріңіз.",
+      );
       setLoading(false);
     }
   }
@@ -124,12 +139,10 @@ export function AuthModal({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {mode === "login" ? "Кіру" : "Тіркелу"}
+            {mode === "login" ? t("auth.loginTitle") : t("auth.registerTitle")}
           </DialogTitle>
           <DialogDescription>
-            {mode === "login"
-              ? "Brain Hub аккаунтыңызға кіріңіз."
-              : "Жаңа аккаунт ашып, жеке кабинетке өтіңіз."}
+            {mode === "login" ? t("auth.loginDesc") : t("auth.registerDesc")}
           </DialogDescription>
         </DialogHeader>
 
@@ -143,7 +156,7 @@ export function AuthModal({
             }`}
             onClick={() => switchMode("login")}
           >
-            Кіру
+            {t("nav.login")}
           </button>
           <button
             type="button"
@@ -154,7 +167,7 @@ export function AuthModal({
             }`}
             onClick={() => switchMode("register")}
           >
-            Тіркелу
+            {t("nav.register")}
           </button>
         </div>
 
@@ -162,16 +175,18 @@ export function AuthModal({
           {mode === "register" && (
             <>
               <div className="space-y-2">
-                <Label htmlFor="fullName">Аты-жөні</Label>
+                <Label htmlFor="fullName">{t("auth.fullName")}</Label>
                 <Input
                   id="fullName"
                   name="fullName"
-                  placeholder="Айгерім Нұрланқызы"
+                  placeholder={
+                    locale === "ru" ? "Айгерим Нурлановна" : "Айгерім Нұрланқызы"
+                  }
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="track">Дайындық бағыты</Label>
+                <Label htmlFor="track">{t("auth.track")}</Label>
                 <Select
                   id="track"
                   name="track"
@@ -179,10 +194,10 @@ export function AuthModal({
                   onChange={(e) => setTrackOverride(e.target.value as TrackId)}
                   required
                 >
-                  {TRACKS.map((item) => (
+                  {tracks.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.name}
-                      {recommendedTrack === item.id ? " (тест ұсынысы)" : ""}
+                      {recommendedTrack === item.id ? t("auth.quizSuggest") : ""}
                     </option>
                   ))}
                 </Select>
@@ -190,7 +205,7 @@ export function AuthModal({
             </>
           )}
           <div className="space-y-2">
-            <Label htmlFor="email">Почта</Label>
+            <Label htmlFor="email">{t("auth.email")}</Label>
             <Input
               id="email"
               name="email"
@@ -200,12 +215,12 @@ export function AuthModal({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Құпия сөз</Label>
+            <Label htmlFor="password">{t("auth.password")}</Label>
             <Input
               id="password"
               name="password"
               type="password"
-              placeholder="Кемінде 8 таңба, әріп пен сан"
+              placeholder={t("auth.passwordHint")}
               minLength={mode === "register" ? 8 : 1}
               required
             />
@@ -219,10 +234,12 @@ export function AuthModal({
 
           <Button type="submit" className="w-full" size="lg" disabled={loading}>
             {loading
-              ? "Күте тұрыңыз…"
+              ? locale === "ru"
+                ? "Подождите…"
+                : "Күте тұрыңыз…"
               : mode === "login"
-                ? "Кіру"
-                : "Тіркелу"}
+                ? t("auth.submitLogin")
+                : t("auth.submitRegister")}
           </Button>
         </form>
       </DialogContent>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { I18nProvider } from "@/components/i18n-provider";
 import { SupabaseSetupBanner } from "@/components/supabase-setup-banner";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
@@ -31,7 +32,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('bh-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}var r=document.documentElement;r.classList.toggle('dark',t==='dark');r.style.colorScheme=t}catch(e){}})();`,
+            __html: `(function(){try{var r=document.documentElement;var t=localStorage.getItem('bh-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}r.classList.toggle('dark',t==='dark');r.style.colorScheme=t;var l=localStorage.getItem('bh-locale');if(l==='ru'||l==='kk'){r.lang=l}else{r.lang='kk'}}catch(e){}})();`,
           }}
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -50,8 +51,10 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-full flex-col font-sans">
         <ThemeProvider>
-          <SupabaseSetupBanner />
-          {children}
+          <I18nProvider>
+            <SupabaseSetupBanner />
+            {children}
+          </I18nProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,11 +1,16 @@
+"use client";
+
 import { MessageCircle, Music2, Send } from "lucide-react";
 import type { NavTarget } from "@/components/landing/header";
+import { useI18n } from "@/components/i18n-provider";
 
 type ContactFooterProps = {
   onNavigate?: (target: NavTarget) => void;
 };
 
 export function ContactFooter({ onNavigate }: ContactFooterProps) {
+  const { t } = useI18n();
+
   return (
     <footer
       id="contact"
@@ -18,8 +23,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
               Brain Hub
             </p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-[var(--foreground-soft)]">
-              Қазақстандық оқушыларға IELTS, грант және бейіндік пәндер бойынша
-              нәтижелі дайындық.
+              {t("footer.blurb")}
             </p>
             <div className="mt-5 flex gap-2">
               <a
@@ -54,7 +58,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
 
           <div>
             <h3 className="text-sm font-semibold text-[var(--foreground)]">
-              Байланыс
+              {t("footer.contact")}
             </h3>
             <ul className="mt-4 space-y-2 text-sm text-[var(--foreground-soft)]">
               <li>
@@ -86,7 +90,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
 
           <div>
             <h3 className="text-sm font-semibold text-[var(--foreground)]">
-              Навигация
+              {t("footer.nav")}
             </h3>
             <ul className="mt-4 space-y-2 text-sm text-[var(--foreground-soft)]">
               <li>
@@ -97,7 +101,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
                     onNavigate?.({ kind: "panel", id: "format" })
                   }
                 >
-                  Оқыту форматы
+                  {t("footer.format")}
                 </button>
               </li>
               <li>
@@ -106,7 +110,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
                   className="hover:text-[var(--foreground)]"
                   onClick={() => onNavigate?.({ kind: "panel", id: "quiz" })}
                 >
-                  Бағыт тесті
+                  {t("footer.quiz")}
                 </button>
               </li>
               <li>
@@ -117,7 +121,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
                     onNavigate?.({ kind: "panel", id: "tracks" })
                   }
                 >
-                  Дайындық бағыттары
+                  {t("footer.tracks")}
                 </button>
               </li>
               <li>
@@ -128,7 +132,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
                     onNavigate?.({ kind: "panel", id: "results" })
                   }
                 >
-                  Жетістіктер
+                  {t("footer.results")}
                 </button>
               </li>
               <li>
@@ -139,7 +143,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
                     onNavigate?.({ kind: "panel", id: "reviews" })
                   }
                 >
-                  Түлектер пікірі
+                  {t("footer.reviews")}
                 </button>
               </li>
               <li>
@@ -150,7 +154,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
                     onNavigate?.({ kind: "panel", id: "pricing" })
                   }
                 >
-                  Бағалар
+                  {t("footer.pricing")}
                 </button>
               </li>
               <li>
@@ -159,7 +163,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
                   className="hover:text-[var(--foreground)]"
                   onClick={() => onNavigate?.({ kind: "contact" })}
                 >
-                  Байланыс
+                  {t("footer.contact")}
                 </button>
               </li>
             </ul>
@@ -167,7 +171,7 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
         </div>
 
         <div className="mt-12 border-t border-[var(--border)] pt-6 text-xs text-[var(--muted-foreground)]">
-          © 2026 Brain Hub. Барлық құқықтар қорғалған.
+          {t("footer.rights")}
         </div>
       </div>
     </footer>
