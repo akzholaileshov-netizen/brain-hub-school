@@ -19,6 +19,7 @@ import {
   localizeUniversityMatch,
 } from "@/lib/i18n/localize";
 import type { TrackId } from "@/lib/quiz-data";
+import { UniversityDetailPanel } from "@/components/landing/university-detail-panel";
 import {
   DEFAULT_ACADEMIC_PROFILE,
   parseGpaInput,
@@ -56,6 +57,7 @@ export function QuizSection({
   const [academic, setAcademic] = useState<StudentAcademicProfile | null>(
     null,
   );
+  const [selectedUni, setSelectedUni] = useState<UniversityMatch | null>(null);
 
   const current = questions[step];
   const selectedIndex = useMemo(() => {
@@ -111,6 +113,7 @@ export function QuizSection({
     setStep(0);
     setAnswers(Array(CAREER_QUESTIONS.length).fill(null));
     setAcademic(null);
+    setSelectedUni(null);
     setGpaError(null);
     onRecommend?.(null);
   }
@@ -140,6 +143,7 @@ export function QuizSection({
     setStep(0);
     setAnswers(Array(CAREER_QUESTIONS.length).fill(null));
     setAcademic(null);
+    setSelectedUni(null);
     setGpaRaw("3.50");
     setHasIelts("no");
     setIeltsBand(6.0);
@@ -469,6 +473,8 @@ export function QuizSection({
                       relatedLabel={(profession, track) =>
                         t("quiz.related", { profession, track })
                       }
+                      openLabel={t("uni.openDetail")}
+                      onSelect={setSelectedUni}
                     />
                     <UniversityList
                       title={t("quiz.kzUnis")}
@@ -476,6 +482,8 @@ export function QuizSection({
                       relatedLabel={(profession, track) =>
                         t("quiz.related", { profession, track })
                       }
+                      openLabel={t("uni.openDetail")}
+                      onSelect={setSelectedUni}
                     />
 
                     <div className="flex flex-wrap gap-3">
@@ -508,6 +516,15 @@ export function QuizSection({
             )}
         </div>
       </div>
+
+      {selectedUni && academic && result && (
+        <UniversityDetailPanel
+          match={selectedUni}
+          profile={academic}
+          quiz={result}
+          onClose={() => setSelectedUni(null)}
+        />
+      )}
     </section>
   );
 }
@@ -516,10 +533,14 @@ function UniversityList({
   title,
   items,
   relatedLabel,
+  openLabel,
+  onSelect,
 }: {
   title: string;
   items: UniversityMatch[];
   relatedLabel: (profession: string, track: string) => string;
+  openLabel: string;
+  onSelect: (item: UniversityMatch) => void;
 }) {
   return (
     <div>
@@ -530,41 +551,47 @@ function UniversityList({
         {items.map((item, index) => {
           const u = item.university;
           return (
-            <li
-              key={u.id}
-              className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/40 p-4"
-            >
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <div>
-                  <p className="text-xs font-semibold text-[var(--primary)]">
-                    #{index + 1}
-                  </p>
-                  <p className="mt-1 font-display text-base font-semibold text-[var(--foreground)] sm:text-lg">
-                    {u.nameKk}
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                    {u.city}, {u.country}
+            <li key={u.id}>
+              <button
+                type="button"
+                onClick={() => onSelect(item)}
+                className="w-full rounded-xl border border-[var(--border)] bg-[var(--muted)]/40 p-4 text-left transition-colors hover:border-[var(--primary)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <p className="text-xs font-semibold text-[var(--primary)]">
+                      #{index + 1}
+                    </p>
+                    <p className="mt-1 font-display text-base font-semibold text-[var(--foreground)] sm:text-lg">
+                      {u.nameKk}
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+                      {u.city}, {u.country}
+                    </p>
+                  </div>
+                  <p className="text-sm font-semibold text-[var(--foreground)]">
+                    {item.matchPercent}%
                   </p>
                 </div>
-                <p className="text-sm font-semibold text-[var(--foreground)]">
-                  {item.matchPercent}%
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--foreground)]/10">
+                  <div
+                    className="h-full rounded-full bg-[var(--primary)]"
+                    style={{ width: `${item.matchPercent}%` }}
+                  />
+                </div>
+                <p className="mt-2 text-sm text-[var(--foreground-soft)]">
+                  {item.whyKk}
                 </p>
-              </div>
-              <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--foreground)]/10">
-                <div
-                  className="h-full rounded-full bg-[var(--primary)]"
-                  style={{ width: `${item.matchPercent}%` }}
-                />
-              </div>
-              <p className="mt-2 text-sm text-[var(--foreground-soft)]">
-                {item.whyKk}
-              </p>
-              <p className="mt-2 text-xs text-[var(--muted-foreground)]">
-                {item.gpaHintKk} · {item.ieltsHintKk}
-              </p>
-              <p className="mt-1 text-xs text-[var(--muted-foreground)]">
-                {relatedLabel(item.relatedProfessionKk, item.relatedTrackKk)}
-              </p>
+                <p className="mt-2 text-xs text-[var(--muted-foreground)]">
+                  {item.gpaHintKk} · {item.ieltsHintKk}
+                </p>
+                <p className="mt-1 text-xs text-[var(--muted-foreground)]">
+                  {relatedLabel(item.relatedProfessionKk, item.relatedTrackKk)}
+                </p>
+                <p className="mt-3 text-xs font-semibold text-[var(--primary)]">
+                  {openLabel} →
+                </p>
+              </button>
             </li>
           );
         })}

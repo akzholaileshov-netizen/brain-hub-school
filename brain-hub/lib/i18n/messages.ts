@@ -121,6 +121,33 @@ const kk: Dict = {
   "lang.kk": "ҚАЗ",
   "lang.ru": "РУС",
   "lang.switch": "Тіл",
+  "uni.openDetail": "Толығырақ",
+  "uni.tabDetail": "Мәлімет",
+  "uni.tabCharts": "Графиктер",
+  "uni.match": "Сәйкестік",
+  "uni.kindKz": "Қазақстан",
+  "uni.kindWorld": "Әлем",
+  "uni.typicalGpa": "Каталогтағы типтік GPA",
+  "uni.typicalIelts": "Каталогтағы типтік IELTS",
+  "uni.yourGpa": "Сіздің GPA: {gpa}",
+  "uni.yourIelts": "Сіздің IELTS: {band}",
+  "uni.yourIeltsNone": "Сізде IELTS жоқ",
+  "uni.ieltsNotRequired": "Міндетті емес",
+  "uni.programs": "Байланысты бағыттар",
+  "uni.programsHint":
+    "Каталогта осы университетке байланыстырылған Brain Hub бағыттары (рейтинг емес).",
+  "uni.majors": "Байланысты мамандықтар",
+  "uni.showCharts": "Графиктерді көрсету",
+  "uni.barsTitle": "Сәйкестік көрсеткіштері",
+  "uni.barsHint":
+    "GPA/IELTS — каталогтағы минимуммен салыстыру; рейтинг емес.",
+  "uni.radarTitle": "Профиль радары",
+  "uni.radarHint": "Төрт өлшем: сәйкестік, GPA, IELTS және бағыт қабаттасуы.",
+  "uni.metricMatch": "Сәйкестік",
+  "uni.metricGpa": "GPA сәйкестігі",
+  "uni.metricIelts": "IELTS сәйкестігі",
+  "uni.metricTrack": "Бағыт қабаттасуы",
+  "uni.backDetail": "Мәліметке оралу",
 };
 
 const ru: Dict = {
@@ -241,6 +268,34 @@ const ru: Dict = {
   "lang.kk": "ҚАЗ",
   "lang.ru": "РУС",
   "lang.switch": "Язык",
+  "uni.openDetail": "Подробнее",
+  "uni.tabDetail": "Сведения",
+  "uni.tabCharts": "Графики",
+  "uni.match": "Совпадение",
+  "uni.kindKz": "Казахстан",
+  "uni.kindWorld": "Мир",
+  "uni.typicalGpa": "Типичный GPA в каталоге",
+  "uni.typicalIelts": "Типичный IELTS в каталоге",
+  "uni.yourGpa": "Ваш GPA: {gpa}",
+  "uni.yourIelts": "Ваш IELTS: {band}",
+  "uni.yourIeltsNone": "У вас нет IELTS",
+  "uni.ieltsNotRequired": "Не обязателен",
+  "uni.programs": "Связанные направления",
+  "uni.programsHint":
+    "Направления Brain Hub, связанные с этим вузом в каталоге (не рейтинг).",
+  "uni.majors": "Связанные профессии",
+  "uni.showCharts": "Показать графики",
+  "uni.barsTitle": "Показатели совпадения",
+  "uni.barsHint":
+    "GPA/IELTS — сравнение с минимумом каталога; это не рейтинг.",
+  "uni.radarTitle": "Радар профиля",
+  "uni.radarHint":
+    "Четыре оси: совпадение, GPA, IELTS и пересечение направлений.",
+  "uni.metricMatch": "Совпадение",
+  "uni.metricGpa": "Совпадение GPA",
+  "uni.metricIelts": "Совпадение IELTS",
+  "uni.metricTrack": "Пересечение направлений",
+  "uni.backDetail": "К сведениям",
 };
 
 const TABLES: Record<Locale, Dict> = { kk, ru };
