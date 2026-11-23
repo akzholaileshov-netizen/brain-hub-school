@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle, useI18n } from "@/components/i18n-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { BrainHubMark } from "@/components/brand/brain-hub-mark";
 import type { ContentPanelId } from "@/components/landing/content-panel";
 
 export type NavTarget =
@@ -76,8 +77,9 @@ export function Header({
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
           <a
             href="#top"
-            className="font-display text-lg font-bold tracking-tight text-[var(--foreground)] sm:text-xl"
+            className="inline-flex items-center gap-2 font-display text-lg font-bold tracking-tight text-[var(--foreground)] transition-opacity hover:opacity-80 sm:text-xl"
           >
+            <BrainHubMark className="h-7 w-7" />
             Brain Hub
           </a>
 

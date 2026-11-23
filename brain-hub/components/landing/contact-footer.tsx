@@ -1,7 +1,12 @@
 "use client";
 
+import { useState, type FormEvent } from "react";
 import { MessageCircle, Music2, Send } from "lucide-react";
 import type { NavTarget } from "@/components/landing/header";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { useI18n } from "@/components/i18n-provider";
 
 type ContactFooterProps = {
@@ -10,6 +15,17 @@ type ContactFooterProps = {
 
 export function ContactFooter({ onNavigate }: ContactFooterProps) {
   const { t } = useI18n();
+  const [email, setEmail] = useState("");
+  const [invalid, setInvalid] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    setInvalid(!ok);
+    if (!ok) return;
+    setSent(true);
+  }
 
   return (
     <footer
@@ -17,6 +33,50 @@ export function ContactFooter({ onNavigate }: ContactFooterProps) {
       className="scroll-mt-24 border-t border-[var(--border)] bg-[var(--background)]"
     >
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <ScrollReveal>
+          <div className="mb-12 max-w-xl">
+            <h2 className="font-display text-2xl font-semibold text-[var(--foreground)] sm:text-3xl">
+              {t("anim.contactTitle")}
+            </h2>
+            <p className="mt-2 text-sm text-[var(--foreground-soft)]">
+              {t("anim.contactHint")}
+            </p>
+            <form
+              onSubmit={onSubmit}
+              className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-end"
+              noValidate
+            >
+              <div className="min-w-0 flex-1 space-y-2">
+                <Label htmlFor="contact-email">{t("auth.email")}</Label>
+                <Input
+                  id="contact-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setInvalid(false);
+                    setSent(false);
+                  }}
+                  aria-invalid={invalid || undefined}
+                  placeholder="student@email.kz"
+                  className={invalid ? "bh-field-invalid" : undefined}
+                />
+                {invalid && (
+                  <p className="motion-safe:animate-rise text-xs text-[var(--destructive)]">
+                    {t("anim.emailInvalid")}
+                  </p>
+                )}
+                {sent && (
+                  <p className="motion-safe:animate-rise text-xs text-[var(--success)]">
+                    {t("anim.emailThanks")}
+                  </p>
+                )}
+              </div>
+              <Button type="submit">{t("anim.contactSubmit")}</Button>
+            </form>
+          </div>
+        </ScrollReveal>
+
         <div className="grid gap-12 md:grid-cols-[1.2fr_1fr_1fr]">
           <div>
             <p className="font-display text-2xl font-semibold text-[var(--foreground)]">

@@ -124,6 +124,7 @@ h2 {
   box-shadow: var(--shadow-soft);
 }
 
+/* —— Micro / entrance keyframes —— */
 @keyframes rise {
   from {
     opacity: 0;
@@ -146,6 +147,82 @@ h2 {
   }
 }
 
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes preloader-fade {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes spin-soft {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
 .motion-safe\:animate-rise {
   animation: rise 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -154,13 +231,119 @@ h2 {
   animation: fade-swap 300ms ease-out both;
 }
 
+.motion-safe\:animate-float {
+  animation: float-soft 4.5s ease-in-out infinite;
+}
+
+.bh-scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bh-scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bh-scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(28px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bh-scroll-reveal-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.bh-skeleton {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--muted) 100%, transparent) 0%,
+    color-mix(in srgb, var(--border) 70%, transparent) 50%,
+    color-mix(in srgb, var(--muted) 100%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.bh-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  border: 2px solid color-mix(in srgb, var(--primary) 25%, transparent);
+  border-top-color: var(--primary);
+  animation: spin-soft 0.7s linear infinite;
+}
+
+.bh-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.bh-marquee:hover .bh-marquee-track {
+  animation-play-state: paused;
+}
+
+.bh-bar-fill {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.bh-bar-fill.is-on {
+  animation: bar-grow 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bh-tilt {
+  transform-style: preserve-3d;
+  perspective: 900px;
+  transition: transform 200ms ease-out;
+}
+
+.bh-tilt-inner {
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 160ms ease-out;
+  transform-style: preserve-3d;
+}
+
+.bh-field-invalid {
+  border-color: var(--destructive) !important;
+  animation: rise 280ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
   .motion-safe\:animate-rise,
-  .motion-safe\:animate-fade-swap {
+  .motion-safe\:animate-fade-swap,
+  .motion-safe\:animate-float,
+  .bh-marquee-track,
+  .bh-skeleton,
+  .bh-spinner,
+  .bh-bar-fill.is-on {
     animation: none !important;
+  }
+
+  .bh-scroll-reveal,
+  .bh-scroll-reveal-left {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .bh-bar-fill {
+    transform: scaleX(1) !important;
+  }
+
+  .bh-tilt-inner {
+    transform: none !important;
   }
 }

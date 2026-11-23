@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/components/i18n-provider";
+import { Skeleton } from "@/components/motion/spinner";
 import type { CareerQuizResult } from "@/lib/career-quiz";
 import {
   universityDisplayName,
@@ -82,7 +84,9 @@ export function UniversityDetailPanel({
 }: UniversityDetailPanelProps) {
   const { locale, t } = useI18n();
   const [tab, setTab] = useState<Tab>("detail");
+  const [loadedPhotoId, setLoadedPhotoId] = useState<string | null>(null);
   const uni = match.university;
+  const photoReady = loadedPhotoId === uni.id;
   const metrics = useMemo(
     () => computeUniChartMetrics(match, profile, quiz),
     [match, profile, quiz],
@@ -153,11 +157,17 @@ export function UniversityDetailPanel({
             <>
               <section className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-soft">
                 <div className="relative aspect-[16/9] w-full bg-[var(--muted)]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  {!photoReady && (
+                    <Skeleton className="absolute inset-0 h-full w-full rounded-none" />
+                  )}
+                  <Image
+                    key={uni.id}
                     src={uni.photoUrl}
                     alt={displayName}
-                    className="h-full w-full object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 768px"
+                    className={`object-cover transition-opacity duration-500 ${photoReady ? "opacity-100" : "opacity-0"}`}
+                    onLoad={() => setLoadedPhotoId(uni.id)}
                   />
                 </div>
                 <div className="p-5">
@@ -334,6 +344,12 @@ function MetricBar({
   value: number;
   caption?: string;
 }) {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setOn(true));
+    return () => cancelAnimationFrame(id);
+  }, [value]);
+
   return (
     <div>
       <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-2">
@@ -349,7 +365,7 @@ function MetricBar({
       </div>
       <div className="h-2.5 overflow-hidden rounded-full bg-[var(--foreground)]/10">
         <div
-          className="h-full rounded-full bg-[var(--primary)] transition-all"
+          className={`bh-bar-fill h-full rounded-full bg-[var(--primary)] ${on ? "is-on" : ""}`}
           style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
         />
       </div>

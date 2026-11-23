@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { useI18n } from "@/components/i18n-provider";
+import { Skeleton, Spinner } from "@/components/motion/spinner";
 import { getTracks } from "@/lib/i18n/localize";
 import { type TrackId } from "@/lib/quiz-data";
 
@@ -227,19 +228,29 @@ export function AuthModal({
           </div>
 
           {error && (
-            <div className="rounded-lg border border-[var(--destructive)]/30 bg-[var(--destructive)]/10 px-3 py-2 text-sm text-[var(--destructive)]">
+            <div className="motion-safe:animate-rise rounded-lg border border-[var(--destructive)]/30 bg-[var(--destructive)]/10 px-3 py-2 text-sm text-[var(--destructive)]">
               {error}
             </div>
           )}
 
+          {loading && (
+            <div className="space-y-2" aria-hidden>
+              <Skeleton className="h-3 w-full" />
+              <Skeleton className="h-3 w-[80%]" />
+            </div>
+          )}
+
           <Button type="submit" className="w-full" size="lg" disabled={loading}>
-            {loading
-              ? locale === "ru"
-                ? "Подождите…"
-                : "Күте тұрыңыз…"
-              : mode === "login"
-                ? t("auth.submitLogin")
-                : t("auth.submitRegister")}
+            {loading ? (
+              <span className="inline-flex items-center gap-2">
+                <Spinner />
+                {t("anim.loading")}
+              </span>
+            ) : mode === "login" ? (
+              t("auth.submitLogin")
+            ) : (
+              t("auth.submitRegister")
+            )}
           </Button>
         </form>
       </DialogContent>

@@ -10,6 +10,9 @@ import {
 import { ContactFooter } from "@/components/landing/contact-footer";
 import { Header, type NavTarget } from "@/components/landing/header";
 import { Hero } from "@/components/landing/hero";
+import { InsightsSection } from "@/components/landing/insights-section";
+import { TrackMarquee } from "@/components/landing/track-marquee";
+import { PagePreloader } from "@/components/motion/page-preloader";
 import type { TrackId } from "@/lib/quiz-data";
 
 type AuthMode = "login" | "register";
@@ -74,6 +77,7 @@ export function LandingPage() {
 
   return (
     <div className="relative flex min-h-full flex-col bg-[var(--background)] text-[var(--foreground)]">
+      <PagePreloader />
       <Header
         authenticated={authenticated}
         onLogin={() => openAuth("login")}
@@ -89,6 +93,8 @@ export function LandingPage() {
             authenticated ? router.push("/dashboard") : openAuth("register")
           }
         />
+        <TrackMarquee />
+        <InsightsSection />
       </main>
       <ContactFooter onNavigate={handleNavigate} />
       <ContentPanel

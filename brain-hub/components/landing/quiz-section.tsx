@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useI18n } from "@/components/i18n-provider";
+import { Skeleton, Spinner } from "@/components/motion/spinner";
 import {
   CAREER_QUESTIONS,
   scoreCareerQuiz,
@@ -39,7 +41,14 @@ const REGION_TITLE_KEY: Record<UniversityRegion, string> = {
   world: "quiz.regionWorld",
 };
 
-type Phase = "start" | "quiz" | "results" | "uni-form" | "uni-results";
+type Phase =
+  | "start"
+  | "quiz"
+  | "loading-results"
+  | "results"
+  | "uni-form"
+  | "loading-unis"
+  | "uni-results";
 
 type QuizSectionProps = {
   onRecommend?: (trackId: TrackId | null) => void;
@@ -145,7 +154,8 @@ export function QuizSection({
     if (step < CAREER_QUESTIONS.length - 1) {
       setStep((s) => s + 1);
     } else {
-      setPhase("results");
+      setPhase("loading-results");
+      window.setTimeout(() => setPhase("results"), 520);
     }
   }
 
@@ -170,7 +180,8 @@ export function QuizSection({
   function submitAcademic(profile: StudentAcademicProfile) {
     setAcademic(profile);
     setGpaError(null);
-    setPhase("uni-results");
+    setPhase("loading-unis");
+    window.setTimeout(() => setPhase("uni-results"), 560);
   }
 
   function onSubmitForm(e: FormEvent) {
@@ -238,6 +249,25 @@ export function QuizSection({
               <Button type="button" size="lg" onClick={startQuiz}>
                 {t("quiz.start")}
               </Button>
+            </div>
+          )}
+
+          {(phase === "loading-results" || phase === "loading-unis") && (
+            <div
+              className="motion-safe:animate-rise space-y-4"
+              aria-busy
+              aria-live="polite"
+            >
+              <div className="flex items-center gap-3">
+                <Spinner />
+                <p className="text-sm font-medium text-[var(--foreground)]">
+                  {t("anim.loading")}
+                </p>
+              </div>
+              <Skeleton className="h-6 w-2/3" />
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-16 w-full" />
+              <Skeleton className="h-16 w-[83%]" />
             </div>
           )}
 
@@ -403,7 +433,7 @@ export function QuizSection({
                         placeholder="3.50"
                       />
                       {gpaError && (
-                        <p className="text-sm text-red-600 dark:text-red-400">
+                        <p className="motion-safe:animate-rise text-sm text-[var(--destructive)]">
                           {gpaError}
                         </p>
                       )}
@@ -568,12 +598,12 @@ function UniversityList({
                 className="w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--muted)]/40 text-left transition-colors hover:border-[var(--primary)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
               >
                 <div className="relative aspect-[16/7] w-full bg-[var(--muted)] sm:aspect-[21/8]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={u.photoUrl}
                     alt={u.nameKk}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 640px"
+                    className="object-cover"
                   />
                 </div>
                 <div className="p-4">
