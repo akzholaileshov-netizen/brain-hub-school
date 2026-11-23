@@ -1,6 +1,10 @@
 /**
  * University recommendations for the career quiz — single source of truth.
  *
+ * After the quiz we recommend 5×5 universities by region:
+ * Қазақстан · СНГ · Америка · Еуропа · Әлем бойынша.
+ *
+ * Campus photos: Wikimedia Commons (or other clearly reusable) direct https URLs.
  * How to edit: update UNIVERSITIES → `npx tsx scripts/validate-universities.ts`
  */
 
@@ -8,20 +12,41 @@ import type { CareerQuizResult } from "@/lib/career-quiz";
 import type { TrackId } from "@/lib/quiz-data";
 import { TRACKS } from "@/lib/quiz-data";
 
-export type UniversityKind = "world" | "kz";
+/** Regional buckets shown after the career quiz (5 universities each). */
+export type UniversityRegion =
+  | "kz"
+  | "cis"
+  | "america"
+  | "europe"
+  | "world";
+
+/** @deprecated Use UniversityRegion — kept as alias for older call sites. */
+export type UniversityKind = UniversityRegion;
+
+export const UNIVERSITY_REGIONS: UniversityRegion[] = [
+  "kz",
+  "cis",
+  "america",
+  "europe",
+  "world",
+];
 
 export type University = {
   id: string;
   nameKk: string;
   country: string;
   city: string;
-  kind: UniversityKind;
+  kind: UniversityRegion;
   tracks: TrackId[];
   professions: string[];
   minGpa: number;
   ieltsRequired: boolean;
   minIelts: number;
   notesKk: string;
+  /** Direct https URL to a campus / university photo (Wikimedia Commons). */
+  photoUrl: string;
+  /** Short human-readable Commons file name for attribution. */
+  photoFile: string;
 };
 
 export type StudentAcademicProfile = {
@@ -36,400 +61,10 @@ export const DEFAULT_ACADEMIC_PROFILE: StudentAcademicProfile = {
   ieltsBand: null,
 };
 
-export const UNIVERSITIES: University[] = [
-  // —— World (30) ——
-  {
-    id: "mit",
-    nameKk: "MIT (Массачусетс технологиялық институты)",
-    country: "АҚШ",
-    city: "Кембридж",
-    kind: "world",
-    tracks: ["info-mat", "fiz-mat"],
-    professions: ["programmer", "ai-engineer", "data-analyst", "electrical-engineer"],
-    minGpa: 3.9,
-    ieltsRequired: true,
-    minIelts: 7.0,
-    notesKk: "Инженерия мен ЖИ бойынша әлемдік көшбасшы.",
-  },
-  {
-    id: "stanford",
-    nameKk: "Стэнфорд университеті",
-    country: "АҚШ",
-    city: "Стэнфорд",
-    kind: "world",
-    tracks: ["info-mat", "fiz-mat", "bio-him"],
-    professions: ["programmer", "ai-engineer", "ux-designer", "biotechnologist"],
-    minGpa: 3.9,
-    ieltsRequired: true,
-    minIelts: 7.0,
-    notesKk: "Стартап мәдениеті мен зерттеу күшті.",
-  },
-  {
-    id: "cambridge",
-    nameKk: "Кембридж университеті",
-    country: "Ұлыбритания",
-    city: "Кембридж",
-    kind: "world",
-    tracks: ["info-mat", "fiz-mat", "law", "bio-him", "vip-ielts"],
-    professions: ["physicist", "lawyer", "doctor", "diplomat"],
-    minGpa: 3.8,
-    ieltsRequired: true,
-    minIelts: 7.5,
-    notesKk: "Академиялық дәстүр және күшті ғылыми мектеп.",
-  },
-  {
-    id: "oxford",
-    nameKk: "Оксфорд университеті",
-    country: "Ұлыбритания",
-    city: "Оксфорд",
-    kind: "world",
-    tracks: ["law", "vip-ielts", "bio-him", "geo-mat"],
-    professions: ["lawyer", "diplomat", "historian", "translator"],
-    minGpa: 3.8,
-    ieltsRequired: true,
-    minIelts: 7.5,
-    notesKk: "Құқық, гуманитарлық және халықаралық бағдарламалар күшті.",
-  },
-  {
-    id: "eth",
-    nameKk: "ETH Цюрих",
-    country: "Швейцария",
-    city: "Цюрих",
-    kind: "world",
-    tracks: ["fiz-mat", "info-mat"],
-    professions: ["mechanical-engineer", "electrical-engineer", "ai-engineer", "architect"],
-    minGpa: 3.7,
-    ieltsRequired: true,
-    minIelts: 7.0,
-    notesKk: "Инженерия мен нақты ғылымдарда Еуропа көшбасшысы.",
-  },
-  {
-    id: "imperial",
-    nameKk: "Imperial College London",
-    country: "Ұлыбритания",
-    city: "Лондон",
-    kind: "world",
-    tracks: ["fiz-mat", "bio-him", "info-mat"],
-    professions: ["mechanical-engineer", "doctor", "data-analyst", "biotechnologist"],
-    minGpa: 3.7,
-    ieltsRequired: true,
-    minIelts: 7.0,
-    notesKk: "STEM және медициналық зерттеулерге бағытталған.",
-  },
-  {
-    id: "nus",
-    nameKk: "Сингапур ұлттық университеті (NUS)",
-    country: "Сингапур",
-    city: "Сингапур",
-    kind: "world",
-    tracks: ["info-mat", "bio-him", "geo-mat", "vip-ielts"],
-    professions: ["programmer", "data-analyst", "ecologist", "intl-relations"],
-    minGpa: 3.6,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Азиядағы күшті зерттеу және халықаралық орта.",
-  },
-  {
-    id: "ntu",
-    nameKk: "Наньян технологиялық университеті (NTU)",
-    country: "Сингапур",
-    city: "Сингапур",
-    kind: "world",
-    tracks: ["info-mat", "fiz-mat"],
-    professions: ["ai-engineer", "electrical-engineer", "cybersecurity"],
-    minGpa: 3.5,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Инженерия мен ЖИ бойынша қолжетімді әлемдік деңгей.",
-  },
-  {
-    id: "tum",
-    nameKk: "Мюнхен техникалық университеті (TUM)",
-    country: "Германия",
-    city: "Мюнхен",
-    kind: "world",
-    tracks: ["fiz-mat", "info-mat"],
-    professions: ["mechanical-engineer", "electrical-engineer", "civil-engineer"],
-    minGpa: 3.4,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Инженерияда практикалық және зерттеулік тереңдік.",
-  },
-  {
-    id: "toronto",
-    nameKk: "Торонто университеті",
-    country: "Канада",
-    city: "Торонто",
-    kind: "world",
-    tracks: ["info-mat", "bio-him", "vip-ielts"],
-    professions: ["programmer", "data-analyst", "doctor", "ai-engineer"],
-    minGpa: 3.5,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Кең мамандықтар мен қауіпсіз студенттік орта.",
-  },
-  {
-    id: "melbourne",
-    nameKk: "Мельбурн университеті",
-    country: "Австралия",
-    city: "Мельбурн",
-    kind: "world",
-    tracks: ["bio-him", "geo-mat", "vip-ielts", "law"],
-    professions: ["doctor", "ecologist", "lawyer", "translator"],
-    minGpa: 3.4,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Медицина, экология және халықаралық бағдарламалар.",
-  },
-  {
-    id: "kaist",
-    nameKk: "KAIST",
-    country: "Оңтүстік Корея",
-    city: "Тэджон",
-    kind: "world",
-    tracks: ["info-mat", "fiz-mat"],
-    professions: ["programmer", "ai-engineer", "electrical-engineer"],
-    minGpa: 3.5,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Технология және инновацияға арналған интенсивті орта.",
-  },
-  {
-    id: "tokyo",
-    nameKk: "Токио университеті",
-    country: "Жапония",
-    city: "Токио",
-    kind: "world",
-    tracks: ["fiz-mat", "info-mat", "bio-him"],
-    professions: ["physicist", "mechanical-engineer", "biotechnologist"],
-    minGpa: 3.6,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Зерттеу және инженерия бойынша Азия элитасы.",
-  },
-  {
-    id: "epfl",
-    nameKk: "EPFL",
-    country: "Швейцария",
-    city: "Лозанна",
-    kind: "world",
-    tracks: ["info-mat", "fiz-mat"],
-    professions: ["ai-engineer", "programmer", "architect"],
-    minGpa: 3.6,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Компьютерлік ғылым мен инженерияда күшті.",
-  },
-  {
-    id: "cmu",
-    nameKk: "Карнеги Меллон университеті",
-    country: "АҚШ",
-    city: "Питтсбург",
-    kind: "world",
-    tracks: ["info-mat"],
-    professions: ["programmer", "ai-engineer", "cybersecurity", "ux-designer"],
-    minGpa: 3.8,
-    ieltsRequired: true,
-    minIelts: 7.0,
-    notesKk: "CS және ЖИ бойынша әлемдегі ең күшті мектептердің бірі.",
-  },
-  {
-    id: "berkeley",
-    nameKk: "UC Berkeley",
-    country: "АҚШ",
-    city: "Беркли",
-    kind: "world",
-    tracks: ["info-mat", "fiz-mat", "geo-mat"],
-    professions: ["data-analyst", "programmer", "ecologist", "civil-engineer"],
-    minGpa: 3.8,
-    ieltsRequired: true,
-    minIelts: 7.0,
-    notesKk: "Зерттеу, инновация және әлеуметтік ғылымдар теңдестірілген.",
-  },
-  {
-    id: "ucl",
-    nameKk: "University College London (UCL)",
-    country: "Ұлыбритания",
-    city: "Лондон",
-    kind: "world",
-    tracks: ["law", "vip-ielts", "bio-him", "geo-mat"],
-    professions: ["lawyer", "architect", "doctor", "intl-relations"],
-    minGpa: 3.5,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Қала ортасындағы кең профильді зерттеу университеті.",
-  },
-  {
-    id: "edinburgh",
-    nameKk: "Эдинбург университеті",
-    country: "Ұлыбритания",
-    city: "Эдинбург",
-    kind: "world",
-    tracks: ["info-mat", "vip-ielts", "geo-mat"],
-    professions: ["ai-engineer", "translator", "ecologist", "data-analyst"],
-    minGpa: 3.4,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "ЖИ, тілдер және геоғылымдар бойынша беделді.",
-  },
-  {
-    id: "delft",
-    nameKk: "Делфт технологиялық университеті",
-    country: "Нидерланд",
-    city: "Делфт",
-    kind: "world",
-    tracks: ["fiz-mat", "geo-mat"],
-    professions: ["civil-engineer", "architect", "mechanical-engineer", "cartographer"],
-    minGpa: 3.3,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Құрылыс, сәулет және инженерияда Еуропа көшбасшысы.",
-  },
-  {
-    id: "heidelberg",
-    nameKk: "Гейдельберг университеті",
-    country: "Германия",
-    city: "Гейдельберг",
-    kind: "world",
-    tracks: ["bio-him", "law"],
-    professions: ["doctor", "pharmacist", "biotechnologist", "lawyer"],
-    minGpa: 3.3,
-    ieltsRequired: true,
-    minIelts: 6.0,
-    notesKk: "Медицина мен зерттеу дәстүрі күшті; ағылшын бағдарламалары бар.",
-  },
-  {
-    id: "hku",
-    nameKk: "Гонконг университеті (HKU)",
-    country: "Гонконг",
-    city: "Гонконг",
-    kind: "world",
-    tracks: ["vip-ielts", "law", "info-mat", "bio-him"],
-    professions: ["intl-relations", "lawyer", "translator", "doctor"],
-    minGpa: 3.5,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Азия мен Батыс арасындағы халықаралық көпір.",
-  },
-  {
-    id: "warwick",
-    nameKk: "Уорик университеті",
-    country: "Ұлыбритания",
-    city: "Ковентри",
-    kind: "world",
-    tracks: ["info-mat", "vip-ielts", "law"],
-    professions: ["data-analyst", "programmer", "data-analyst", "translator"],
-    minGpa: 3.3,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Бизнес, деректер және халықаралық бағдарламаларға қолайлы.",
-  },
-  {
-    id: "amsterdam",
-    nameKk: "Амстердам университеті",
-    country: "Нидерланд",
-    city: "Амстердам",
-    kind: "world",
-    tracks: ["vip-ielts", "geo-mat", "law", "info-mat"],
-    professions: ["intl-relations", "ecologist", "translator", "data-analyst"],
-    minGpa: 3.2,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Ағылшын тілді бакалавр бағдарламалары кең.",
-  },
-  {
-    id: "mcgill",
-    nameKk: "МакГилл университеті",
-    country: "Канада",
-    city: "Монреаль",
-    kind: "world",
-    tracks: ["bio-him", "fiz-mat", "vip-ielts"],
-    professions: ["doctor", "pharmacist", "physicist", "translator"],
-    minGpa: 3.4,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Медицина және ғылымда Канада элитасы.",
-  },
-  {
-    id: "anu",
-    nameKk: "Австралия ұлттық университеті (ANU)",
-    country: "Австралия",
-    city: "Канберра",
-    kind: "world",
-    tracks: ["geo-mat", "law", "vip-ielts"],
-    professions: ["diplomat", "intl-relations", "ecologist", "historian"],
-    minGpa: 3.3,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Халықаралық қатынастар мен саясаттануға ыңғайлы.",
-  },
-  {
-    id: "gatech",
-    nameKk: "Georgia Tech",
-    country: "АҚШ",
-    city: "Атланта",
-    kind: "world",
-    tracks: ["fiz-mat", "info-mat"],
-    professions: ["mechanical-engineer", "electrical-engineer", "programmer", "cybersecurity"],
-    minGpa: 3.6,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Инженерия мен киберқауіпсіздікте практикалық бағыт.",
-  },
-  {
-    id: "purdue",
-    nameKk: "Purdue университеті",
-    country: "АҚШ",
-    city: "Уэст-Лафайетт",
-    kind: "world",
-    tracks: ["fiz-mat", "info-mat"],
-    professions: ["mechanical-engineer", "civil-engineer", "electrical-engineer", "programmer"],
-    minGpa: 3.3,
-    ieltsRequired: true,
-    minIelts: 6.5,
-    notesKk: "Инженерия бойынша қолжетімді әрі беделді АҚШ опциясы.",
-  },
-  {
-    id: "charles",
-    nameKk: "Карл университеті (Прага)",
-    country: "Чехия",
-    city: "Прага",
-    kind: "world",
-    tracks: ["bio-him", "law", "geo-mat", "vip-ielts"],
-    professions: ["doctor", "pharmacist", "lawyer", "translator"],
-    minGpa: 3.0,
-    ieltsRequired: true,
-    minIelts: 6.0,
-    notesKk: "Еуропадағы қолжетімді медицина және гуманитарлық бағдарламалар.",
-  },
-  {
-    id: "warsaw",
-    nameKk: "Варшава университеті",
-    country: "Польша",
-    city: "Варшава",
-    kind: "world",
-    tracks: ["info-mat", "law", "vip-ielts", "geo-mat"],
-    professions: ["programmer", "lawyer", "translator", "intl-relations"],
-    minGpa: 2.8,
-    ieltsRequired: true,
-    minIelts: 6.0,
-    notesKk: "Қолжетімді Еуропа опциясы; foundation жолдары бар.",
-  },
-  {
-    id: "malaya",
-    nameKk: "Малайя университеті",
-    country: "Малайзия",
-    city: "Куала-Лумпур",
-    kind: "world",
-    tracks: ["bio-him", "info-mat", "vip-ielts", "geo-mat"],
-    professions: ["doctor", "programmer", "tourism-manager", "translator"],
-    minGpa: 2.8,
-    ieltsRequired: true,
-    minIelts: 5.5,
-    notesKk: "Төменгі GPA және IELTS үшін шынайы халықаралық старт.",
-  },
+const W = "https://upload.wikimedia.org/wikipedia/commons";
 
-  // —— Kazakhstan (14) ——
+export const UNIVERSITIES: University[] = [
+  // —— Қазақстан (5) ——
   {
     id: "nu",
     nameKk: "Назарбаев Университеті (NU)",
@@ -437,11 +72,20 @@ export const UNIVERSITIES: University[] = [
     city: "Астана",
     kind: "kz",
     tracks: ["info-mat", "fiz-mat", "bio-him", "geo-mat", "vip-ielts"],
-    professions: ["programmer", "ai-engineer", "doctor", "mechanical-engineer", "data-analyst"],
+    professions: [
+      "programmer",
+      "ai-engineer",
+      "doctor",
+      "mechanical-engineer",
+      "data-analyst",
+    ],
     minGpa: 3.7,
     ieltsRequired: true,
     minIelts: 6.5,
     notesKk: "Ағылшын тілді зерттеу университеті; foundation бағдарламасы бар.",
+    // Photo: Wikimedia Commons — File:Nazarbayev University 2.jpg
+    photoUrl: `${W}/thumb/2/24/Nazarbayev_University_2.jpg/960px-Nazarbayev_University_2.jpg`,
+    photoFile: "Nazarbayev University 2.jpg",
   },
   {
     id: "kbtu",
@@ -450,11 +94,20 @@ export const UNIVERSITIES: University[] = [
     city: "Алматы",
     kind: "kz",
     tracks: ["info-mat", "fiz-mat"],
-    professions: ["programmer", "mechanical-engineer", "data-analyst", "cybersecurity"],
+    professions: [
+      "programmer",
+      "mechanical-engineer",
+      "data-analyst",
+      "cybersecurity",
+    ],
     minGpa: 3.4,
     ieltsRequired: true,
     minIelts: 5.5,
-    notesKk: "IT және мұнай-газ инженериясында күшті; ағылшын дайындығы қолдау көрсетеді.",
+    notesKk:
+      "IT және мұнай-газ инженериясында күшті; ағылшын дайындығы қолдау көрсетеді.",
+    // Photo: Wikimedia Commons — File:Kazakh-British Technical University, Almaty (P1180218).jpg
+    photoUrl: `${W}/thumb/b/b8/Kazakh-British_Technical_University%2C_Almaty_%28P1180218%29.jpg/960px-Kazakh-British_Technical_University%2C_Almaty_%28P1180218%29.jpg`,
+    photoFile: "Kazakh-British Technical University, Almaty (P1180218).jpg",
   },
   {
     id: "kaznu",
@@ -467,7 +120,11 @@ export const UNIVERSITIES: University[] = [
     minGpa: 3.2,
     ieltsRequired: false,
     minIelts: 0,
-    notesKk: "Кең профильді ұлттық университет; қазақ/орыс тілді бағдарламалар көп.",
+    notesKk:
+      "Кең профильді ұлттық университет; қазақ/орыс тілді бағдарламалар көп.",
+    // Photo: Wikimedia Commons — File:Al-Farabi KazNU rektorat.jpg
+    photoUrl: `${W}/thumb/7/72/Al-Farabi_KazNU_rektorat.jpg/960px-Al-Farabi_KazNU_rektorat.jpg`,
+    photoFile: "Al-Farabi KazNU rektorat.jpg",
   },
   {
     id: "satbayev",
@@ -476,50 +133,19 @@ export const UNIVERSITIES: University[] = [
     city: "Алматы",
     kind: "kz",
     tracks: ["fiz-mat", "geo-mat", "info-mat"],
-    professions: ["mechanical-engineer", "civil-engineer", "geologist", "electrical-engineer"],
+    professions: [
+      "mechanical-engineer",
+      "civil-engineer",
+      "geologist",
+      "electrical-engineer",
+    ],
     minGpa: 3.1,
     ieltsRequired: false,
     minIelts: 0,
     notesKk: "Инженерия мен жер ғылымдары бойынша классикалық таңдау.",
-  },
-  {
-    id: "sdu",
-    nameKk: "Сүлейман Демирел университеті (SDU)",
-    country: "Қазақстан",
-    city: "Қаскелең",
-    kind: "kz",
-    tracks: ["info-mat", "vip-ielts", "law"],
-    professions: ["programmer", "translator", "lawyer", "ielts-coach"],
-    minGpa: 3.0,
-    ieltsRequired: true,
-    minIelts: 5.0,
-    notesKk: "Ағылшын ортасы және IT/халықаралық бағдарламалар.",
-  },
-  {
-    id: "aitu",
-    nameKk: "Astana IT University (AITU)",
-    country: "Қазақстан",
-    city: "Астана",
-    kind: "kz",
-    tracks: ["info-mat"],
-    professions: ["programmer", "ai-engineer", "cybersecurity", "ux-designer", "data-analyst"],
-    minGpa: 3.2,
-    ieltsRequired: true,
-    minIelts: 5.5,
-    notesKk: "Заманауи IT бакалавриаты; практикалық жобаларға баса назар.",
-  },
-  {
-    id: "narxoz",
-    nameKk: "Нархоз университеті",
-    country: "Қазақстан",
-    city: "Алматы",
-    kind: "kz",
-    tracks: ["geo-mat", "vip-ielts", "law", "info-mat"],
-    professions: ["tourism-manager", "data-analyst", "intl-relations", "content-writer"],
-    minGpa: 2.8,
-    ieltsRequired: false,
-    minIelts: 5.0,
-    notesKk: "Бизнес, экономика және басқаруға қолайлы қолжетімді опция.",
+    // Photo: Wikimedia Commons — File:Satbayev University.jpg
+    photoUrl: `${W}/6/6d/Satbayev_University.jpg`,
+    photoFile: "Satbayev University.jpg",
   },
   {
     id: "kazguu",
@@ -533,84 +159,408 @@ export const UNIVERSITIES: University[] = [
     ieltsRequired: false,
     minIelts: 5.0,
     notesKk: "Құқық және мемлекеттік басқару бойынша беделді мектеп.",
+    // Photo: Wikimedia Commons — File:Maqsut Narikbayev University.jpg
+    photoUrl: `${W}/thumb/1/17/Maqsut_Narikbayev_University.jpg/960px-Maqsut_Narikbayev_University.jpg`,
+    photoFile: "Maqsut Narikbayev University.jpg",
   },
+
+  // —— СНГ (5) ——
   {
-    id: "kimep",
-    nameKk: "KIMEP университеті",
-    country: "Қазақстан",
-    city: "Алматы",
-    kind: "kz",
-    tracks: ["vip-ielts", "geo-mat", "law"],
-    professions: ["intl-relations", "translator", "diplomat", "content-writer"],
-    minGpa: 3.2,
-    ieltsRequired: true,
-    minIelts: 5.5,
-    notesKk: "Ағылшын тілді бизнес және халықаралық қатынастар.",
-  },
-  {
-    id: "muit",
-    nameKk: "Халықаралық ақпараттық технологиялар университеті (МУИТ)",
-    country: "Қазақстан",
-    city: "Алматы",
-    kind: "kz",
-    tracks: ["info-mat"],
-    professions: ["programmer", "cybersecurity", "ux-designer", "data-analyst"],
-    minGpa: 2.9,
-    ieltsRequired: false,
-    minIelts: 5.0,
-    notesKk: "IT мамандықтарына қолжетімді кіру және практикалық оқу.",
-  },
-  {
-    id: "astana-it",
-    nameKk: "Astana International University / IT бағдарламалары",
-    country: "Қазақстан",
-    city: "Астана",
-    kind: "kz",
-    tracks: ["info-mat", "vip-ielts"],
-    professions: ["programmer", "data-analyst", "translator"],
-    minGpa: 2.7,
-    ieltsRequired: false,
-    minIelts: 4.5,
-    notesKk: "Қолжетімді IT және тілдік дайындық жолы.",
-  },
-  {
-    id: "enu",
-    nameKk: "Л.Н. Гумилев атындағы ЕҰУ",
-    country: "Қазақстан",
-    city: "Астана",
-    kind: "kz",
-    tracks: ["law", "geo-mat", "vip-ielts", "fiz-mat", "bio-him"],
-    professions: ["public-admin", "historian", "diplomat", "ecologist", "historian"],
-    minGpa: 3.0,
+    id: "msu",
+    nameKk: "Мәскеу мемлекеттік университеті (МГУ)",
+    country: "Ресей",
+    city: "Мәскеу",
+    kind: "cis",
+    tracks: ["fiz-mat", "bio-him", "geo-mat", "law", "info-mat"],
+    professions: ["physicist", "doctor", "lawyer", "historian", "programmer"],
+    minGpa: 3.6,
     ieltsRequired: false,
     minIelts: 0,
-    notesKk: "Мемлекеттік қызмет пен кең ғылыми бағыттарға ыңғайлы.",
+    notesKk:
+      "СНГ-дағы классикалық ғылыми мектеп; кең факультеттік таңдау.",
+    // Photo: Wikimedia Commons — File:Moscow State University crop.jpg
+    photoUrl: `${W}/thumb/a/a0/Moscow_State_University_crop.jpg/960px-Moscow_State_University_crop.jpg`,
+    photoFile: "Moscow State University crop.jpg",
   },
   {
-    id: "asfendiyarov",
-    nameKk: "Асфендияров атындағы ҚазҰМУ",
-    country: "Қазақстан",
-    city: "Алматы",
-    kind: "kz",
-    tracks: ["bio-him"],
-    professions: ["doctor", "pharmacist", "lab-technician", "nutritionist"],
+    id: "spbu",
+    nameKk: "Санкт-Петербург мемлекеттік университеті (СПбГУ)",
+    country: "Ресей",
+    city: "Санкт-Петербург",
+    kind: "cis",
+    tracks: ["law", "vip-ielts", "bio-him", "geo-mat", "fiz-mat"],
+    professions: ["lawyer", "diplomat", "translator", "historian", "ecologist"],
+    minGpa: 3.5,
+    ieltsRequired: false,
+    minIelts: 0,
+    notesKk: "Гуманитарлық және халықаралық бағдарламалар күшті.",
+    // Photo: Wikimedia Commons — File:RUS-2016-SPB-Saint Petersburg State University (Palace of Peter II).jpg
+    photoUrl: `${W}/thumb/d/d1/RUS-2016-SPB-Saint_Petersburg_State_University_%28Palace_of_Peter_II%29.jpg/960px-RUS-2016-SPB-Saint_Petersburg_State_University_%28Palace_of_Peter_II%29.jpg`,
+    photoFile:
+      "RUS-2016-SPB-Saint Petersburg State University (Palace of Peter II).jpg",
+  },
+  {
+    id: "mipt",
+    nameKk: "Мәскеу физика-техникалық институты (МФТИ)",
+    country: "Ресей",
+    city: "Долгопрудный",
+    kind: "cis",
+    tracks: ["fiz-mat", "info-mat"],
+    professions: [
+      "physicist",
+      "ai-engineer",
+      "electrical-engineer",
+      "programmer",
+    ],
+    minGpa: 3.7,
+    ieltsRequired: false,
+    minIelts: 0,
+    notesKk: "Физика, математика және IT үшін СНГ-дағы ең күшті мектептердің бірі.",
+    // Photo: Wikimedia Commons — File:Moscow Institute of Physics and Technology 20260330 140411.jpg
+    photoUrl: `${W}/thumb/9/9d/Moscow_Institute_of_Physics_and_Technology_20260330_140411.jpg/960px-Moscow_Institute_of_Physics_and_Technology_20260330_140411.jpg`,
+    photoFile: "Moscow Institute of Physics and Technology 20260330 140411.jpg",
+  },
+  {
+    id: "hse",
+    nameKk: "Жоғары экономика мектебі (HSE)",
+    country: "Ресей",
+    city: "Мәскеу",
+    kind: "cis",
+    tracks: ["geo-mat", "info-mat", "vip-ielts", "law"],
+    professions: [
+      "data-analyst",
+      "intl-relations",
+      "programmer",
+      "public-admin",
+    ],
     minGpa: 3.4,
     ieltsRequired: false,
-    minIelts: 0,
-    notesKk: "Медициналық білім берудің негізгі ұлттық орталығы.",
+    minIelts: 5.5,
+    notesKk: "Экономика, деректер және әлеуметтік ғылымдарға бағытталған.",
+    // Photo: Wikimedia Commons — File:The building of the Higher School of Economics. Main building. 03.jpg
+    photoUrl: `${W}/thumb/1/1c/The_building_of_the_Higher_School_of_Economics._Main_building._03.jpg/960px-The_building_of_the_Higher_School_of_Economics._Main_building._03.jpg`,
+    photoFile:
+      "The building of the Higher School of Economics. Main building. 03.jpg",
   },
   {
-    id: "almau",
-    nameKk: "Almaty Management University (AlmaU)",
-    country: "Қазақстан",
-    city: "Алматы",
-    kind: "kz",
-    tracks: ["geo-mat", "vip-ielts", "info-mat"],
-    professions: ["tourism-manager", "content-writer", "ux-designer", "intl-relations"],
-    minGpa: 2.6,
+    id: "itmo",
+    nameKk: "ITMO университеті",
+    country: "Ресей",
+    city: "Санкт-Петербург",
+    kind: "cis",
+    tracks: ["info-mat", "fiz-mat"],
+    professions: [
+      "programmer",
+      "ai-engineer",
+      "cybersecurity",
+      "ux-designer",
+    ],
+    minGpa: 3.3,
     ieltsRequired: false,
-    minIelts: 4.5,
-    notesKk: "Бизнес және креативтік басқаруға қолжетімді старт.",
+    minIelts: 5.0,
+    notesKk: "IT, кибернетика және қолданбалы информатика бойынша беделді.",
+    // Photo: Wikimedia Commons — File:ITMO University's main building, August 2016.jpg
+    photoUrl: `${W}/thumb/c/cc/ITMO_University%27s_main_building%2C_August_2016.jpg/960px-ITMO_University%27s_main_building%2C_August_2016.jpg`,
+    photoFile: "ITMO University's main building, August 2016.jpg",
+  },
+
+  // —— Америка (5) ——
+  {
+    id: "mit",
+    nameKk: "MIT (Массачусетс технологиялық институты)",
+    country: "АҚШ",
+    city: "Кембридж",
+    kind: "america",
+    tracks: ["info-mat", "fiz-mat"],
+    professions: [
+      "programmer",
+      "ai-engineer",
+      "data-analyst",
+      "electrical-engineer",
+    ],
+    minGpa: 3.9,
+    ieltsRequired: true,
+    minIelts: 7.0,
+    notesKk: "Инженерия мен ЖИ бойынша әлемдік көшбасшы.",
+    // Photo: Wikimedia Commons — File:MIT from Harvard Bridge (4713031548).jpg
+    photoUrl: `${W}/thumb/e/e2/MIT_from_Harvard_Bridge_%284713031548%29.jpg/960px-MIT_from_Harvard_Bridge_%284713031548%29.jpg`,
+    photoFile: "MIT from Harvard Bridge (4713031548).jpg",
+  },
+  {
+    id: "stanford",
+    nameKk: "Стэнфорд университеті",
+    country: "АҚШ",
+    city: "Стэнфорд",
+    kind: "america",
+    tracks: ["info-mat", "fiz-mat", "bio-him"],
+    professions: [
+      "programmer",
+      "ai-engineer",
+      "ux-designer",
+      "biotechnologist",
+    ],
+    minGpa: 3.9,
+    ieltsRequired: true,
+    minIelts: 7.0,
+    notesKk: "Стартап мәдениеті мен зерттеу күшті.",
+    // Photo: Wikimedia Commons — File:Stanford University from Hoover Tower May 2011 002.jpg
+    photoUrl: `${W}/thumb/f/fd/Stanford_University_from_Hoover_Tower_May_2011_002.jpg/960px-Stanford_University_from_Hoover_Tower_May_2011_002.jpg`,
+    photoFile: "Stanford University from Hoover Tower May 2011 002.jpg",
+  },
+  {
+    id: "berkeley",
+    nameKk: "UC Berkeley",
+    country: "АҚШ",
+    city: "Беркли",
+    kind: "america",
+    tracks: ["info-mat", "fiz-mat", "bio-him", "geo-mat"],
+    professions: [
+      "ai-engineer",
+      "data-analyst",
+      "ecologist",
+      "electrical-engineer",
+    ],
+    minGpa: 3.8,
+    ieltsRequired: true,
+    minIelts: 7.0,
+    notesKk: "Зерттеу, инновация және әлеуметтік ғылымдар теңгерімі.",
+    // Photo: Wikimedia Commons — File:UC Berkeley September 2024 002.jpg
+    photoUrl: `${W}/thumb/a/ae/UC_Berkeley_September_2024_002.jpg/960px-UC_Berkeley_September_2024_002.jpg`,
+    photoFile: "UC Berkeley September 2024 002.jpg",
+  },
+  {
+    id: "toronto",
+    nameKk: "Торонто университеті",
+    country: "Канада",
+    city: "Торонто",
+    kind: "america",
+    tracks: ["info-mat", "bio-him", "vip-ielts", "fiz-mat"],
+    professions: ["ai-engineer", "doctor", "data-analyst", "programmer"],
+    minGpa: 3.6,
+    ieltsRequired: true,
+    minIelts: 6.5,
+    notesKk: "Кең мамандық таңдауы және тұрақты студенттік орта.",
+    // Photo: Wikimedia Commons — File:University College Portal (University of Toronto).jpg
+    photoUrl: `${W}/thumb/d/db/University_College_Portal_%28University_of_Toronto%29.jpg/960px-University_College_Portal_%28University_of_Toronto%29.jpg`,
+    photoFile: "University College Portal (University of Toronto).jpg",
+  },
+  {
+    id: "mcgill",
+    nameKk: "Макгилл университеті",
+    country: "Канада",
+    city: "Монреаль",
+    kind: "america",
+    tracks: ["bio-him", "fiz-mat", "vip-ielts", "law"],
+    professions: ["doctor", "biotechnologist", "lawyer", "physicist"],
+    minGpa: 3.5,
+    ieltsRequired: true,
+    minIelts: 6.5,
+    notesKk: "Медицина мен ғылымда Канада элитасы.",
+    // Photo: Wikimedia Commons — File:Arts Building, McGill University, Montréal, Southeast view 20170410 1.jpg
+    photoUrl: `${W}/thumb/2/27/Arts_Building%2C_McGill_University%2C_Montr%C3%A9al%2C_Southeast_view_20170410_1.jpg/960px-Arts_Building%2C_McGill_University%2C_Montr%C3%A9al%2C_Southeast_view_20170410_1.jpg`,
+    photoFile:
+      "Arts Building, McGill University, Montréal, Southeast view 20170410 1.jpg",
+  },
+
+  // —— Еуропа (5) ——
+  {
+    id: "cambridge",
+    nameKk: "Кембридж университеті",
+    country: "Ұлыбритания",
+    city: "Кембридж",
+    kind: "europe",
+    tracks: ["info-mat", "fiz-mat", "law", "bio-him", "vip-ielts"],
+    professions: ["physicist", "lawyer", "doctor", "diplomat"],
+    minGpa: 3.8,
+    ieltsRequired: true,
+    minIelts: 7.5,
+    notesKk: "Академиялық дәстүр және күшті ғылыми мектеп.",
+    // Photo: Wikimedia Commons — File:Kings College Cambridge Chapel from the river.jpg
+    photoUrl: `${W}/thumb/4/46/Kings_College_Cambridge_Chapel_from_the_river.jpg/960px-Kings_College_Cambridge_Chapel_from_the_river.jpg`,
+    photoFile: "Kings College Cambridge Chapel from the river.jpg",
+  },
+  {
+    id: "oxford",
+    nameKk: "Оксфорд университеті",
+    country: "Ұлыбритания",
+    city: "Оксфорд",
+    kind: "europe",
+    tracks: ["law", "vip-ielts", "bio-him", "geo-mat"],
+    professions: ["lawyer", "diplomat", "historian", "translator"],
+    minGpa: 3.8,
+    ieltsRequired: true,
+    minIelts: 7.5,
+    notesKk: "Құқық, гуманитарлық және халықаралық бағдарламалар күшті.",
+    // Photo: Wikimedia Commons — File:Radcliffe Camera, Oxford - Oct 2006.jpg
+    photoUrl: `${W}/thumb/2/2b/Radcliffe_Camera%2C_Oxford_-_Oct_2006.jpg/960px-Radcliffe_Camera%2C_Oxford_-_Oct_2006.jpg`,
+    photoFile: "Radcliffe Camera, Oxford - Oct 2006.jpg",
+  },
+  {
+    id: "eth",
+    nameKk: "ETH Цюрих",
+    country: "Швейцария",
+    city: "Цюрих",
+    kind: "europe",
+    tracks: ["fiz-mat", "info-mat"],
+    professions: [
+      "mechanical-engineer",
+      "electrical-engineer",
+      "ai-engineer",
+      "architect",
+    ],
+    minGpa: 3.7,
+    ieltsRequired: true,
+    minIelts: 7.0,
+    notesKk: "Инженерия мен нақты ғылымдарда Еуропа көшбасшысы.",
+    // Photo: Wikimedia Commons — File:ETH Zürich - Hauptgebäude - Polyterrasse 2012-09-27 14-40-49 ShiftN.jpg
+    photoUrl: `${W}/thumb/5/56/ETH_Z%C3%BCrich_-_Hauptgeb%C3%A4ude_-_Polyterrasse_2012-09-27_14-40-49_ShiftN.jpg/960px-ETH_Z%C3%BCrich_-_Hauptgeb%C3%A4ude_-_Polyterrasse_2012-09-27_14-40-49_ShiftN.jpg`,
+    photoFile:
+      "ETH Zürich - Hauptgebäude - Polyterrasse 2012-09-27 14-40-49 ShiftN.jpg",
+  },
+  {
+    id: "tum",
+    nameKk: "Мюнхен техникалық университеті (TUM)",
+    country: "Германия",
+    city: "Мюнхен",
+    kind: "europe",
+    tracks: ["fiz-mat", "info-mat", "bio-him"],
+    professions: [
+      "mechanical-engineer",
+      "electrical-engineer",
+      "ai-engineer",
+      "architect",
+    ],
+    minGpa: 3.5,
+    ieltsRequired: true,
+    minIelts: 6.5,
+    notesKk: "Инженерияда практикалық және зерттеу тереңдігі.",
+    // Photo: Wikimedia Commons — File:Technische Universität München.jpg
+    photoUrl: `${W}/thumb/b/bb/Technische_Universit%C3%A4t_M%C3%BCnchen.jpg/960px-Technische_Universit%C3%A4t_M%C3%BCnchen.jpg`,
+    photoFile: "Technische Universität München.jpg",
+  },
+  {
+    id: "delft",
+    nameKk: "Делфт техникалық университеті",
+    country: "Нидерланд",
+    city: "Делфт",
+    kind: "europe",
+    tracks: ["fiz-mat", "geo-mat", "info-mat"],
+    professions: [
+      "civil-engineer",
+      "architect",
+      "mechanical-engineer",
+      "electrical-engineer",
+    ],
+    minGpa: 3.4,
+    ieltsRequired: true,
+    minIelts: 6.5,
+    notesKk: "Құрылыс, архитектура және инженерияда Еуропа көшбасшысы.",
+    // Photo: Wikimedia Commons — File:TU-Delft-Aula.jpg
+    photoUrl: `${W}/thumb/9/9b/TU-Delft-Aula.jpg/960px-TU-Delft-Aula.jpg`,
+    photoFile: "TU-Delft-Aula.jpg",
+  },
+
+  // —— Әлем бойынша (5) — Asia / Oceania ——
+  {
+    id: "nus",
+    nameKk: "Сингапур ұлттық университеті (NUS)",
+    country: "Сингапур",
+    city: "Сингапур",
+    kind: "world",
+    tracks: ["info-mat", "bio-him", "geo-mat", "vip-ielts"],
+    professions: [
+      "programmer",
+      "data-analyst",
+      "ecologist",
+      "intl-relations",
+    ],
+    minGpa: 3.6,
+    ieltsRequired: true,
+    minIelts: 6.5,
+    notesKk: "Азиядағы күшті зерттеу және халықаралық орта.",
+    // Photo: Wikimedia Commons — File:Entrance E of the National University of Singapore 20210426 165000.jpg
+    photoUrl: `${W}/thumb/0/04/Entrance_E_of_the_National_University_of_Singapore_20210426_165000.jpg/960px-Entrance_E_of_the_National_University_of_Singapore_20210426_165000.jpg`,
+    photoFile:
+      "Entrance E of the National University of Singapore 20210426 165000.jpg",
+  },
+  {
+    id: "tokyo",
+    nameKk: "Токио университеті",
+    country: "Жапония",
+    city: "Токио",
+    kind: "world",
+    tracks: ["fiz-mat", "info-mat", "bio-him"],
+    professions: [
+      "physicist",
+      "mechanical-engineer",
+      "ai-engineer",
+      "doctor",
+    ],
+    minGpa: 3.7,
+    ieltsRequired: true,
+    minIelts: 6.5,
+    notesKk: "Азия элитасы: зерттеу және инженерия.",
+    // Photo: Wikimedia Commons — File:Yasuda Auditorium - Tokyo University 4.jpg
+    photoUrl: `${W}/thumb/f/fa/Yasuda_Auditorium_-_Tokyo_University_4.jpg/960px-Yasuda_Auditorium_-_Tokyo_University_4.jpg`,
+    photoFile: "Yasuda Auditorium - Tokyo University 4.jpg",
+  },
+  {
+    id: "melbourne",
+    nameKk: "Мельбурн университеті",
+    country: "Австралия",
+    city: "Мельбурн",
+    kind: "world",
+    tracks: ["bio-him", "geo-mat", "vip-ielts", "law"],
+    professions: ["doctor", "ecologist", "lawyer", "translator"],
+    minGpa: 3.4,
+    ieltsRequired: true,
+    minIelts: 6.5,
+    notesKk: "Медицина, экология және халықаралық бағдарламалар.",
+    // Photo: Wikimedia Commons — File:Cussonia Court University of Melbourne 2018.jpg
+    photoUrl: `${W}/thumb/5/5c/Cussonia_Court_University_of_Melbourne_2018.jpg/960px-Cussonia_Court_University_of_Melbourne_2018.jpg`,
+    photoFile: "Cussonia Court University of Melbourne 2018.jpg",
+  },
+  {
+    id: "kaist",
+    nameKk: "KAIST",
+    country: "Оңтүстік Корея",
+    city: "Тэджон",
+    kind: "world",
+    tracks: ["info-mat", "fiz-mat"],
+    professions: [
+      "ai-engineer",
+      "electrical-engineer",
+      "programmer",
+      "mechanical-engineer",
+    ],
+    minGpa: 3.5,
+    ieltsRequired: true,
+    minIelts: 6.0,
+    notesKk: "Технология мен инновация үшін қарқынды орта.",
+    // Photo: Wikimedia Commons — File:KAIST fountains view.jpg
+    photoUrl: `${W}/thumb/a/a8/KAIST_fountains_view.jpg/960px-KAIST_fountains_view.jpg`,
+    photoFile: "KAIST fountains view.jpg",
+  },
+  {
+    id: "hku",
+    nameKk: "Гонконг университеті (HKU)",
+    country: "Гонконг",
+    city: "Гонконг",
+    kind: "world",
+    tracks: ["vip-ielts", "bio-him", "geo-mat", "law", "info-mat"],
+    professions: [
+      "intl-relations",
+      "doctor",
+      "lawyer",
+      "data-analyst",
+    ],
+    minGpa: 3.5,
+    ieltsRequired: true,
+    minIelts: 6.5,
+    notesKk: "Азия мен Батыс арасындағы халықаралық көпір.",
+    // Photo: Wikimedia Commons — File:The University of Hong Kong.jpg
+    photoUrl: `${W}/thumb/7/7b/The_University_of_Hong_Kong.jpg/960px-The_University_of_Hong_Kong.jpg`,
+    photoFile: "The University of Hong Kong.jpg",
   },
 ];
 
@@ -625,10 +575,10 @@ export type UniversityMatch = {
   ieltsHintKk: string;
 };
 
-export type UniversityRecommendation = {
-  world: UniversityMatch[];
-  kz: UniversityMatch[];
-};
+export type UniversityRecommendation = Record<
+  UniversityRegion,
+  UniversityMatch[]
+>;
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
@@ -637,7 +587,6 @@ function clamp(n: number, min: number, max: number) {
 function gpaScore(studentGpa: number, minGpa: number): number {
   const gap = studentGpa - minGpa;
   if (gap >= 0) return 28 + clamp(gap * 12, 0, 12);
-  // Still reachable: soft penalty so low GPA sees mid-tier unis, not only elites
   return clamp(18 + gap * 35, 0, 18);
 }
 
@@ -665,17 +614,17 @@ function ieltsScore(
     };
   }
 
-  // No IELTS
   if (!uni.ieltsRequired) {
     return {
       points: 16,
-      noteKk: "IELTS міндетті емес; қазақ/орыс немесе ішкі тілдік дайындық жеткілікті.",
+      noteKk:
+        "IELTS міндетті емес; қазақ/орыс немесе ішкі тілдік дайындық жеткілікті.",
     };
   }
-  if (uni.kind === "kz") {
+  if (uni.kind === "kz" || uni.kind === "cis") {
     return {
       points: 8,
-      noteKk: `IELTS әзір жоқ — foundation / ағылшын-дайындық немесе NU/KBTU жолдарын қараңыз (мақсат ~${uni.minIelts.toFixed(1)}).`,
+      noteKk: `IELTS әзір жоқ — foundation / ағылшын-дайындық жолдарын қараңыз (мақсат ~${uni.minIelts.toFixed(1)}).`,
     };
   }
   return {
@@ -691,13 +640,11 @@ function trackProfessionScore(
   const trackId = quiz.track.id;
   const trackPoints = uni.tracks.includes(trackId)
     ? 36 + Math.min(quiz.trackScores[trackId] / 4, 14)
-    : Math.max(
-        ...uni.tracks.map((t) => (quiz.trackScores[t] ?? 0) / 6),
-        0,
-      );
+    : Math.max(...uni.tracks.map((t) => (quiz.trackScores[t] ?? 0) / 6), 0);
 
   let bestProfPoints = 0;
-  let relatedProfessionKk = TRACKS.find((t) => t.id === trackId)?.name ?? trackId;
+  let relatedProfessionKk =
+    TRACKS.find((t) => t.id === trackId)?.name ?? trackId;
   for (const match of quiz.topProfessions) {
     if (uni.professions.includes(match.profession.id)) {
       const p = 10 + match.matchPercent / 5;
@@ -768,13 +715,13 @@ function scoreOne(
   };
 }
 
-function rankKind(
-  kind: UniversityKind,
+function rankRegion(
+  region: UniversityRegion,
   quiz: CareerQuizResult,
   profile: StudentAcademicProfile,
   limit: number,
 ): UniversityMatch[] {
-  const rows = UNIVERSITIES.filter((u) => u.kind === kind)
+  const rows = UNIVERSITIES.filter((u) => u.kind === region)
     .map((u) => scoreOne(u, quiz, profile))
     .sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
@@ -804,8 +751,11 @@ export function recommendUniversities(
   };
 
   return {
-    world: rankKind("world", quiz, normalized, 10),
-    kz: rankKind("kz", quiz, normalized, 5),
+    kz: rankRegion("kz", quiz, normalized, 5),
+    cis: rankRegion("cis", quiz, normalized, 5),
+    america: rankRegion("america", quiz, normalized, 5),
+    europe: rankRegion("europe", quiz, normalized, 5),
+    world: rankRegion("world", quiz, normalized, 5),
   };
 }
 

@@ -40,10 +40,8 @@ const COUNTRY_RU: Record<string, string> = {
   Жапония: "Япония",
   Нидерланд: "Нидерланды",
   Гонконг: "Гонконг",
-  Чехия: "Чехия",
-  Польша: "Польша",
-  Малайзия: "Малайзия",
   Қазақстан: "Казахстан",
+  Ресей: "Россия",
 };
 
 const CITY_RU: Record<string, string> = {
@@ -51,33 +49,30 @@ const CITY_RU: Record<string, string> = {
   Стэнфорд: "Стэнфорд",
   Оксфорд: "Оксфорд",
   Цюрих: "Цюрих",
-  Лондон: "Лондон",
   Сингапур: "Сингапур",
   Мюнхен: "Мюнхен",
   Торонто: "Торонто",
   Мельбурн: "Мельбурн",
   Тэджон: "Тэджон",
   Токио: "Токио",
-  Лозанна: "Лозанна",
-  Питтсбург: "Питтсбург",
   Беркли: "Беркли",
-  Эдинбург: "Эдинбург",
   Делфт: "Делфт",
-  Гейдельберг: "Гейдельберг",
   Гонконг: "Гонконг",
-  Ковентри: "Ковентри",
-  Амстердам: "Амстердам",
   Монреаль: "Монреаль",
-  Канберра: "Канберра",
-  Атланта: "Атланта",
-  "Уэст-Лафайетт": "Уэст-Лафайетт",
-  Прага: "Прага",
-  Варшава: "Варшава",
-  "Куала-Лумпур": "Куала-Лумпур",
   Астана: "Астана",
   Алматы: "Алматы",
-  Қаскелең: "Каскелен",
+  Мәскеу: "Москва",
+  "Санкт-Петербург": "Санкт-Петербург",
+  Долгопрудный: "Долгопрудный",
 };
+
+const REGION_LABEL_KEY = {
+  kz: "uni.kindKz",
+  cis: "uni.kindCis",
+  america: "uni.kindAmerica",
+  europe: "uni.kindEurope",
+  world: "uni.kindWorld",
+} as const;
 
 export function UniversityDetailPanel({
   match,
@@ -156,25 +151,35 @@ export function UniversityDetailPanel({
         <div className="mx-auto max-w-3xl space-y-6">
           {tab === "detail" ? (
             <>
-              <section className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 shadow-soft">
-                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--primary)]">
-                  {t("uni.match")} · {match.matchPercent}%
-                </p>
-                <h2 className="mt-2 font-display text-2xl font-semibold text-[var(--foreground)]">
-                  {displayName}
-                </h2>
-                <p className="mt-1 text-sm text-[var(--muted-foreground)]">
-                  {city}, {country}
-                  {uni.kind === "kz"
-                    ? ` · ${t("uni.kindKz")}`
-                    : ` · ${t("uni.kindWorld")}`}
-                </p>
-                <p className="mt-4 text-sm leading-relaxed text-[var(--foreground-soft)]">
-                  {notes}
-                </p>
-                <p className="mt-3 text-sm text-[var(--foreground-soft)]">
-                  {match.whyKk}
-                </p>
+              <section className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-soft">
+                <div className="relative aspect-[16/9] w-full bg-[var(--muted)]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={uni.photoUrl}
+                    alt={displayName}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--primary)]">
+                    {t("uni.match")} · {match.matchPercent}%
+                  </p>
+                  <h2 className="mt-2 font-display text-2xl font-semibold text-[var(--foreground)]">
+                    {displayName}
+                  </h2>
+                  <p className="mt-1 text-sm text-[var(--muted-foreground)]">
+                    {city}, {country} · {t(REGION_LABEL_KEY[uni.kind])}
+                  </p>
+                  <p className="mt-4 text-sm leading-relaxed text-[var(--foreground-soft)]">
+                    {notes}
+                  </p>
+                  <p className="mt-3 text-sm text-[var(--foreground-soft)]">
+                    {match.whyKk}
+                  </p>
+                  <p className="mt-3 text-[10px] leading-snug text-[var(--muted-foreground)]">
+                    {t("uni.photoCredit", { file: uni.photoFile })}
+                  </p>
+                </div>
               </section>
 
               <section className="grid gap-3 sm:grid-cols-2">
