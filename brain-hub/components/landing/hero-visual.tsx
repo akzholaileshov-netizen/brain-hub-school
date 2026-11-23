@@ -105,16 +105,16 @@ export function HeroVisual() {
         role="img"
         aria-label={t("anim.heroCubeAlt")}
       >
-        <div className="bh-cube">
-          {faces.map((name, i) => (
-            <div key={i} className={`bh-cube-face bh-cube-face-${i}`}>
-              <span className="bh-cube-face-label">{name}</span>
-            </div>
-          ))}
+        <div className="bh-cube-stage" aria-hidden>
+          <div className="bh-cube">
+            {faces.map((name, i) => (
+              <div key={i} className={`bh-cube-face bh-cube-face-${i}`}>
+                <span className="bh-cube-face-label">{name}</span>
+              </div>
+            ))}
+          </div>
         </div>
-        <p className="mt-4 text-center text-xs text-[var(--muted-foreground)]">
-          {t("anim.heroCubeCaption")}
-        </p>
+        <p className="bh-cube-caption">{t("anim.heroCubeCaption")}</p>
       </div>
     </div>
   );
@@ -148,21 +148,21 @@ function StudySceneSvg({ label }: { label: string }) {
         rx="22"
         fill="url(#bhDeskSky)"
       />
+      {/* floor / desk — kept below the IELTS badge (badge bottom ~ y 176) */}
       <rect
         x="8"
-        y="168"
+        y="188"
         width="384"
-        height="84"
+        height="64"
         rx="0"
         fill="var(--muted)"
         opacity="0.65"
       />
-      {/* desk surface */}
       <ellipse
         cx="200"
-        cy="198"
+        cy="208"
         rx="155"
-        ry="18"
+        ry="14"
         fill="var(--border)"
         opacity="0.55"
       />
@@ -183,23 +183,21 @@ function StudySceneSvg({ label }: { label: string }) {
         <line x1="8" y1="-7" x2="50" y2="-7" stroke="var(--card)" strokeWidth="1.5" />
       </g>
 
-      {/* laptop */}
-      <g transform="translate(118 98)">
+      {/* laptop — kept left so it never meets the IELTS badge */}
+      <g transform="translate(110 100)">
         <rect
-          x="18"
+          x="14"
           y="8"
-          width="140"
-          height="88"
+          width="128"
+          height="84"
           rx="8"
           fill="url(#bhLaptopScreen)"
         />
-        {/* window chrome */}
-        <circle cx="34" cy="22" r="3" fill="var(--primary-foreground)" opacity="0.55" />
-        <circle cx="44" cy="22" r="3" fill="var(--primary-foreground)" opacity="0.4" />
-        <circle cx="54" cy="22" r="3" fill="var(--primary-foreground)" opacity="0.28" />
-        {/* progress chart on screen */}
+        <circle cx="30" cy="22" r="3" fill="var(--primary-foreground)" opacity="0.55" />
+        <circle cx="40" cy="22" r="3" fill="var(--primary-foreground)" opacity="0.4" />
+        <circle cx="50" cy="22" r="3" fill="var(--primary-foreground)" opacity="0.28" />
         <polyline
-          points="36,72 58,58 78,62 100,40 122,48 142,28"
+          points="30,70 48,56 66,60 86,40 106,46 124,28"
           fill="none"
           stroke="var(--primary-foreground)"
           strokeWidth="3"
@@ -207,19 +205,19 @@ function StudySceneSvg({ label }: { label: string }) {
           strokeLinejoin="round"
           opacity="0.95"
         />
-        <circle cx="142" cy="28" r="4" fill="var(--primary-foreground)" />
+        <circle cx="124" cy="28" r="4" fill="var(--primary-foreground)" />
         <rect
-          x="8"
-          y="96"
-          width="160"
+          x="6"
+          y="92"
+          width="144"
           height="10"
           rx="3"
           fill="var(--foreground)"
           opacity="0.22"
         />
         <rect
-          x="70"
-          y="106"
+          x="60"
+          y="102"
           width="36"
           height="4"
           rx="2"
@@ -229,15 +227,13 @@ function StudySceneSvg({ label }: { label: string }) {
       </g>
 
       {/* student at desk */}
-      <g transform="translate(168 52)">
+      <g transform="translate(155 54)">
         <circle cx="36" cy="26" r="20" fill="var(--foreground)" opacity="0.82" />
-        {/* shoulders / hoodie */}
         <path
           d="M4 86c6-32 20-46 32-46s26 14 32 46"
           fill="var(--primary)"
           opacity="0.82"
         />
-        {/* left arm */}
         <path
           d="M12 72c-10 10-16 22-18 34"
           fill="none"
@@ -246,9 +242,8 @@ function StudySceneSvg({ label }: { label: string }) {
           strokeLinecap="round"
           opacity="0.75"
         />
-        {/* right arm to keyboard */}
         <path
-          d="M60 72c16 8 34 20 48 30"
+          d="M60 72c14 8 28 18 40 26"
           fill="none"
           stroke="var(--primary)"
           strokeWidth="11"
@@ -257,21 +252,14 @@ function StudySceneSvg({ label }: { label: string }) {
         />
       </g>
 
-      {/* graduation cap floating */}
-      <g transform="translate(300 36)">
+      {/* graduation cap */}
+      <g transform="translate(268 28)">
         <polygon
           points="36,18 72,32 36,46 0,32"
           fill="var(--foreground)"
           opacity="0.82"
         />
-        <rect
-          x="28"
-          y="32"
-          width="16"
-          height="14"
-          fill="var(--primary)"
-          opacity="0.7"
-        />
+        <rect x="28" y="32" width="16" height="14" fill="var(--primary)" opacity="0.7" />
         <line
           x1="72"
           y1="32"
@@ -283,27 +271,8 @@ function StudySceneSvg({ label }: { label: string }) {
         <circle cx="72" cy="54" r="3" fill="var(--primary)" />
       </g>
 
-      {/* IELTS 7.5 badge */}
-      <g transform="translate(292 150)">
-        <rect
-          width="78"
-          height="36"
-          rx="12"
-          fill="var(--primary)"
-        />
-        <text
-          x="39"
-          y="23"
-          textAnchor="middle"
-          fill="var(--primary-foreground)"
-          style={{ fontSize: 14, fontWeight: 700, fontFamily: "var(--font-display)" }}
-        >
-          IELTS 7.5
-        </text>
-      </g>
-
-      {/* small plant for warmth */}
-      <g transform="translate(340 128)">
+      {/* plant — far left, clear of badge */}
+      <g transform="translate(48 108)">
         <rect x="10" y="28" width="16" height="14" rx="3" fill="var(--border)" />
         <path
           d="M18 28c-8-14-2-22 0-26 2 4 8 12 0 26z"
@@ -315,6 +284,31 @@ function StudySceneSvg({ label }: { label: string }) {
           fill="var(--success)"
           opacity="0.55"
         />
+      </g>
+
+      {/* IELTS badge — clear right margin, opaque, drawn last */}
+      <g transform="translate(298 118)">
+        <rect
+          width="90"
+          height="40"
+          rx="12"
+          fill="var(--primary)"
+          stroke="var(--card)"
+          strokeWidth="2"
+        />
+        <text
+          x="45"
+          y="25"
+          textAnchor="middle"
+          fill="var(--primary-foreground)"
+          style={{
+            fontSize: 15,
+            fontWeight: 700,
+            fontFamily: "var(--font-display)",
+          }}
+        >
+          IELTS 7.5
+        </text>
       </g>
     </svg>
   );

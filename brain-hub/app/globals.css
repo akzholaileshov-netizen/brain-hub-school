@@ -316,14 +316,37 @@ h2 {
 .bh-cube-scene {
   --cube-size: 132px;
   perspective: 720px;
-  perspective-origin: 50% 45%;
+  perspective-origin: 50% 42%;
   width: 100%;
-  min-height: calc(var(--cube-size) * 1.85);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 1.25rem;
+  /* Stage reserves paint space for rotated faces; caption sits below it */
+  padding: 0.5rem 0 0.25rem;
+}
+
+.bh-cube-stage {
+  position: relative;
+  width: 100%;
+  /* Diagonal clearance so a full spin never paints over the caption */
+  height: calc(var(--cube-size) * 2.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.bh-cube-caption {
+  margin-top: 1.15rem;
+  margin-bottom: 0.5rem;
+  padding-top: 0.15rem;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--muted-foreground);
+  position: relative;
+  z-index: 1;
 }
 
 .bh-cube {
@@ -409,6 +432,14 @@ h2 {
   .bh-cube-scene {
     --cube-size: 148px;
   }
+
+  .bh-cube-stage {
+    height: calc(var(--cube-size) * 2.05);
+  }
+
+  .bh-cube-caption {
+    margin-top: 1rem;
+  }
 }
 
 .bh-field-invalid {
@@ -454,3 +485,5 @@ h2 {
 }
 
 /* hero-cube-v2 */
+
+/* hero-cube-caption-fix */
