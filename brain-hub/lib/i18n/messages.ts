@@ -24,10 +24,11 @@ const kk: Dict = {
   "hero.ctaQuiz": "Бағытты анықтау",
   "hero.ctaConsult": "Тегін консультация",
   "anim.loading": "Жүктелуде…",
-  "anim.heroVisualLabel": "2D + 3D көрініс",
-  "anim.heroVisualAlt": "Оқу жоспарының 2D иллюстрациясы",
-  "anim.heroVisualHint":
-    "Курсорды жылжытыңыз — карта 3D қисайып қозғалады (CSS transform).",
+  "anim.heroVisualAlt":
+    "Студент ноутбукпен оқып отыр, кітаптар, бітіру қалпағы және IELTS 7.5 белгісі",
+  "anim.heroVisualCaption": "Жеке дайындық — IELTS пен грантқа бір жол.",
+  "anim.heroCubeAlt": "Бағыттар көрсетілген айналып тұрған 3D куб",
+  "anim.heroCubeCaption": "Дайындық бағыттары",
   "anim.marqueeLabel": "Бағыттар таспасы",
   "anim.insightsEyebrow": "Графика және деректер",
   "anim.insightsTitle": "Нәтижелерді көріп, кампус атмосферасын сезініңіз",
@@ -208,10 +209,11 @@ const ru: Dict = {
   "hero.ctaQuiz": "Определить направление",
   "hero.ctaConsult": "Бесплатная консультация",
   "anim.loading": "Загрузка…",
-  "anim.heroVisualLabel": "2D + 3D вид",
-  "anim.heroVisualAlt": "2D-иллюстрация учебного плана",
-  "anim.heroVisualHint":
-    "Наведите курсор — карточка наклоняется в 3D (CSS transform).",
+  "anim.heroVisualAlt":
+    "Студент за ноутбуком, книги, шапочка выпускника и значок IELTS 7.5",
+  "anim.heroVisualCaption": "Личная подготовка — один путь к IELTS и гранту.",
+  "anim.heroCubeAlt": "Вращающийся 3D-куб с направлениями подготовки",
+  "anim.heroCubeCaption": "Направления подготовки",
   "anim.marqueeLabel": "Лента направлений",
   "anim.insightsEyebrow": "Графика и данные",
   "anim.insightsTitle": "Смотрите результаты и атмосферу кампусов",

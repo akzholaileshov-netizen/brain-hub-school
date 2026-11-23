@@ -312,6 +312,105 @@ h2 {
   transform-style: preserve-3d;
 }
 
+/* —— Hero CSS 3D track cube —— */
+.bh-cube-scene {
+  --cube-size: 132px;
+  perspective: 720px;
+  perspective-origin: 50% 45%;
+  width: 100%;
+  min-height: calc(var(--cube-size) * 1.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 1.25rem;
+}
+
+.bh-cube {
+  position: relative;
+  width: var(--cube-size);
+  height: var(--cube-size);
+  transform-style: preserve-3d;
+  transform: rotateX(var(--cube-rx, -18deg)) rotateY(var(--cube-ry, 28deg));
+  animation: bh-cube-spin 14s linear infinite;
+  will-change: transform;
+}
+
+.bh-cube-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--border) 80%, var(--primary) 20%);
+  background: color-mix(in srgb, var(--card) 88%, var(--primary) 12%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 35%, transparent),
+    0 8px 20px color-mix(in srgb, var(--foreground) 12%, transparent);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.dark .bh-cube-face {
+  background: color-mix(in srgb, var(--card) 82%, var(--primary) 18%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent),
+    0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
+.bh-cube-face-label {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+.bh-cube-face-0 {
+  transform: rotateY(0deg) translateZ(calc(var(--cube-size) / 2));
+}
+.bh-cube-face-1 {
+  transform: rotateY(90deg) translateZ(calc(var(--cube-size) / 2));
+}
+.bh-cube-face-2 {
+  transform: rotateY(180deg) translateZ(calc(var(--cube-size) / 2));
+}
+.bh-cube-face-3 {
+  transform: rotateY(-90deg) translateZ(calc(var(--cube-size) / 2));
+}
+.bh-cube-face-4 {
+  transform: rotateX(90deg) translateZ(calc(var(--cube-size) / 2));
+  background: color-mix(in srgb, var(--primary) 22%, var(--card));
+}
+.bh-cube-face-5 {
+  transform: rotateX(-90deg) translateZ(calc(var(--cube-size) / 2));
+  background: color-mix(in srgb, var(--primary) 16%, var(--card));
+}
+
+@keyframes bh-cube-spin {
+  from {
+    transform: rotateX(var(--cube-rx, -18deg)) rotateY(var(--cube-ry, 28deg));
+  }
+  to {
+    transform: rotateX(var(--cube-rx, -18deg))
+      rotateY(calc(var(--cube-ry, 28deg) + 360deg));
+  }
+}
+
+.bh-cube-scene.is-dragging .bh-cube {
+  animation-play-state: paused;
+}
+
+@media (min-width: 640px) {
+  .bh-cube-scene {
+    --cube-size: 148px;
+  }
+}
+
 .bh-field-invalid {
   border-color: var(--destructive) !important;
   animation: rise 280ms ease-out;
@@ -328,7 +427,8 @@ h2 {
   .bh-marquee-track,
   .bh-skeleton,
   .bh-spinner,
-  .bh-bar-fill.is-on {
+  .bh-bar-fill.is-on,
+  .bh-cube {
     animation: none !important;
   }
 
@@ -346,4 +446,11 @@ h2 {
   .bh-tilt-inner {
     transform: none !important;
   }
+
+  /* Still clearly 3D when motion is reduced — fixed angled pose */
+  .bh-cube {
+    transform: rotateX(-22deg) rotateY(32deg) !important;
+  }
 }
+
+/* hero-cube-v2 */
