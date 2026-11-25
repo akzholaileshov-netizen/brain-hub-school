@@ -150,7 +150,12 @@ export const LESSON_VIDEOS: Record<string, LessonVideoSource> = {
     "KhanAcademyRussian",
     "ru",
   ),
-  "mat-sauattylyq::Өлшем бірліктері": none,
+  "mat-sauattylyq::Өлшем бірліктері": entry(
+    "vCJTKtuBff4",
+    "Метрические единицы длины",
+    "Видеоуроки",
+    "ru",
+  ),
   "mat-sauattylyq::Пайыздық есептер": entry(
     "qJMrghdG27Y",
     "+15% к цене за 5 секунд | ЕГЭ база",
@@ -199,14 +204,24 @@ export const LESSON_VIDEOS: Record<string, LessonVideoSource> = {
   ),
 
   // —— Математикалық сауаттылық (fiz-mat) ——
-  "mat-sauattylyq::Формулаларды қолдану": none,
+  "mat-sauattylyq::Формулаларды қолдану": entry(
+    "DvEvBD-LJso",
+    "Көбейтіндіні қосындыға түрлендіру формулалары. Практикалық бөлім 3. 9 сынып.",
+    "MEKTEП OnLine MATEMATИKA",
+    "kk",
+  ),
   "mat-sauattylyq::Графиктік есептер": entry(
     "NavEQL1rB7k",
     "14. График функции. Алгебра 7 класс",
     "Математика Без Воды | Алгебра 7-8 классы",
     "ru",
   ),
-  "mat-sauattylyq::Бірліктерді түрлендіру": none,
+  "mat-sauattylyq::Бірліктерді түрлендіру": entry(
+    "C_EOsKABAGQ",
+    "Единицы измерения длины. Как перевести одну величину в другую?",
+    "Ваш Учитель",
+    "ru",
+  ),
 
   // —— География ——
   "geografiya::Физикалық география": entry(
@@ -215,7 +230,12 @@ export const LESSON_VIDEOS: Record<string, LessonVideoSource> = {
     "Онлайн-Школа с 1 по 11 класс",
     "ru",
   ),
-  "geografiya::Экономикалық география": none,
+  "geografiya::Экономикалық география": entry(
+    "XkAkt5gtFbg",
+    "География 10 класс. Мировое хозяйство",
+    "InternetUrok.ru",
+    "ru",
+  ),
   "geografiya::Қазақстан географиясы": entry(
     "vRIK-ikdt7c",
     "Виды внутренних вод Казахстана",
@@ -256,17 +276,32 @@ export const LESSON_VIDEOS: Record<string, LessonVideoSource> = {
     "Математика Без Воды | Алгебра 7-8 классы",
     "ru",
   ),
-  "mat-sauattylyq::Аналитикалық есептер": none,
+  "mat-sauattylyq::Аналитикалық есептер": entry(
+    "_8jSBPGJkDk",
+    "Математическая грамотность для ЕНТ | Разбор реальных вопросов ЕНТ 2025",
+    "Подготовка к ЕНТ | Умскул",
+    "ru",
+  ),
 
   // —— Адам. Қоғам. Құқық ——
-  "adam-qogam-quqyq::Құқық ұғымы және жүйесі": none,
+  "adam-qogam-quqyq::Құқық ұғымы және жүйесі": entry(
+    "akSUtS12B_0",
+    "Обществознание 9 класс. Право, его роль в жизни общества и государства",
+    "Образование. Обучение - Znaika TV. Знайка.ру",
+    "ru",
+  ),
   "adam-qogam-quqyq::Адам құқықтары": entry(
     "eN5U04VvrTY",
     "Права и свободы человека и гражданина. Урок # 3 (Личные / гражданские права)",
     "Сергей Кочережко",
     "ru",
   ),
-  "adam-qogam-quqyq::Азаматтық жауапкершілік": none,
+  "adam-qogam-quqyq::Азаматтық жауапкершілік": entry(
+    "KoWiXZ34pfM",
+    "Понятие и виды юридической ответственности | #егэ ОБЩЕСТВОЗНАНИЕ 2023 (1)",
+    "ЕГЭ обществознание | Безрукова Светлана",
+    "ru",
+  ),
 
   // —— Дүниежүзі тарихы ——
   "duniezhuzi-tarihy::Ежелгі өркениеттер": entry(
@@ -281,7 +316,12 @@ export const LESSON_VIDEOS: Record<string, LessonVideoSource> = {
     "Bushwacker",
     "ru",
   ),
-  "duniezhuzi-tarihy::XX ғасыр оқиғалары": none,
+  "duniezhuzi-tarihy::XX ғасыр оқиғалары": entry(
+    "_OJZsJ6i6Q0",
+    "История 9 класс. Мир в начале XX в.",
+    "InternetUrok.ru",
+    "ru",
+  ),
 
   // —— Қазақстан тарихы ——
   "qazaqstan-tarihy::Қазақ хандығы": entry(
